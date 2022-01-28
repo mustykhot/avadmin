@@ -1,0 +1,10 @@
+@import "../../assets/styles/index";
+.popping {
+  position: relative;
+  img {
+    cursor: pointer;
+  }
+  .actionPop {
+    @include actionPop;
+  }
+}

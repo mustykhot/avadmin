@@ -1,0 +1,171 @@
+@import "../../assets/styles/index";
+
+.profileBox {
+  width: 25%;
+  background: #ffffff;
+  box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+  border-radius: 9px;
+  padding: 16px 21px 30px 21px;
+  .profileImg {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+    margin-bottom: 22px;
+  }
+  p.username {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    /* identical to box height */
+    text-align: center;
+    color: #141e15;
+  }
+  p.email {
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    color: #6e768c;
+    margin-top: 10px;
+  }
+  .actionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+    a.email,
+    a.chat {
+      @include button;
+      display: flex;
+      text-decoration: none;
+      padding: 6px 8px;
+    }
+    a.email {
+      background: #0052bd;
+      border-radius: 5px;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+
+      color: #ffffff;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+      padding: 8px 10px;
+      color: #ffffff;
+      margin-right: 8px;
+    }
+    a.chat {
+      display: flex;
+      background: #f4f4ff;
+      border-radius: 5px;
+      font-size: 14px;
+      line-height: 16px;
+      text-align: center;
+
+      color: #6e768c;
+      align-items: center;
+      img {
+        width: 18px;
+        margin-right: 3px;
+      }
+    }
+  }
+  p.details {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 25px;
+    line-height: 19px;
+    /* identical to box height */
+    margin-bottom: 5px;
+
+    color: #141e15;
+  }
+  .line {
+    margin-bottom: 20px;
+    width: 100%;
+    border-bottom: 0.5px solid #dcdff1;
+  }
+  .eachDetails {
+    width: 100%;
+    margin-bottom: 20px;
+    p.detailTitle {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 16px;
+      color: #393939;
+      margin-bottom: 5px;
+    }
+    p.detailAns {
+      font-size: 12px;
+      line-height: 19px;
+      color: #6e768c;
+    }
+  }
+  .card {
+    width: 100%;
+    p.card {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 16px;
+      margin-bottom: 10px;
+      color: #393939;
+    }
+    .cardList {
+      background: #f4f6fa;
+      border-radius: 4px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      img {
+        width: 29px;
+        margin-right: 15px;
+      }
+      .abtCard {
+        flex: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left {
+          p.type {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 16px;
+
+            color: #393939;
+            margin-bottom: 3px;
+          }
+          p.exp {
+            font-size: 10px;
+            line-height: 12px;
+            /* identical to box height */
+
+            color: #6e768c;
+          }
+        }
+        .arr {
+          cursor: pointer;
+          path {
+            fill: $primary;
+          }
+        }
+      }
+    }
+    .cardInfo {
+      background: #f4f6fa;
+      border-radius: 4px;
+      padding: 8px 18px;
+      margin-top: 10px;
+      p {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+
+        color: #393939;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

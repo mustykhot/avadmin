@@ -1,0 +1,139 @@
+@import "../../assets/styles/index";
+.sideBar {
+  width: 230px;
+  background: $primary;
+  min-height: 100vh;
+  height: auto;
+  padding: 20px 0px 50px 20px;
+  .logo {
+    width: 100%;
+    margin-bottom: 30px;
+    img {
+      width: 120px;
+      display: block;
+      margin: auto;
+    }
+  }
+  .sideNav,
+  .setting {
+    width: 100%;
+    .set {
+      font-size: 12px;
+      line-height: 20px;
+      /* identical to box height, or 167% */
+
+      letter-spacing: 1px;
+      text-transform: uppercase;
+
+      color: #9ba4b0;
+      margin-bottom: 25px;
+    }
+    .item {
+      display: flex;
+      border: none;
+      background: none;
+      margin-bottom: 30px;
+      align-items: center;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 10px;
+      .iconSide {
+        margin-right: 10px;
+        path {
+          stroke: $white;
+        }
+        circle {
+          stroke: $white;
+        }
+        rect {
+          stroke: $white;
+        }
+      }
+      p {
+        font-size: 14px;
+        line-height: 20px;
+        /* identical to box height, or 143% */
+
+        color: #ffffff;
+      }
+      &.active {
+        background: #f4f4ff;
+        border-radius: 98px 5px 5px 98px;
+        .iconSide {
+          path {
+            stroke: $primary;
+          }
+          circle {
+            stroke: $primary;
+          }
+          rect {
+            stroke: $primary;
+          }
+        }
+        p {
+          color: $primary;
+        }
+      }
+      &.extra {
+        display: block;
+        .coverFirst {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .first {
+            display: flex;
+            align-items: center;
+          }
+        }
+
+        .hidden {
+          background: rgba(0, 0, 0, 0.14);
+          border-radius: 3px;
+          width: 100%;
+          margin-top: 5px;
+          padding: 15px 7px 13px;
+          .eachHide {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            padding: 10px;
+            margin-bottom: 2px;
+            border-radius: 5px;
+            p {
+              margin-bottom: 0;
+            }
+            &.active {
+              background: #f4f4ff;
+              .iconSide {
+                path {
+                  stroke: $primary;
+                }
+              }
+              p {
+                color: $primary;
+              }
+            }
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.numbercircle {
+  background: #ff0000;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}

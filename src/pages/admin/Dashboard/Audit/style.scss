@@ -1,0 +1,409 @@
+@import "../../../../assets/styles/index";
+
+.pd-audit {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include createBtn;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .whiteContainer {
+    @include whiteContainer;
+
+    .tableHead {
+      @include tableHead;
+      .otherBox {
+        display: flex;
+        align-items: center;
+        .search {
+          @include search;
+        }
+        input {
+          @include input;
+          width: 156px;
+          margin-left: 20px;
+        }
+      }
+
+      .tableTitle {
+        @include tableTitle;
+      }
+    }
+
+    .overflowTable {
+      width: 100%;
+      //   overflow-y: auto;
+      //   @include webkit2;
+      @include overflowTable;
+      table {
+        .left {
+          text-align: left;
+          padding-left: 70px;
+        }
+        .right {
+          text-align: right;
+          padding-right: 70px;
+        }
+      }
+    }
+  }
+}
+
+.pd-transaction-download {
+  width: 463px;
+  margin: auto;
+  margin-top: 30px;
+  .topSide {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    button {
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      .fill2 {
+        margin-right: 3px;
+        width: 12px;
+        path {
+          // fill: #4a4a4a;
+          stroke: #4a4a4a;
+        }
+      }
+      &:last-child {
+        margin-left: 15px;
+      }
+    }
+  }
+  .downloadBox {
+    background: #ffffff;
+    box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+    border-radius: 0px 9px 9px 9px;
+    width: 100%;
+    margin-top: 5px;
+    padding: 40px 28px;
+    .aboutProduct {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      img {
+        width: 71px;
+        height: 71px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+      .productText {
+        p.order,
+        p.productName {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 16px;
+          color: #393939;
+          margin-bottom: 5px;
+        }
+        p.auctionName {
+          font-size: 12px;
+          line-height: 14px;
+          color: #0052bd;
+        }
+      }
+    }
+    .eachOrder {
+      margin-top: 20px;
+      width: 100%;
+      .orderTopic {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: #393939;
+        margin-bottom: 15px;
+      }
+      .flexOrder {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        p.left {
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 14px;
+          color: #6e768c;
+        }
+        p.right {
+          font-size: 12px;
+          line-height: 14px;
+          text-align: right;
+          color: #393939;
+          &.green {
+            color: #00ce6e;
+          }
+        }
+      }
+    }
+    .line {
+      width: 100%;
+      border-bottom: 1px solid #dcdff1;
+    }
+  }
+}
+
+.pd-transaction_detail {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include createBtn;
+        margin-left: 10px;
+      }
+    }
+  }
+  .whiteContainer {
+    @include whiteContainer;
+    padding: 30px 30px 60px 30px;
+    .title {
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 23px;
+
+      color: #4a4a4a;
+    }
+    .subTitle {
+      font-size: 12px;
+      line-height: 14px;
+      /* identical to box height */
+      color: #393939;
+      margin-top: 10px;
+    }
+    .cards {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+      margin-top: 16px;
+      .eachCard {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        box-sizing: border-box;
+        color: #4a4a4a;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        width: 31%;
+        height: 120px;
+        .leftBox {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 16px;
+          &.map {
+            background: #e2f6e1;
+            img {
+              width: 18px;
+            }
+          }
+          &.naira {
+            background: #e1e7ff;
+            img {
+              width: 18px;
+            }
+          }
+        }
+        .rightBox {
+          flex: auto;
+          .cardTitle {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 16px;
+            margin-bottom: 11px;
+          }
+          .cardText {
+            .name {
+              font-size: 12px;
+              line-height: 14px;
+              margin-bottom: 5px;
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
+            .productFlex {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 5px;
+              align-items: center;
+              p.left {
+                font-size: 12px;
+                line-height: 14px;
+              }
+              p.right {
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 14px;
+              }
+            }
+          }
+        }
+        &.blue {
+          background: $primary;
+          color: $white;
+        }
+      }
+    }
+    .product_detail {
+      display: flex;
+      margin-top: 32px;
+      width: 100%;
+      justify-content: space-between;
+      .left {
+        width: 69%;
+        p.head {
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 14px;
+          margin-bottom: 14px;
+          color: #393939;
+        }
+        .product_about {
+          display: flex;
+          align-items: center;
+          margin-bottom: 35px;
+          img {
+            width: 68px;
+            margin-right: 10px;
+          }
+          .aboutBox {
+            p.name {
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 19px;
+              /* identical to box height */
+              margin-bottom: 6px;
+              color: #393939;
+            }
+            p.subName {
+              font-size: 12px;
+              line-height: 14px;
+              /* identical to box height */
+
+              color: #0052bd;
+            }
+          }
+        }
+        .desc {
+          .story {
+            font-size: 12px;
+            line-height: 19px;
+            /* or 160% */
+
+            color: #4a4a4a;
+            width: 60%;
+          }
+        }
+      }
+      .bidding {
+        width: 31%;
+        background: #f8f9fa;
+        border: 1px solid #babec2;
+        box-sizing: border-box;
+        border-radius: 4px;
+        padding: 30px 21px;
+        p.biddingHead {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 16px;
+
+          color: #4a4a4a;
+          margin-bottom: 20px;
+        }
+        .eachBidding {
+          display: flex;
+          width: 100%;
+          margin-bottom: 20px;
+          align-items: center;
+          .bidImg {
+            background: #dcdff1;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            p {
+              font-weight: 600;
+              font-size: 14px;
+              line-height: 16px;
+              color: #0052bd;
+            }
+          }
+          .aboutBid {
+            flex: auto;
+            .det {
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 5px;
+              .name {
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 14px;
+                color: #2a2b36;
+              }
+              .money {
+                font-weight: 600;
+                font-size: 12px;
+                line-height: 14px;
+                color: #4a4a4a;
+                .green {
+                  color: #2a863a;
+                }
+              }
+              .date,
+              .win {
+                font-size: 10px;
+                line-height: 12px;
+                /* identical to box height */
+
+                color: #6e768c;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

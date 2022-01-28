@@ -1,0 +1,167 @@
+@import "../../../../assets/styles/index";
+.pd-userprofile {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include downloadBtn2;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .createAdmin {
+    width: 450px;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.07);
+    border-radius: 11px;
+    padding: 20px;
+    margin: auto;
+    .group {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      .halfInput {
+        width: 45%;
+      }
+    }
+    .cancel {
+      @include button;
+      margin-top: 10px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-decoration-line: underline;
+
+      color: #0052bd;
+    }
+  }
+  .profileFlex {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 33px;
+
+    .activityBox {
+      width: 73%;
+      padding-top: 5px;
+      .userNav {
+        display: flex;
+        justify-content: space-between;
+
+        .left {
+          display: flex;
+          // width: 60%;
+          justify-content: space-between;
+          .eachnav {
+            font-size: 14px;
+            margin-right: 50px;
+            line-height: 16px;
+            color: #6e768c;
+            height: max-content;
+            padding: 0 8px 10px 8px;
+            cursor: pointer;
+            &:last-child {
+              margin-right: 0;
+            }
+            &.active {
+              color: $primary;
+              font-weight: 600;
+              border-bottom: 2px solid $primary;
+            }
+          }
+        }
+        .action {
+          position: relative;
+          .actionbtn {
+            @include button;
+            background: $primary;
+            color: $white;
+            padding: 8px 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            .fill {
+              path {
+                fill: white;
+              }
+              margin-left: 10px;
+            }
+          }
+          .actionDrop {
+            position: absolute;
+            top: 34px;
+            right: 0;
+            background: #ffffff;
+            border: 0.2px solid #979797;
+            box-shadow: 0px 10px 43px -15px rgba(0, 0, 0, 0.225361);
+            border-radius: 5px;
+            width: 161px;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0);
+            transform-origin: right top;
+            transition: transform 0.3s ease;
+            box-shadow: $card-shadow;
+            &.show {
+              transform: scale(1);
+            }
+            button {
+              @include button;
+              background: none;
+              border: none;
+              font-size: 14px;
+              line-height: 16px;
+              transition: 0.3s ease;
+              margin-bottom: 5px;
+              color: #393939;
+              cursor: pointer;
+              &:hover {
+                background: #dcdff1;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .whiteContainer {
+      @include whiteContainer;
+      .tableHead {
+        @include tableHead;
+        .search {
+          @include search;
+        }
+        .tableTitle {
+          @include tableTitle;
+        }
+      }
+      .summaryFlex {
+        width: 100%;
+        margin-top: 26px;
+        margin-bottom: 30px;
+        display: flex;
+        padding: 0 20px;
+        justify-content: space-between;
+      }
+
+      .overflowTable {
+        @include overflowTable;
+        table {
+        }
+      }
+    }
+  }
+}

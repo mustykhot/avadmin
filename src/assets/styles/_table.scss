@@ -1,0 +1,175 @@
+@import "./mixin";
+@import "./variable";
+@mixin tableTitle {
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  /* identical to box height */
+
+  letter-spacing: 0.746667px;
+
+  color: #2d4450;
+}
+@mixin overflowTable {
+  width: 100%;
+  //   overflow-y: auto;
+  //   @include webkit2;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    .bgDark {
+      background: #f5f5f5;
+    }
+    th {
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      /* identical to box height */
+      color: #6e768c;
+    }
+    td,
+    th {
+      border-bottom: 1px solid #eaedf3;
+      padding: 20px;
+      text-align: center;
+    }
+    th.extraTh {
+      cursor: pointer;
+    }
+    td.nameTd {
+      text-align: unset;
+      .nameDiv {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          margin-right: 7px;
+        }
+        .nameBox {
+          .name {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 16px;
+            color: #2a2b36;
+            margin-bottom: 5px;
+          }
+          .email {
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            color: #6e768c;
+          }
+        }
+      }
+    }
+    td {
+      line-height: 14px;
+      color: #393939;
+      font-size: 12px;
+    }
+
+    td.collect {
+      font-size: 12px;
+      line-height: 14px;
+      /* identical to box height */
+
+      color: #393939;
+      text-align: unset;
+    }
+    .phone,
+    .role {
+      font-size: 12px;
+      line-height: 14px;
+      /* identical to box height */
+
+      color: #393939;
+      p.bid {
+        width: max-content;
+        padding: 3px 8px;
+        margin: auto;
+        margin-top: 3px;
+        background: #d7def7;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 12px;
+        /* identical to box height */
+
+        color: #0052bd;
+      }
+      p.time {
+        &.green {
+          color: #2a863a;
+        }
+        &.red {
+          color: #ff0303;
+        }
+      }
+    }
+    td {
+      width: 20%;
+    }
+    .statusTd {
+      .status {
+        font-weight: 500;
+        font-size: 10px;
+        line-height: 12px;
+        border-radius: 12.5px;
+        width: max-content;
+        margin: auto;
+        padding: 6px 25px;
+        &.active {
+          color: #0c9c7a;
+          background: #e5f5f4;
+        }
+        &.red {
+          background: #f7e5e5;
+          color: #a71410;
+        }
+      }
+    }
+    .action {
+    }
+    td.amount {
+      color: #42be65;
+      &.red {
+        color: #ff0000;
+      }
+    }
+    &.unset {
+      td {
+        width: 16.66%;
+      }
+    }
+    &.four {
+      td {
+        width: 25%;
+      }
+    }
+    .view {
+      @include button;
+      background: none;
+      text-decoration: underline;
+      color: $primary;
+    }
+  }
+}
+
+@mixin whiteContainer {
+  background: #ffffff;
+  box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+  border-radius: 9px;
+  margin-top: 45px;
+  width: 100%;
+  padding: 30px 0px 60px 0px;
+}
+
+@mixin tableHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}

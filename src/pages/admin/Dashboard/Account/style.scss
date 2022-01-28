@@ -1,0 +1,55 @@
+@import "../../../../assets/styles/index";
+
+.pd-account {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include createBtn;
+        margin-left: 10px;
+      }
+    }
+  }
+  .whiteContainer {
+    @include whiteContainer;
+    .coverSetting {
+      width: 80%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left {
+        width: 47%;
+        .leftHead {
+          font-size: 16px;
+          line-height: 19px;
+          /* identical to box height */
+          font-weight: bold;
+          margin-bottom: 28px;
+          letter-spacing: 0.746667px;
+
+          color: #393939;
+        }
+        form {
+          width: 100%;
+          border: 1px solid #dcdff1;
+          border-radius: 11px;
+          padding: 30px;
+          margin-top: 38px;
+        }
+      }
+    }
+  }
+}

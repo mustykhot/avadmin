@@ -1,0 +1,69 @@
+@import "../../../../assets/styles/index";
+
+.pd-user {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include downloadBtn2;
+        margin-left: 10px;
+      }
+    }
+  }
+  .whiteContainer {
+    @include whiteContainer;
+    .tableHead {
+      @include tableHead;
+      .search {
+        @include search;
+      }
+      .tableTitle {
+        @include tableTitle;
+      }
+    }
+
+    .overflowTable {
+      @include overflowTable;
+      table {
+      }
+    }
+  }
+  .createAdmin {
+    width: 450px;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.07);
+    border-radius: 11px;
+    padding: 20px;
+    margin: auto;
+    .group {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      .halfInput {
+        width: 45%;
+      }
+    }
+    .cancel {
+      @include button;
+      margin-top: 10px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-decoration-line: underline;
+
+      color: #0052bd;
+    }
+  }
+}

@@ -1,0 +1,259 @@
+@import "../../../../assets/styles/index";
+.pd-shipping {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      position: relative;
+      .actionPop {
+        @include actionPop;
+        top: 40px;
+        left: unset;
+        right: 0px;
+      }
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include createBtn;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .whiteContainer {
+    @include whiteContainer;
+
+    .tableHead {
+      @include tableHead;
+      .search {
+        @include search;
+      }
+      .tableTitle {
+        @include tableTitle;
+      }
+    }
+
+    .overflowTable {
+      width: 100%;
+      //   overflow-y: auto;
+      //   @include webkit2;
+      @include overflowTable;
+      table {
+      }
+    }
+  }
+  .createAdmin {
+    width: 450px;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.07);
+    border-radius: 11px;
+    padding: 20px;
+    margin: auto;
+    .group {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      .halfInput {
+        width: 45%;
+      }
+    }
+    .cancel {
+      @include button;
+      margin-top: 10px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-decoration-line: underline;
+
+      color: #0052bd;
+    }
+  }
+}
+
+.pd-shippingDetail {
+  width: 463px;
+  margin: auto;
+  margin-top: 30px;
+  .topSide {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    button {
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      .fill2 {
+        margin-right: 3px;
+        width: 12px;
+        path {
+          // fill: #4a4a4a;
+          stroke: #4a4a4a;
+        }
+      }
+      &:last-child {
+        margin-left: 15px;
+      }
+    }
+  }
+  .downloadBox {
+    background: #ffffff;
+    box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+    border-radius: 0px 9px 9px 9px;
+    width: 100%;
+    margin-top: 5px;
+    padding: 40px 28px;
+    .aboutProduct {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+      img {
+        width: 71px;
+        height: 71px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+      .productText {
+        p.order,
+        p.productName {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 16px;
+          color: #393939;
+          margin-bottom: 5px;
+        }
+        p.auctionName {
+          font-size: 12px;
+          line-height: 14px;
+          color: #0052bd;
+        }
+      }
+    }
+    .eachOrder {
+      margin-top: 20px;
+      width: 100%;
+      .orderTopic {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 16px;
+        color: #393939;
+        margin-bottom: 15px;
+      }
+      .flexOrder {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        p.left {
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 14px;
+          color: #6e768c;
+        }
+        .right {
+          font-size: 12px;
+          line-height: 14px;
+          text-align: right;
+          color: #393939;
+          &.green {
+            color: #00ce6e;
+          }
+          &.red {
+            color: #ff0303;
+          }
+        }
+
+        .cover {
+          width: 100%;
+          .eachBidding {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+
+            img {
+              width: 35px;
+              height: 35px;
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+            .leftBid {
+              flex: auto;
+              display: flex;
+              flex-direction: column;
+              .nameBid {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 6px;
+                p.name,
+                p.price {
+                  font-weight: 500;
+                  font-size: 14px;
+                  line-height: 16px;
+                  color: #2a2b36;
+                }
+                p.price {
+                  font-size: 12px;
+                }
+                .date,
+                .bid {
+                  font-weight: 500;
+                  font-size: 10px;
+                  line-height: 12px;
+
+                  color: #6e768c;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .about_vendor {
+      background: #f6f9ff;
+      border-radius: 5px;
+      margin-top: 35px;
+      width: 100%;
+      padding: 20px 17px;
+      display: flex;
+      justify-content: space-between;
+      .location {
+        width: 49%;
+        border-right: 0.5px solid #c9c9c9;
+        &:last-child {
+          border-right: 0;
+        }
+        .title {
+          font-weight: 600;
+          font-size: 12px;
+          line-height: 14px;
+          /* identical to box height */
+
+          color: #393939;
+          margin-bottom: 10px;
+        }
+        .desc {
+          font-size: 10px;
+          line-height: 16px;
+          /* or 160% */
+
+          color: #6e768c;
+        }
+      }
+    }
+    .line {
+      width: 100%;
+      border-bottom: 1px solid #dcdff1;
+    }
+  }
+}

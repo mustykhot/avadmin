@@ -1,0 +1,51 @@
+@import "../../assets/styles/index";
+.noService {
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .coverBag {
+    background: #edf1f8;
+    width: 64px;
+    margin: 0;
+    margin-bottom: 10px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg,
+    img {
+      width: 45%;
+      height: 45%;
+    }
+  }
+
+  p.noText {
+    font-size: 14px;
+    line-height: 17px;
+    color: #6b7c9e;
+    margin-bottom: 20px;
+  }
+  .noPost {
+    @include button;
+    background: #052769;
+    width: 158px;
+    color: white;
+  }
+  &.error {
+    .coverBag {
+      width: 100px;
+      height: 100px;
+    }
+    p.noText {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+      font-weight: 500;
+    }
+  }
+}

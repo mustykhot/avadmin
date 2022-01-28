@@ -1,0 +1,23 @@
+@import "../../assets/styles/index";
+.formHeadFlex {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  p.formTitle {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 0px;
+    color: $black;
+  }
+  p.formPage {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: rgba($color: $primary, $alpha: 0.2);
+  }
+  span.active {
+    color: $primary;
+  }
+}

@@ -1,0 +1,46 @@
+@import "../../../../assets/styles/index";
+
+.pd-admin {
+  width: 100%;
+  .topicPart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .pageTitle {
+      @include pageTitle;
+    }
+
+    .btnBox {
+      display: flex;
+      button.download {
+        @include downloadBtn;
+      }
+
+      button.create {
+        @include createBtn;
+        margin-left: 10px;
+      }
+    }
+  }
+  .whiteContainer {
+    @include whiteContainer;
+    .tableHead {
+      @include tableHead;
+      .search {
+        @include search;
+      }
+      .tableTitle {
+        @include tableTitle;
+      }
+    }
+
+    .overflowTable {
+      width: 100%;
+      //   overflow-y: auto;
+      //   @include webkit2;
+      @include overflowTable;
+      table {
+      }
+    }
+  }
+}

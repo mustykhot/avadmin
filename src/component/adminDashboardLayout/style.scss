@@ -1,0 +1,13 @@
+@import "../../assets/styles/index";
+.dashLayout {
+  width: 100%;
+  display: flex;
+
+  .mainBar {
+    flex: auto;
+    background: #f2f2f2;
+    .mainContent {
+      padding: 30px;
+    }
+  }
+}

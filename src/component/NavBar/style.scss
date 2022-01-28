@@ -1,0 +1,97 @@
+@import "../../assets/styles/index";
+nav {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: white;
+  padding: 20px 10px;
+
+  .navEnd {
+    .userSide {
+      display: flex;
+      align-items: center;
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      .dropSide {
+        cursor: pointer;
+        position: relative;
+        margin-right: 20px;
+        .boxIn {
+          display: flex;
+          align-items: center;
+          .name {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 14px;
+            letter-spacing: 1px;
+            color: #000000;
+            margin-right: 5px;
+          }
+          img {
+            width: 10px;
+          }
+        }
+
+        .dropDown {
+          position: absolute;
+          top: 57px;
+          right: 5px;
+          width: 150px;
+          padding: 20px;
+          z-index: 2;
+          border-radius: 6px;
+          background: white;
+          display: flex;
+          flex-direction: column;
+          transform: scale(0);
+          transform-origin: right top;
+          transition: transform 0.3s ease;
+          box-shadow: $card-shadow;
+          &.show {
+            transform: scale(1);
+          }
+          button {
+            @include button;
+            width: 100%;
+            background: none;
+            margin-bottom: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: $primary;
+            font-size: 15px;
+            box-shadow: none;
+          }
+          a {
+            text-decoration: none;
+            font-weight: 600;
+            color: $primary;
+            font-size: 15px;
+          }
+        }
+      }
+      .bellSide {
+        position: relative;
+        img {
+          width: 18px;
+        }
+        .circle {
+          width: 8px;
+          height: 8px;
+          background: #ee2203;
+          position: absolute;
+          top: 3px;
+          right: 10px;
+          border-radius: 50%;
+          &.dnone {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,179 @@
+@import "react-redux-toastr/src/styles/index";
+
+// toastr custom styles
+.redux-toastr {
+  position: relative;
+  .top-center {
+    width: 90vw;
+    max-width: 600px;
+    transform: translateX(-25%);
+    padding-top: 40px;
+  }
+  .toastr {
+    opacity: 1;
+    background-color: white;
+    width: 100%;
+    &::after {
+      // content: "";
+      position: fixed;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.404);
+    }
+    > div {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: relative;
+      z-index: 50;
+      > div {
+        float: unset !important;
+        margin: 0 !important;
+        position: relative;
+      }
+    }
+    span {
+      color: white !important;
+    }
+    &.rrt-success {
+      background-color: #1e791c;
+    }
+    &.rrt-error {
+      background-color: #d73b4e !important;
+    }
+    .rrt-left-container {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: static;
+      display: flex;
+      justify-content: center;
+      * {
+        position: static !important;
+
+        display: flex;
+        justify-content: center;
+        margin: 0 !important;
+      }
+    }
+    .rrt-middle-container {
+      margin-left: 0 !important;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      height: 70px;
+      flex-grow: 2;
+      width: auto !important;
+    }
+    .rrt-right-container {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .close-toastr {
+        width: 100%;
+      }
+    }
+    svg {
+      width: 28px !important;
+      position: relative;
+      height: 28px !important;
+    }
+  }
+  .close-toastr.toastr-control {
+    opacity: 1;
+  }
+}
+
+// more actions styles
+.more-actions {
+  .drop-down-content {
+    min-width: 125px;
+    padding: 0.5rem 0;
+  }
+  button.btn-noBg,
+  a.btn-noBg {
+    text-decoration: none;
+    cursor: pointer;
+    text-transform: capitalize;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0;
+    font-weight: 500;
+    background-color: transparent;
+    border: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    svg {
+      font-size: 18px;
+      margin-right: 0.4rem;
+      margin-top: -5px;
+    }
+    &:last-child {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+// status
+.status {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 12px;
+  border-radius: 12.5px;
+  width: max-content;
+  margin: auto;
+  padding: 6px 25px;
+  &.active {
+    color: #0c9c7a;
+    background: #e5f5f4;
+  }
+  &.red,
+  &.Deactivated,
+  &.Declined {
+    background: #f7e5e5;
+    color: #a71410;
+  }
+  &.yellow,
+  &.pending {
+    background: #fff2ca;
+    color: #f98b2d;
+  }
+}
+
+.nameDiv {
+  display: flex;
+  align-items: center;
+
+  text-align: left;
+  img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 7px;
+  }
+  .nameBox {
+    .name {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 16px;
+      color: #2a2b36;
+      margin-bottom: 5px;
+      text-align: unset;
+    }
+    .email {
+      font-weight: 500;
+      font-size: 10px;
+      line-height: 12px;
+      color: #6e768c;
+      text-align: unset;
+    }
+  }
+}

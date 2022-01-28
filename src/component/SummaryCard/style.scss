@@ -1,0 +1,74 @@
+@import "../../assets/styles/index";
+.summary {
+  width: 32%;
+  background: $white;
+  border: 1px solid #e7e7e7;
+  box-sizing: border-box;
+
+  border-radius: 4px;
+  padding: 15px 20px;
+  &.four {
+    width: 23%;
+  }
+  .iconFlex {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    img {
+      width: 20px;
+    }
+    .percent {
+      display: flex;
+      align-items: center;
+      border-radius: 12.5px;
+      padding: 5px 7px;
+      .fill {
+        path {
+          fill: $primary;
+        }
+      }
+      &.inc {
+        background: #91c73c;
+        .fill {
+          transform: rotate(180deg);
+        }
+      }
+      &.dec {
+        background: #c7513c;
+      }
+      p {
+        margin-right: 3px;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 14px;
+        /* identical to box height */
+
+        color: $white;
+      }
+    }
+  }
+  p.midText {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 23px;
+    color: #393939;
+    margin-bottom: 12px;
+  }
+  p.btmText {
+    font-size: 14px;
+    line-height: 16px;
+
+    color: #4a4a4a;
+  }
+  &.amount {
+    background: #0052bd;
+    border: none;
+
+    p.midText,
+    p.btmText {
+      color: $white;
+    }
+  }
+}

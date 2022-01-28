@@ -1,0 +1,66 @@
+@import "../../assets/styles/index";
+.message_box {
+  width: 100%;
+  border-top: 0.5px solid #dcdff1;
+  border-bottom: 0.5px solid #dcdff1;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &.active {
+    background: #f6f9ff;
+    box-shadow: inset 5px 0px 0px #0052bd;
+    border-left: 4px solid $primary;
+  }
+  img {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+  }
+  .textBox {
+    width: 80%;
+    .nameSide {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+      p.name {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 24px;
+        color: #4a4a4a;
+      }
+      p.time {
+        font-size: 10px;
+        line-height: 18px;
+        text-align: right;
+        letter-spacing: 0.416667px;
+        color: #8d97a5;
+      }
+    }
+    .messageSide {
+      display: flex;
+      justify-content: space-between;
+      p.message {
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 20px;
+        color: #4a4a4a;
+        width: 70%;
+      }
+      p.numberCircle {
+        background: #ff0000;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        font-size: 10px;
+        line-height: 12px;
+        text-align: center;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}

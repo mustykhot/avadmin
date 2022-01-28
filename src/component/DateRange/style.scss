@@ -1,0 +1,52 @@
+.dateFilter {
+  width: 190px;
+
+  position: relative;
+  .dateBox {
+    height: 35px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    width: 100%;
+    border-radius: 4px;
+    display: flex;
+    padding: 5px 15px;
+    justify-content: space-between;
+    cursor: pointer;
+    align-items: center;
+    p {
+      font-size: 12px;
+      line-height: 14px;
+
+      color: #2d3748;
+    }
+    img {
+      width: 11px;
+    }
+  }
+  .rangeDiv {
+    position: absolute;
+    top: 40px;
+
+    z-index: 7;
+    border: 1px solid #2f80ed;
+    background: white;
+
+    .applyBtn {
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+      padding-bottom: 10px;
+      button {
+        padding: 8px 10px;
+        color: white;
+        background: #2f80ed;
+        outline: none;
+        border: transparent;
+        border-radius: 10px;
+        width: 100px;
+        margin-right: 10px;
+      }
+    }
+  }
+}

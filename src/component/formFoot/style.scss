@@ -1,0 +1,22 @@
+@import "../../assets/styles/index";
+
+.formFoot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  a {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-decoration-line: underline;
+    color: $primary;
+  }
+  span {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    color: #6e768c;
+  }
+}

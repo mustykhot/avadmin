@@ -1,0 +1,125 @@
+@import "../../assets/styles/index";
+
+.chatBox {
+  width: 100%;
+  height: 100%;
+  .chatDetails {
+    width: 100%;
+    padding: 22px 31px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .userDetail {
+      display: flex;
+      align-items: center;
+      img {
+        width: 31px;
+        height: 31px;
+        border-radius: 50%;
+        margin-right: 18px;
+      }
+      .textPart {
+        p.name {
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 24px;
+          color: #4a4a4a;
+          margin-bottom: 5px;
+        }
+        p.userActive {
+          display: flex;
+          align-items: center;
+          font-size: 12px;
+          line-height: 14px;
+          color: #6e768c;
+          span {
+            background: #42be65;
+            width: 8px;
+            display: block;
+            height: 8px;
+            margin-right: 3px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+  .line {
+    border-bottom: 0.5px solid #eaedf3;
+  }
+  .allMessageBox {
+    height: 77%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 29px;
+    overflow: auto;
+    @include webkit;
+    .eachMsg {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      margin-bottom: 20px;
+      &.left {
+        border-radius: 5px;
+        font-size: 12px;
+        line-height: 20px;
+        justify-content: flex-end;
+        align-items: flex-end;
+        p.msg {
+          color: #51606d;
+          background: #eaeff4;
+        }
+      }
+      .time {
+        font-size: 12px;
+        line-height: 20px;
+        color: #323e4a;
+        margin-bottom: 4px;
+      }
+      p.msg {
+        background: #0052bd;
+        border-radius: 3px;
+        font-size: 12px;
+        line-height: 20px;
+        color: #ffffff;
+        padding: 5px 16px;
+        max-width: 346px;
+      }
+    }
+  }
+  .chat-footer {
+    border-top: 1px solid #eaedf3;
+
+    form {
+      display: flex;
+      align-items: center;
+      padding: 10px 30px;
+      justify-content: space-between;
+      .form-group {
+        width: 70%;
+        .input-icon-wrap {
+          border: none;
+          height: unset;
+        }
+      }
+      .round-btn {
+        background: none;
+        border: none;
+      }
+      .sendBtn {
+        background: #0052bd;
+        border-radius: 4px;
+        color: white;
+        display: flex;
+        align-items: center;
+        height: 40px;
+        justify-content: center;
+        width: 109px;
+        .sendIcon {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
