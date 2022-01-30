@@ -124,7 +124,7 @@ const Chat = () => {
   const [firstId, setFirstId] = useState("");
   const [secondId, setSecondId] = useState("");
   const [skip, setSkip] = useState(true);
-  console.log(firstId, secondId, "gggggggggg");
+  console.log(firstId, secondId, "ggggggg");
   const setId = (id1, id2) => {
     setFirstId(id1);
     setSecondId(id2);
