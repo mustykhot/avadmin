@@ -12,13 +12,15 @@ const MessageBox = ({
   setActive,
   setId,
   members,
+  skipper,
 }) => {
-  console.log(members[1], members[0]);
   return (
     <div
       onClick={() => {
+        console.log(members[1], members[0], "here");
         setActive(id);
         setId(members[0], members[1]);
+        skipper(false);
       }}
       className={`message_box ${active ? "active" : ""}`}
     >

@@ -124,6 +124,7 @@ const Chat = () => {
   const [firstId, setFirstId] = useState("");
   const [secondId, setSecondId] = useState("");
   const [skip, setSkip] = useState(true);
+  console.log(firstId, secondId, "gggggggggg");
   const setId = (id1, id2) => {
     setFirstId(id1);
     setSecondId(id2);
@@ -137,8 +138,8 @@ const Chat = () => {
     error: twoconvError,
   } = useGetConversationBtwUsersQuery(
     {
-      firstId: firstId,
-      secondId: secondId,
+      idFirst: firstId,
+      idSecond: secondId,
     },
     {
       skip,
@@ -181,6 +182,7 @@ const Chat = () => {
                       active={item._id === activeMsg}
                       members={item.members}
                       setId={setId}
+                      skipper={setSkip}
                     />
                   );
                 })
