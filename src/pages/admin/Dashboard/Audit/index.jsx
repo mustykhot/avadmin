@@ -12,7 +12,12 @@ import Modal from "../../../../component/Modal";
 import SubmitBtn from "../../../../component/submitBtn";
 import SuccessModal from "../../../../component/popModal";
 import { useForm } from "react-hook-form";
-
+import { useGetAuditQuery } from "../../../../services/api";
+import NoProduct from "../../../../component/NoProduct";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import LoadingTable from "../../../../component/loadingTable";
+import moment from "moment";
 const Audit = () => {
   const list = [1, 2, 3];
   const [isLoadng, setIsLoading] = useState(false);
@@ -27,6 +32,13 @@ const Audit = () => {
     console.log(vals);
     setIsLoading(false);
   };
+  const {
+    data: audit = [],
+    isLoading: loading,
+    isError,
+    error,
+  } = useGetAuditQuery();
+  console.log(audit, "audit");
 
   return (
     <AdminDashboardLayout active="audit">
@@ -46,31 +58,46 @@ const Audit = () => {
           </div>
 
           <div className="overflowTable">
-            <table>
-              <thead>
-                <tr>
-                  <th className="left">Campaign Title</th>
-                  <th className="extraTh right">
-                    Time <img src={shape} alt="shape" />{" "}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((item) => {
-                  return (
-                    <tr>
-                      <td className="left">
-                        <b>Give admin access to “Ads manager</b> <br /> <br />
-                        Carrie Thompson Balogun | Non-financial admin
-                      </td>
+            {isError ? (
+              <NoProduct msg="There is a problem...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            ) : loading ? (
+              <LoadingTable />
+            ) : !audit.rows ? (
+              <NoProduct msg="No Audit Yet">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            ) : (
+              <table>
+                <thead>
+                  <tr>
+                    <th className="left">Campaign Title</th>
+                    <th className="extraTh right">
+                      Time <img src={shape} alt="shape" />{" "}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {audit.rows.map((item) => {
+                    return (
+                      <tr>
+                        <td className="left">
+                          {/* <b>Give admin access to “Ads manager</b> <br />{" "}
+                            <br />
+                            Carrie Thompson Balogun | Non-financial admin */}
+                          <b>{item.auditLog}</b>
+                        </td>
 
-                      <td className="right">5 hours ago</td>
-                    </tr>
-                  );
-                })}
-                <tr></tr>
-              </tbody>
-            </table>
+                        <td className="right">
+                          {moment(item.createdAt).fromNow()}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       </div>

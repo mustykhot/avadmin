@@ -42,6 +42,7 @@ export const authApi = createApi({
     "user",
     "admins",
     "chat",
+    "audit",
   ],
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -156,6 +157,11 @@ export const authApi = createApi({
       providesTags: ["vendor"],
       transformResponse: (response) => response.data,
     }),
+    getAudit: builder.query({
+      query: () => `user/audits/all`,
+      providesTags: ["audit"],
+      transformResponse: (response) => response,
+    }),
     // private vendor
     getAllPrivateVendor: builder.query({
       query: () => "vendors",
@@ -254,4 +260,5 @@ export const {
   useCreateChatMutation,
   useGetConversationQuery,
   useGetConversationBtwUsersQuery,
+  useGetAuditQuery,
 } = authApi;

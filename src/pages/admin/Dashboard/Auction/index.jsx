@@ -253,108 +253,116 @@ const Auction = () => {
               <input type="text" placeholder="Search" className="search" />
             </div>
             <div className="overflowTable">
-              {loadingBuyNow ? (
-                <LoadingTable />
-              ) : deal.message !== "no buy now deals available!" ? (
-                <TableContainer>
-                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                    <EnhancedTableHead
-                      headCells={headCells}
-                      numSelected={selected.length}
-                      order={order}
-                      orderBy={orderBy}
-                      onSelectAllClick={handleSelectAllClick}
-                      onRequestSort={handleRequestSort}
-                      rowCount={deal.data.rows.length}
-                      align="left"
-                      isCheck={true}
-                    />
-                    <TableBody>
-                      {stableSort(
-                        deal.data.rows,
-                        getComparator(order, orderBy)
-                      ).map((row, index) => {
-                        const isItemSelected = isSelected(row.id);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+              {!isError ? (
+                loadingBuyNow ? (
+                  <LoadingTable />
+                ) : deal.message !== "no buy now deals available!" ? (
+                  <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                      <EnhancedTableHead
+                        headCells={headCells}
+                        numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={deal.data.rows.length}
+                        align="left"
+                        isCheck={true}
+                      />
+                      <TableBody>
+                        {stableSort(
+                          deal.data.rows,
+                          getComparator(order, orderBy)
+                        ).map((row, index) => {
+                          const isItemSelected = isSelected(row.id);
+                          const labelId = `enhanced-table-checkbox-${index}`;
 
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={row.id}
-                            selected={isItemSelected}
-                          >
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                color="primary"
-                                checked={isItemSelected}
-                                inputProps={{
-                                  "aria-labelledby": labelId,
-                                }}
-                                onChange={(event) => handleClick(event, row.id)}
-                              />
-                            </TableCell>
-
-                            <TableCell align="left">
-                              {" "}
-                              <div className="nameDiv">
-                                <img
-                                  className="userImg"
-                                  src={userImg}
-                                  alt="user"
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={row.id}
+                              selected={isItemSelected}
+                            >
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  color="primary"
+                                  checked={isItemSelected}
+                                  inputProps={{
+                                    "aria-labelledby": labelId,
+                                  }}
+                                  onChange={(event) =>
+                                    handleClick(event, row.id)
+                                  }
                                 />
-                                <div className="nameBox">
-                                  <p className="name">Emeka Phillips</p>
-                                  <p className="email">
-                                    emeka.phillips@gmail.com
-                                  </p>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.product.productName}
-                            </TableCell>
-                            <TableCell align="left">
-                              {formatCurrency(row.product.price)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {formatCurrency(row.product.finalPrice)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {moment(row.created_at).format("L")}
-                            </TableCell>
-                            <TableCell align="left">
-                              <p
-                                className={`status ${
-                                  row.status === "Deactivated" ||
-                                  row.status === "Declined"
-                                    ? "red"
-                                    : row.status === "pending"
-                                    ? "yellow"
-                                    : "active"
-                                }`}
-                              >
-                                {row.status}
-                              </p>
-                            </TableCell>
+                              </TableCell>
 
-                            <TableCell className="action" align="left">
-                              <SubscribeDropDown
-                                approve={approveDeal}
-                                reject={rejectDeal}
-                                id={row.id}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                              <TableCell align="left">
+                                {" "}
+                                <div className="nameDiv">
+                                  <img
+                                    className="userImg"
+                                    src={userImg}
+                                    alt="user"
+                                  />
+                                  <div className="nameBox">
+                                    <p className="name">Emeka Phillips</p>
+                                    <p className="email">
+                                      emeka.phillips@gmail.com
+                                    </p>
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.product.productName}
+                              </TableCell>
+                              <TableCell align="left">
+                                {formatCurrency(row.product.price)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {formatCurrency(row.product.finalPrice)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {moment(row.created_at).format("L")}
+                              </TableCell>
+                              <TableCell align="left">
+                                <p
+                                  className={`status ${
+                                    row.status === "Deactivated" ||
+                                    row.status === "Declined"
+                                      ? "red"
+                                      : row.status === "pending"
+                                      ? "yellow"
+                                      : "active"
+                                  }`}
+                                >
+                                  {row.status}
+                                </p>
+                              </TableCell>
+
+                              <TableCell className="action" align="left">
+                                <SubscribeDropDown
+                                  approve={approveDeal}
+                                  reject={rejectDeal}
+                                  id={row.id}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <NoProduct msg="No Data Yet...">
+                    <FontAwesomeIcon icon={faCommentSlash} />
+                  </NoProduct>
+                )
               ) : (
-                <NoProduct msg="No Data Yet...">
+                <NoProduct msg="There is a problem...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
@@ -369,108 +377,116 @@ const Auction = () => {
               <input type="text" placeholder="Search" className="search" />
             </div>
             <div className="overflowTable">
-              {loadingPrivate ? (
-                <LoadingTable />
-              ) : dealPrivate.message !== "no buy now deals available!" ? (
-                <TableContainer>
-                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                    <EnhancedTableHead
-                      headCells={headCells}
-                      numSelected={selected.length}
-                      order={order}
-                      orderBy={orderBy}
-                      onSelectAllClick={handleSelectAllClick}
-                      onRequestSort={handleRequestSort}
-                      rowCount={dealPrivate.data.rows.length}
-                      align="left"
-                      isCheck={true}
-                    />
-                    <TableBody>
-                      {stableSort(
-                        dealPrivate.data.rows,
-                        getComparator(order, orderBy)
-                      ).map((row, index) => {
-                        const isItemSelected = isSelected(row.id);
-                        const labelId = `enhanced-table-checkbox-${index}`;
+              {!isPrivateError ? (
+                loadingPrivate ? (
+                  <LoadingTable />
+                ) : dealPrivate.message !== "no buy now deals available!" ? (
+                  <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                      <EnhancedTableHead
+                        headCells={headCells}
+                        numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={dealPrivate.data.rows.length}
+                        align="left"
+                        isCheck={true}
+                      />
+                      <TableBody>
+                        {stableSort(
+                          dealPrivate.data.rows,
+                          getComparator(order, orderBy)
+                        ).map((row, index) => {
+                          const isItemSelected = isSelected(row.id);
+                          const labelId = `enhanced-table-checkbox-${index}`;
 
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={row.id}
-                            selected={isItemSelected}
-                          >
-                            <TableCell padding="checkbox">
-                              <Checkbox
-                                color="primary"
-                                checked={isItemSelected}
-                                inputProps={{
-                                  "aria-labelledby": labelId,
-                                }}
-                                onChange={(event) => handleClick(event, row.id)}
-                              />
-                            </TableCell>
-
-                            <TableCell align="left">
-                              {" "}
-                              <div className="nameDiv">
-                                <img
-                                  className="userImg"
-                                  src={userImg}
-                                  alt="user"
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={row.id}
+                              selected={isItemSelected}
+                            >
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  color="primary"
+                                  checked={isItemSelected}
+                                  inputProps={{
+                                    "aria-labelledby": labelId,
+                                  }}
+                                  onChange={(event) =>
+                                    handleClick(event, row.id)
+                                  }
                                 />
-                                <div className="nameBox">
-                                  <p className="name">Emeka Phillips</p>
-                                  <p className="email">
-                                    emeka.phillips@gmail.com
-                                  </p>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell align="left">
-                              {row.product.productName}
-                            </TableCell>
-                            <TableCell align="left">
-                              {formatCurrency(row.product.price)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {formatCurrency(row.product.finalPrice)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {moment(row.created_at).format("L")}
-                            </TableCell>
-                            <TableCell align="left">
-                              <p
-                                className={`status ${
-                                  row.status === "Deactivated" ||
-                                  row.status === "Declined"
-                                    ? "red"
-                                    : row.status === "pending"
-                                    ? "yellow"
-                                    : "active"
-                                }`}
-                              >
-                                {row.status}
-                              </p>
-                            </TableCell>
+                              </TableCell>
 
-                            <TableCell className="action" align="left">
-                              <SubscribeDropDown
-                                approve={approveDeal}
-                                reject={rejectDeal}
-                                id={row.id}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                              <TableCell align="left">
+                                {" "}
+                                <div className="nameDiv">
+                                  <img
+                                    className="userImg"
+                                    src={userImg}
+                                    alt="user"
+                                  />
+                                  <div className="nameBox">
+                                    <p className="name">Emeka Phillips</p>
+                                    <p className="email">
+                                      emeka.phillips@gmail.com
+                                    </p>
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell align="left">
+                                {row.product.productName}
+                              </TableCell>
+                              <TableCell align="left">
+                                {formatCurrency(row.product.price)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {formatCurrency(row.product.finalPrice)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {moment(row.created_at).format("L")}
+                              </TableCell>
+                              <TableCell align="left">
+                                <p
+                                  className={`status ${
+                                    row.status === "Deactivated" ||
+                                    row.status === "Declined"
+                                      ? "red"
+                                      : row.status === "pending"
+                                      ? "yellow"
+                                      : "active"
+                                  }`}
+                                >
+                                  {row.status}
+                                </p>
+                              </TableCell>
+
+                              <TableCell className="action" align="left">
+                                <SubscribeDropDown
+                                  approve={approveDeal}
+                                  reject={rejectDeal}
+                                  id={row.id}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <NoProduct msg="No Data Yet...">
+                    <FontAwesomeIcon icon={faCommentSlash} />
+                  </NoProduct>
+                )
               ) : (
-                <NoProduct msg="No Data Yet...">
+                <NoProduct msg="There is a problem...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}

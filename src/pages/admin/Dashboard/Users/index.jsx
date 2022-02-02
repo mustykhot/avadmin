@@ -153,8 +153,10 @@ const Users = () => {
           </div>
 
           <div className="overflowTable">
-            {isError === true ? (
-              <p>{error.status}</p>
+            {isError ? (
+              <NoProduct msg="There is a problem...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
             ) : loading ? (
               <LoadingTable />
             ) : users.message !== "no user available!" ? (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import action from "../../assets/icons/action.svg";
 import TableDrop from "../TableDrop";
 import moment from "moment";
@@ -11,6 +11,10 @@ import { ReactComponent as Fileicon } from "../../assets/icons/fileIcon.svg";
 import NoProduct from "../NoProduct";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toastr } from "react-redux-toastr";
+import { useCreateChatMutation } from "../../services/api";
+import uploadImg from "../../hook/UploadImg";
+
 const ChatBox = ({ currentMsg }) => {
   const [show, setShow] = useState(false);
   const { register, formState, handleSubmit, reset } = useForm({
@@ -18,20 +22,81 @@ const ChatBox = ({ currentMsg }) => {
     mode: "onSubmit",
     shouldUnregister: true,
   });
-  const onSubmit = (values) => {
-    console.log(values);
+  // send message
+  const [create, { isLoading }] = useCreateChatMutation();
+  const [img, setImg] = useState(null);
+
+  // upload
+
+  const uploader = async (file) => {
+    let url = await uploadImg(file, "n3mtymsx");
+
+    setImg({
+      url: url.secure_url,
+      name: url.original_filename,
+      format: url.format,
+    });
+  };
+  const onSubmit = async (values) => {
+    let payload = {
+      text: values.message,
+      sender: userId,
+      converstation: currentMsg.id,
+    };
+    if (img) {
+      payload = {
+        ...payload,
+        file: {
+          url: img.url,
+          name: img.name,
+          mimeType: img.format,
+        },
+      };
+    }
+    console.log(payload, "payload");
+    try {
+      const response = await create(payload).unwrap();
+      //  closeModal();
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
     reset({ message: "" });
   };
-  const userId = "1234";
+  const [sender, setSender] = useState(null);
+  // console.log(sender, "sender");
+  const userId = "61d57dbea7bc65c65b587c32";
+  // console.log(currentMsg, "currentMsg");
+  useEffect(() => {
+    const sendernew = currentMsg
+      ? currentMsg.members.filter((item) => {
+          return item.id === userId;
+        })
+      : "";
+
+    setSender(sendernew[0]);
+  }, [currentMsg]);
+
   return (
     <>
       {currentMsg ? (
         <div className="chatBox">
           <div className="chatDetails">
             <div className="userDetail">
-              <img src={currentMsg.img} alt="user" />
+              <img
+                src={
+                  sender
+                    ? "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1613435284/pmmnrbuspg9d8vl5cqqe.jpg"
+                    : "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1613435284/pmmnrbuspg9d8vl5cqqe.jpg"
+                }
+                alt="user"
+              />
               <div className="textPart">
-                <p className="name">{currentMsg.name}</p>
+                <p className="name">
+                  {sender ? `${sender.firstName} ${sender.lastName}` : "N/A"}
+                </p>
                 {currentMsg.isActive && (
                   <p className="userActive">
                     <span></span> Active Now
@@ -43,18 +108,27 @@ const ChatBox = ({ currentMsg }) => {
           </div>
           <div className="line"></div>
           <div className="allMessageBox">
-            {currentMsg.msgList.map((item) => {
-              return (
-                <div
-                  className={`eachMsg ${
-                    item.senderId === userId ? "left" : ""
-                  }`}
-                >
-                  <p className="time"> {moment(item.time).format("LT")}</p>
-                  <p className="msg">{item.msg}</p>
-                </div>
-              );
-            })}
+            {!currentMsg.messages.length ? (
+              <NoProduct msg="No Message...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            ) : (
+              currentMsg.messages.map((item) => {
+                return (
+                  <div
+                    className={`eachMsg ${
+                      item.sender.id === userId ? "left" : ""
+                    }`}
+                  >
+                    <p className="time">
+                      {" "}
+                      {moment(item.createdAt).format("LT")}
+                    </p>
+                    <p className="msg">{item.text}</p>
+                  </div>
+                );
+              })
+            )}
           </div>
 
           {/* chat footer */}
@@ -68,12 +142,21 @@ const ChatBox = ({ currentMsg }) => {
                 register={register}
                 errors={formState.errors}
               />
-              <button className="btn round-btn">
+              {/* <button className="btn round-btn">
                 <AttachIcon className="attachIcon" />
-              </button>
-              <button className="btn round-btn">
+              </button> */}
+              <input
+                onChange={(e) => {
+                  uploader(e.target.files[0]);
+                }}
+                type="file"
+                name="url"
+                hidden
+                id="url"
+              />
+              <label htmlFor="url" className="btn round-btn">
                 <Fileicon className="fileIcon" />
-              </button>
+              </label>
               <button className="btn round-btn sendBtn">
                 Send
                 <SendIcon className="sendIcon" />

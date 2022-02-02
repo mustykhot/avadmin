@@ -1,35 +1,22 @@
 import { Skeleton } from "@mui/material";
 import "./style.scss";
-const LoadingTable = () => {
+const LoadingTable = ({ rows = [1, 2, 3, 4, 5, 6] }) => {
   return (
     <table className="skeletonTable">
       <thead>
         <tr>
-          <th>
-            {" "}
-            <Skeleton animation="wave" width="100%" height={20} />
-          </th>
-          <th>
-            {" "}
-            <Skeleton animation="wave" width="100%" height={20} />
-          </th>
-          <th className="extraTh">
-            {" "}
-            <Skeleton animation="wave" width="100%" height={20} />
-          </th>
-          <th className="extraTh">
-            <Skeleton animation="wave" width="100%" height={20} />
-          </th>
-          <th className="extraTh">
-            <Skeleton animation="wave" width="100%" height={20} />
-          </th>
-          <th>
-            <Skeleton animation="wave" width="100%" height={20} />
-          </th>
+          {rows.map((item) => {
+            return (
+              <th key={item}>
+                {" "}
+                <Skeleton animation="wave" width="100%" height={20} />
+              </th>
+            );
+          })}
         </tr>
       </thead>
       <tbody>
-        {[1, 2, 3, 4, 5, 6].map((item) => {
+        {rows.map((item) => {
           return (
             <tr>
               <td className="">

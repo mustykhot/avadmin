@@ -226,113 +226,73 @@ const PrivateVendor = () => {
             </div>
 
             <div className="overflowTable">
-              {loading ? (
-                <LoadingTable />
-              ) : vendor.rows.length ? (
-                <TableContainer>
-                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                    <EnhancedTableHead
-                      headCells={headCells}
-                      // numSelected={selected.length}
-                      order={order}
-                      orderBy={orderBy}
-                      // onSelectAllClick={handleSelectAllClick}
-                      onRequestSort={handleRequestSort}
-                      rowCount={vendor.rows.length}
-                      align="left"
-                    />
-                    <TableBody>
-                      {stableSort(
-                        vendor.rows,
-                        getComparator(order, orderBy)
-                      ).map((item) => {
-                        // const isItemSelected = isSelected(row.id);
-                        // const labelId = `enhanced-table-checkbox-${index}`
-                        return (
-                          <TableRow
-                            // hover
-                            // role="checkbox"
-                            // aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={item._id}
-                            // selected={isItemSelected}
-                          >
-                            <TableCell align="left">
-                              <div className="nameDiv">
-                                <img
-                                  className="userImg"
-                                  src={userImg}
-                                  alt="user"
-                                />
-                                <div className="nameBox">
-                                  <p className="name">{item.name}</p>
-                                  <p className="email">{item.email}</p>
+              {!isError ? (
+                loading ? (
+                  <LoadingTable />
+                ) : vendor.rows.length ? (
+                  <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                      <EnhancedTableHead
+                        headCells={headCells}
+                        // numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        // onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={vendor.rows.length}
+                        align="left"
+                      />
+                      <TableBody>
+                        {stableSort(
+                          vendor.rows,
+                          getComparator(order, orderBy)
+                        ).map((item) => {
+                          // const isItemSelected = isSelected(row.id);
+                          // const labelId = `enhanced-table-checkbox-${index}`
+                          return (
+                            <TableRow
+                              // hover
+                              // role="checkbox"
+                              // aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={item._id}
+                              // selected={isItemSelected}
+                            >
+                              <TableCell align="left">
+                                <div className="nameDiv">
+                                  <img
+                                    className="userImg"
+                                    src={userImg}
+                                    alt="user"
+                                  />
+                                  <div className="nameBox">
+                                    <p className="name">{item.name}</p>
+                                    <p className="email">{item.email}</p>
+                                  </div>
                                 </div>
-                              </div>
-                            </TableCell>
-                            <TableCell align="left">
-                              {item.phonenumber}
-                            </TableCell>
-                            <TableCell align="left">₦ 54,000</TableCell>
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.phonenumber}
+                              </TableCell>
+                              <TableCell align="left">₦ 54,000</TableCell>
 
-                            <TableCell align="left">5</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                              <TableCell align="left">5</TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <NoProduct msg="No Data Yet...">
+                    <FontAwesomeIcon icon={faCommentSlash} />
+                  </NoProduct>
+                )
               ) : (
-                <NoProduct msg="No Data Yet...">
+                <NoProduct msg="There is a problem...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
-            </div>
-          </div>
-        )}
-        {toggleBtn === "corporate" && (
-          <div className="whiteContainer">
-            <div className="tableHead">
-              <p className="tableTitle">Vendors</p>
-              <input type="text" placeholder="Search" className="search" />
-            </div>
-
-            <div className="overflowTable">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Mobile No</th>
-                    <th className="extraTh">
-                      Deal Values <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Deal Posted <img src={shape} alt="shape" />{" "}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map((item) => {
-                    return (
-                      <tr>
-                        <td className="nameTd">
-                          <div className="nameDiv">
-                            <img className="userImg" src={userImg} alt="user" />
-                            <div className="nameBox">
-                              <p className="name">Emeka Phillips</p>
-                              <p className="email">emeka.phillips@gmail.com</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="phone">08087427344</td>
-                        <td className="role">₦ 54,000</td>
-                        <td className="role">5</td>
-                      </tr>
-                    );
-                  })}
-                  <tr></tr>
-                </tbody>
-              </table>
             </div>
           </div>
         )}

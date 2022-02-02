@@ -20,9 +20,11 @@ import {
   useGetConversationBtwUsersQuery,
   useGetConversationQuery,
 } from "../../../../services/api";
-import { Avatar } from "@mui/material";
+import { Avatar, CardHeader } from "@mui/material";
 import { useSelector } from "react-redux";
 import { toastr } from "react-redux-toastr";
+import Skeleton from "@mui/material/Skeleton";
+
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
   const { user } = useSelector((state) => state.auth);
@@ -168,33 +170,110 @@ const Chat = () => {
               <p className="recent">Recent</p>
             </div>
             <div className="msgDiv">
-              {conversation ? (
-                conversation.conversations.map((item) => {
-                  return (
-                    <MessageBox
-                      image={item.img}
-                      name={item.name}
-                      id={item._id}
-                      // latestMessage={item.latestMessage}
-                      numberOfNew={item.numberOfNew}
-                      time={item.time}
-                      setActive={setActiveMsg}
-                      active={item._id === activeMsg}
-                      members={item.members}
-                      setId={setId}
-                      skipper={setSkip}
+              {!isError ? (
+                !convLoading ? (
+                  conversation ? (
+                    conversation.conversations.map((item) => {
+                      return (
+                        <MessageBox
+                          image={item.img}
+                          name={item.name}
+                          id={item._id}
+                          // latestMessage={item.latestMessage}
+                          numberOfNew={item.numberOfNew}
+                          time={item.time}
+                          setActive={setActiveMsg}
+                          active={item._id === activeMsg}
+                          members={item.members}
+                          setId={setId}
+                          skipper={setSkip}
+                        />
+                      );
+                    })
+                  ) : (
+                    <NoProduct msg="No Chats Yet...">
+                      <FontAwesomeIcon icon={faCommentSlash} />
+                    </NoProduct>
+                  )
+                ) : (
+                  // <p>Loading</p>
+                  <>
+                    <CardHeader
+                      avatar={
+                        <Skeleton
+                          animation="wave"
+                          variant="circular"
+                          width={40}
+                          height={40}
+                        />
+                      }
+                      title={
+                        <Skeleton
+                          animation="wave"
+                          height={10}
+                          width="80%"
+                          style={{ marginBottom: 6 }}
+                        />
+                      }
+                      subheader={
+                        <Skeleton animation="wave" height={10} width="40%" />
+                      }
                     />
-                  );
-                })
+                    <CardHeader
+                      avatar={
+                        <Skeleton
+                          animation="wave"
+                          variant="circular"
+                          width={40}
+                          height={40}
+                        />
+                      }
+                      title={
+                        <Skeleton
+                          animation="wave"
+                          height={10}
+                          width="80%"
+                          style={{ marginBottom: 6 }}
+                        />
+                      }
+                      subheader={
+                        <Skeleton animation="wave" height={10} width="40%" />
+                      }
+                    />
+                    <CardHeader
+                      avatar={
+                        <Skeleton
+                          animation="wave"
+                          variant="circular"
+                          width={40}
+                          height={40}
+                        />
+                      }
+                      title={
+                        <Skeleton
+                          animation="wave"
+                          height={10}
+                          width="80%"
+                          style={{ marginBottom: 6 }}
+                        />
+                      }
+                      subheader={
+                        <Skeleton animation="wave" height={10} width="40%" />
+                      }
+                    />
+                  </>
+                )
               ) : (
-                <NoProduct msg="No Chats Yet...">
+                <NoProduct msg="There is a problem...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
             </div>
           </div>
           <div className="chatBoxDiv">
-            <ChatBox currentMsg={currentMsg} />
+            <ChatBox
+              currentMsg={twoconversation && twoconversation.conversations[0]}
+            />
           </div>
         </div>
       </div>
