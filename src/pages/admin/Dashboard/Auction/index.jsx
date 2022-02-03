@@ -8,7 +8,7 @@ import { useState } from "react";
 import TableDrop from "../../../../component/TableDrop";
 import { Link, useNavigate } from "react-router-dom";
 import DropDownWrapper from "../../../../component/DropDownWrapper";
-import { IconButton } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   useApproveDealMutation,
@@ -128,7 +128,7 @@ const Auction = () => {
     isError: isPrivateError,
     error: privateError,
   } = useGetAllDealPrivateQuery();
-  console.log(deal);
+  console.log(deal && deal.data.rows);
 
   // click table
   const [selected, setSelected] = useState([]);
@@ -256,7 +256,7 @@ const Auction = () => {
               {!isError ? (
                 loadingBuyNow ? (
                   <LoadingTable />
-                ) : deal.message !== "no buy now deals available!" ? (
+                ) : deal.data.rows ? (
                   <TableContainer>
                     <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                       <EnhancedTableHead
@@ -303,27 +303,35 @@ const Auction = () => {
                               <TableCell align="left">
                                 {" "}
                                 <div className="nameDiv">
-                                  <img
-                                    className="userImg"
-                                    src={userImg}
-                                    alt="user"
+                                  <Avatar
+                                    alt={"user"}
+                                    src={row.user ? row.user.image : ""}
+                                    sx={{ width: 35, height: 35 }}
                                   />
                                   <div className="nameBox">
-                                    <p className="name">Emeka Phillips</p>
+                                    <p className="name">
+                                      {row.user
+                                        ? `${row.user.firstName} ${row.user.lastName}`
+                                        : "N/A"}
+                                    </p>
                                     <p className="email">
-                                      emeka.phillips@gmail.com
+                                      {row.user ? row.user.email : "N/A"}
                                     </p>
                                   </div>
                                 </div>
                               </TableCell>
                               <TableCell align="left">
-                                {row.product.productName}
+                                {row.product ? row.product.productName : "N/A"}
                               </TableCell>
                               <TableCell align="left">
-                                {formatCurrency(row.product.price)}
+                                {row.product
+                                  ? formatCurrency(row.product.price)
+                                  : "N/A"}
                               </TableCell>
                               <TableCell align="left">
-                                {formatCurrency(row.product.finalPrice)}
+                                {row.product
+                                  ? formatCurrency(row.product.finalPrice)
+                                  : "N/A"}
                               </TableCell>
                               <TableCell align="left">
                                 {moment(row.created_at).format("L")}
@@ -373,7 +381,7 @@ const Auction = () => {
         {toggleBtn === "private" && (
           <div className="whiteContainer">
             <div className="tableHead">
-              <p className="tableTitle">Admin Users</p>
+              <p className="tableTitle">Buy Now</p>
               <input type="text" placeholder="Search" className="search" />
             </div>
             <div className="overflowTable">
@@ -425,29 +433,36 @@ const Auction = () => {
                               </TableCell>
 
                               <TableCell align="left">
-                                {" "}
                                 <div className="nameDiv">
-                                  <img
-                                    className="userImg"
-                                    src={userImg}
-                                    alt="user"
+                                  <Avatar
+                                    alt={"user"}
+                                    src={row.user ? row.user.image : ""}
+                                    sx={{ width: 35, height: 35 }}
                                   />
                                   <div className="nameBox">
-                                    <p className="name">Emeka Phillips</p>
+                                    <p className="name">
+                                      {row.user
+                                        ? `${row.user.firstName} ${row.user.lastName}`
+                                        : "N/A"}
+                                    </p>
                                     <p className="email">
-                                      emeka.phillips@gmail.com
+                                      {row.user ? row.user.email : "N/A"}
                                     </p>
                                   </div>
                                 </div>
                               </TableCell>
                               <TableCell align="left">
-                                {row.product.productName}
+                                {row.product ? row.product.productName : "N/A"}
                               </TableCell>
                               <TableCell align="left">
-                                {formatCurrency(row.product.price)}
+                                {formatCurrency(
+                                  row.product ? row.product.price : "N/A"
+                                )}
                               </TableCell>
                               <TableCell align="left">
-                                {formatCurrency(row.product.finalPrice)}
+                                {formatCurrency(
+                                  row.product ? row.product.finalPrice : "N/A"
+                                )}
                               </TableCell>
                               <TableCell align="left">
                                 {moment(row.created_at).format("L")}

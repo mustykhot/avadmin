@@ -80,9 +80,13 @@ const AuctionDetail = () => {
             <div className="productText">
               <p className="order">Order ID: ${deal && deal.id} </p>
               <p className="productName">
-                2008 Gcc Mitsubishi Pajero Gls157515kms
+                {deal
+                  ? deal.product
+                    ? deal.product.productName
+                    : "N/A"
+                  : "N/A"}
               </p>
-              <p className="auctionName">Automobile Auctions</p>
+              <p className="auctionName">{deal && deal.dealType}</p>
             </div>
           </div>
           <div className="line"></div>
@@ -127,21 +131,32 @@ const AuctionDetail = () => {
             <div className="flexOrder">
               <p className="left">Customer name:</p>
               <p className="right">
-                <b>Guaranty Trust Bank Plc</b>
+                <b>
+                  {deal
+                    ? deal.user
+                      ? `${deal.user.firstName} ${deal.user.lastName}`
+                      : "N/A"
+                    : "N/A"}
+                  c
+                </b>
               </p>
             </div>
             <div className="flexOrder">
               <p className="left">Contact Email:</p>
               <p className="right">
                 {" "}
-                <b>emeka.phillips@gmail.com</b>{" "}
+                <b>
+                  {deal ? (deal.user ? deal.user.email : "N/A") : "N/A"}
+                </b>{" "}
               </p>
             </div>
             <div className="flexOrder">
               <p className="left">Phone:</p>
               <p className="right">
                 {" "}
-                <b>+2348098765432</b>{" "}
+                <b>
+                  {deal ? (deal.user ? deal.user.phone : "N/A") : "N/A"}
+                </b>{" "}
               </p>
             </div>
           </div>
@@ -151,16 +166,23 @@ const AuctionDetail = () => {
             <div className="flexOrder">
               <p className="left">Based Price:</p>
               <p className="right">
-                ₦ {deal && formatCurrency(deal.currentBid)}{" "}
+                ₦{" "}
+                {deal && deal.product
+                  ? formatCurrency(deal.product.price)
+                  : "0,00"}
               </p>
             </div>
             <div className="flexOrder">
               <p className="left">Max Increment:</p>
-              <p className="right">₦ 200,000+</p>
+              <p className="right">
+                ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
+              </p>
             </div>
             <div className="flexOrder">
               <p className="left">Highest Bid:</p>
-              <p className="right green">₦ 754,000,000</p>
+              <p className="right green">
+                ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
+              </p>
             </div>
           </div>
           <div className="line"></div>

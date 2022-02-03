@@ -9,7 +9,7 @@ const ProfileBox = ({ name, email, account, tel, billing, img }) => {
       <p className="username">{name}</p>
       <p className="email">{email}</p>
       <div className="actionBtn">
-        <a href="mailto:" className="email">
+        <a href={`mailto:${email}`} className="email">
           Send email
         </a>
         <Link to="/chat" className="chat">

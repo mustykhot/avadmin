@@ -232,7 +232,7 @@ const Administrator = () => {
                           <TableCell align="left">{row.phone}</TableCell>
                           <TableCell align="left">{row.role}</TableCell>
 
-                          <TableCell align="left">
+                          {/* <TableCell align="left">
                             <p
                               className={`status ${
                                 row.status === "Deactivated" ||
@@ -244,6 +244,16 @@ const Administrator = () => {
                               }`}
                             >
                               {row.status}
+                            </p>
+                          </TableCell> */}
+
+                          <TableCell align="left">
+                            <p
+                              className={`status ${
+                                !row.active ? "red" : "active"
+                              }`}
+                            >
+                              {row.active ? "Active" : "Inactive"}
                             </p>
                           </TableCell>
 

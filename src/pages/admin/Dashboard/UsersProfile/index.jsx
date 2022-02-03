@@ -8,14 +8,26 @@ import { useState } from "react";
 
 import TableDrop from "../../../../component/TableDrop";
 import userProfile from "../../../../assets/images/userprofile.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import chat from "../../../../assets/icons/chat2.svg";
 import SummaryCard from "../../../../component/SummaryCard";
 import trendingUp from "../../../../assets/icons/trending-up.svg";
 import clock from "../../../../assets/icons/clock.svg";
 import check from "../../../../assets/icons/check-circle.svg";
 import Bitmap from "../../../../assets/icons/Bitmap.svg";
+import NoProduct from "../../../../component/NoProduct";
 import ProfileBox from "../../../../component/ProfileBox";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  useGetEachTransactionQuery,
+  useGetUserDealQuery,
+  useGetUserQuery,
+  useGetUserTransQuery,
+  useGetWalletQuery,
+} from "../../../../services/api";
+import LoadingTable from "../../../../component/loadingTable";
+import moment from "moment";
 const UsersProfile = () => {
   const list = [1, 2, 3];
   const [show, setShow] = useState(false);
@@ -23,8 +35,39 @@ const UsersProfile = () => {
   const handleActiveAction = (type) => {
     setActiveAction(type);
   };
+  const { id } = useParams();
   const [showCard, setShowCard] = useState(false);
+  const {
+    data: user,
+    isLoading: loading,
+    isError,
+    error,
+  } = useGetUserQuery(id);
+  console.log(user);
 
+  const {
+    data: transaction = null,
+    isLoading,
+    isError: istransError,
+    error: transError,
+  } = useGetUserTransQuery(id);
+  console.log(transaction, "trans");
+
+  const {
+    data: deal = null,
+    isLoading: isDealLoading,
+    isError: isdealError,
+    error: dealError,
+  } = useGetUserDealQuery(id);
+  console.log(deal, "deal");
+
+  const {
+    data: wallet = null,
+    isLoading: isWallet,
+    isError: isWalletError,
+    error: walletError,
+  } = useGetWalletQuery(id);
+  console.log(wallet, "wallet");
   return (
     <AdminDashboardLayout active="user">
       <div className="pd-userprofile">
@@ -34,14 +77,14 @@ const UsersProfile = () => {
 
         <div className="profileFlex">
           <ProfileBox
-            name={"Raji Mustapha"}
-            email={"KathleenHaller@dayrep.com"}
-            account={"2324423234"}
-            tel={"09087654566"}
+            name={user && `${user.firstName} ${user.lastName}`}
+            email={user && user.email}
+            account={id}
+            tel={user && user.phone}
             billing={
               " 235 Ikorodu road, Anthony-iyanaoworo, Lagos state, Nigeria"
             }
-            img={userProfile}
+            img={user && user.image}
           />
 
           <div className="activityBox">
@@ -118,7 +161,7 @@ const UsersProfile = () => {
                     percent={"12%"}
                   />
                   <SummaryCard
-                    midText={"530,504,000"}
+                    midText={wallet && wallet.data.balance}
                     currency={"₦"}
                     btmText={"Wallet Balance"}
                     isAmount={true}
@@ -129,45 +172,58 @@ const UsersProfile = () => {
                   <div className="tableHead">
                     <p className="tableTitle">Recent Activities</p>
                   </div>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Transaction ID</th>
-                        <th>Mobile No</th>
-                        <th className="extraTh">
-                          Amount <img src={shape} alt="shape" />{" "}
-                        </th>
-                        <th className="extraTh">
-                          Status <img src={shape} alt="shape" />{" "}
-                        </th>
-                        <th className="extraTh">
-                          Date <img src={shape} alt="shape" />{" "}
-                        </th>
-
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item) => {
-                        return (
+                  {!isLoading ? (
+                    transaction.data.rows ? (
+                      <table>
+                        <thead>
                           <tr>
-                            <td className="phone">8974-8743</td>
-                            <td className={`amount green`}>₦ 2,400,000</td>
-                            <td className="role">₦ 54,000</td>
-                            <td className="statusTd">
-                              <p className="status active">Successful</p>
-                            </td>
-                            <td className="role">10 Nov, 2021</td>
+                            <th>Transaction ID</th>
+                            <th>Mobile No</th>
+                            <th className="extraTh">
+                              Amount <img src={shape} alt="shape" />{" "}
+                            </th>
+                            <th className="extraTh">
+                              Status <img src={shape} alt="shape" />{" "}
+                            </th>
+                            <th className="extraTh">
+                              Date <img src={shape} alt="shape" />{" "}
+                            </th>
 
-                            <td className="action">
-                              <TableDrop extra={true} />
-                            </td>
+                            <th></th>
                           </tr>
-                        );
-                      })}
-                      <tr></tr>
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                          {transaction.data.rows.map((item) => {
+                            return (
+                              <tr key={item.id}>
+                                <td className="phone">{item.id}</td>
+                                <td className={`amount green`}>
+                                  {item.user.phone}
+                                </td>
+                                <td className="role">₦ {item.amount}</td>
+                                <td className="statusTd">
+                                  <p className="status active">Successful</p>
+                                </td>
+                                <td className="role">
+                                  {moment(item.createdAt).format("L")}
+                                </td>
+
+                                <td className="action">
+                                  <TableDrop extra={true} />
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <NoProduct msg="No Transactions...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    )
+                  ) : (
+                    <LoadingTable />
+                  )}
                 </div>
               </div>
             )}
@@ -205,44 +261,53 @@ const UsersProfile = () => {
                   <div className="tableHead">
                     <p className="tableTitle">Auction Participated</p>
                   </div>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Item ID</th>
-
-                        <th className="extraTh">
-                          Amount <img src={shape} alt="shape" />{" "}
-                        </th>
-                        <th className="extraTh">
-                          Status <img src={shape} alt="shape" />{" "}
-                        </th>
-                        <th className="extraTh">
-                          Date <img src={shape} alt="shape" />{" "}
-                        </th>
-
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item) => {
-                        return (
+                  {!isLoading ? (
+                    deal.userDeals ? (
+                      <table>
+                        <thead>
                           <tr>
-                            <td className="phone">8974-8743</td>
-                            <td className="role">₦ 54,000</td>
-                            <td className="statusTd">
-                              <p className="status active">Auction Won</p>
-                            </td>
-                            <td className="role">10 Nov, 2021</td>
+                            <th>Item ID</th>
 
-                            <td className="action">
-                              <TableDrop extra={true} />
-                            </td>
+                            <th className="extraTh">
+                              Amount <img src={shape} alt="shape" />{" "}
+                            </th>
+                            <th className="extraTh">
+                              Status <img src={shape} alt="shape" />{" "}
+                            </th>
+                            <th className="extraTh">
+                              Date <img src={shape} alt="shape" />{" "}
+                            </th>
+
+                            <th></th>
                           </tr>
-                        );
-                      })}
-                      <tr></tr>
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                          {deal.userDeals.map((item) => {
+                            return (
+                              <tr key={item.id}>
+                                <td className="phone">8974-8743</td>
+                                <td className="role">₦ 54,000</td>
+                                <td className="statusTd">
+                                  <p className="status active">Auction Won</p>
+                                </td>
+                                <td className="role">10 Nov, 2021</td>
+
+                                <td className="action">
+                                  <TableDrop extra={true} />
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <NoProduct msg="No Transactions...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    )
+                  ) : (
+                    <LoadingTable />
+                  )}
                 </div>
               </div>
             )}

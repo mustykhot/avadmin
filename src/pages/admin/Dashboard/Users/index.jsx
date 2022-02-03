@@ -27,7 +27,7 @@ import {
   getComparator,
   stableSort,
 } from "../../../../utils/utils";
-import { Checkbox } from "@mui/material";
+import { Avatar, Checkbox } from "@mui/material";
 import moment from "moment";
 import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -82,7 +82,7 @@ const Users = () => {
     isError,
     error,
   } = useGetUsersQuery();
-  console.log(isError, error);
+  console.log(users, "users");
   const viewUser = (id) => {
     navigate(`user_detail/${id}`);
   };
@@ -169,91 +169,91 @@ const Users = () => {
                     orderBy={orderBy}
                     onSelectAllClick={handleSelectAllClick}
                     onRequestSort={handleRequestSort}
-                    rowCount={users.data.rows.length}
+                    rowCount={users.users.length}
                     align="left"
                     isCheck={true}
                   />
                   <TableBody>
-                    {stableSort(
-                      users.data.rows,
-                      getComparator(order, orderBy)
-                    ).map((row, index) => {
-                      const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
+                    {stableSort(users.users, getComparator(order, orderBy)).map(
+                      (row, index) => {
+                        const isItemSelected = isSelected(row.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.id}
-                          selected={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                              onChange={(event) => handleClick(event, row.id)}
-                            />
-                          </TableCell>
-
-                          <TableCell align="left">
-                            {" "}
-                            <div className="nameDiv">
-                              <img
-                                className="userImg"
-                                src={userImg}
-                                alt="user"
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={row.id}
+                            selected={isItemSelected}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                checked={isItemSelected}
+                                inputProps={{
+                                  "aria-labelledby": labelId,
+                                }}
+                                onChange={(event) => handleClick(event, row.id)}
                               />
-                              <div className="nameBox">
-                                <p className="name">Emeka Phillips</p>
-                                <p className="email">
-                                  emeka.phillips@gmail.com
-                                </p>
+                            </TableCell>
+
+                            <TableCell align="left">
+                              {" "}
+                              <div className="nameDiv">
+                                {/* <img
+                                  className="userImg"
+                                  src={row.image}
+                                  alt="user"
+                                /> */}
+
+                                <Avatar
+                                  alt={row.firstName}
+                                  src={row.image}
+                                  sx={{ width: 35, height: 35 }}
+                                />
+                                <div className="nameBox">
+                                  <p className="name">
+                                    {row.firstName} {row.lastName}
+                                  </p>
+                                  <p className="email">{row.email}</p>
+                                </div>
                               </div>
-                            </div>
-                          </TableCell>
-                          <TableCell align="left">08087427344</TableCell>
-                          <TableCell align="left">
-                            {formatCurrency(540000)}
-                          </TableCell>
+                            </TableCell>
+                            <TableCell align="left">{row.phone}</TableCell>
+                            <TableCell align="left">
+                              {formatCurrency(540000)}
+                            </TableCell>
 
-                          <TableCell align="left">
-                            {moment().format("L")}
-                          </TableCell>
-                          <TableCell align="left">
-                            <p
-                              className={`status ${
-                                row.status === "Deactivated" ||
-                                row.status === "Declined"
-                                  ? "red"
-                                  : row.status === "pending"
-                                  ? "yellow"
-                                  : "active"
-                              }`}
-                            >
-                              {row.status}
-                            </p>
-                          </TableCell>
+                            <TableCell align="left">
+                              {moment().format("L")}
+                            </TableCell>
+                            <TableCell align="left">
+                              <p
+                                className={`status ${
+                                  !row.active ? "red" : "active"
+                                }`}
+                              >
+                                {row.active ? "Active" : "Inactive"}
+                              </p>
+                            </TableCell>
 
-                          <TableCell className="action" align="left">
-                            {" "}
-                            <button
-                              onClick={() => {
-                                viewUser(1);
-                              }}
-                              className="view"
-                            >
-                              View
-                            </button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                            <TableCell className="action" align="left">
+                              {" "}
+                              <button
+                                onClick={() => {
+                                  viewUser(row.id);
+                                }}
+                                className="view"
+                              >
+                                View
+                              </button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

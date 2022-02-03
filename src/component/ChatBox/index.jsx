@@ -12,8 +12,9 @@ import NoProduct from "../NoProduct";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toastr } from "react-redux-toastr";
-import { useCreateChatMutation } from "../../services/api";
+import { useSendChatMutation } from "../../services/api";
 import uploadImg from "../../hook/UploadImg";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const ChatBox = ({ currentMsg }) => {
   const [show, setShow] = useState(false);
@@ -23,7 +24,7 @@ const ChatBox = ({ currentMsg }) => {
     shouldUnregister: true,
   });
   // send message
-  const [create, { isLoading }] = useCreateChatMutation();
+  const [create, { isLoading }] = useSendChatMutation();
   const [img, setImg] = useState(null);
 
   // upload
@@ -41,7 +42,7 @@ const ChatBox = ({ currentMsg }) => {
     let payload = {
       text: values.message,
       sender: userId,
-      converstation: currentMsg.id,
+      conversation: currentMsg.id,
     };
     if (img) {
       payload = {
@@ -158,8 +159,15 @@ const ChatBox = ({ currentMsg }) => {
                 <Fileicon className="fileIcon" />
               </label>
               <button className="btn round-btn sendBtn">
-                Send
-                <SendIcon className="sendIcon" />
+                {isLoading ? (
+                  <FontAwesomeIcon icon={faSpinner} pulse spin />
+                ) : (
+                  <>
+                    {" "}
+                    Send
+                    <SendIcon className="sendIcon" />
+                  </>
+                )}
               </button>
             </form>
           </div>

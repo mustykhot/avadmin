@@ -70,7 +70,7 @@ const PrivateVendor = () => {
 
   const navigate = useNavigate();
 
-  // get category
+  // get vendor
   const {
     data: vendor = [],
     isLoading: loading,

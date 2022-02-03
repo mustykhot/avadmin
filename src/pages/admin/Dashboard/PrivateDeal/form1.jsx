@@ -15,7 +15,9 @@ import Phone from "../../../../component/input/phone";
 import PhoneInput from "react-phone-input-2";
 import {
   useAddPrivateDealMutation,
+  useAddVendorMutation,
   useGetAllCategoryQuery,
+  useGetAllPrivateVendorQuery,
 } from "../../../../services/api";
 import { toastr } from "react-redux-toastr";
 import NaijaStates from "naija-state-local-government";
@@ -94,6 +96,13 @@ const PrivateDealForm1 = () => {
       // setIsSelected(true);
     }
   };
+  // get vendor
+  const {
+    data: vendor = [],
+    isLoading: isVendLoading,
+    isError: isVendError,
+    error: vendErr,
+  } = useGetAllPrivateVendorQuery();
 
   // form 2
 
@@ -121,7 +130,7 @@ const PrivateDealForm1 = () => {
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      images: images,
+      phone: images,
     };
     console.log(payload);
 
@@ -150,6 +159,25 @@ const PrivateDealForm1 = () => {
       companyImg: companyImg,
     };
     console.log(payload);
+    onSubmitVendor(payload);
+  };
+  const dealType = [
+    { value: "BUY NOW", label: "Buy Now" },
+    { value: "AUCTION", label: "Auction" },
+  ];
+
+  const [addVendor, { isLoading: loader }] = useAddVendorMutation();
+  const onSubmitVendor = async (payload) => {
+    try {
+      const response = await addVendor(payload).unwrap();
+      //  closeModal();
+      console.log(response, "response");
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
   };
 
   return (
@@ -178,6 +206,31 @@ const PrivateDealForm1 = () => {
                   selectOption={category.map((item) => ({
                     label: item.categoryName,
                     value: item._id,
+                  }))}
+                />
+
+                <button
+                  onClick={completeFormStep}
+                  type="button"
+                  className="submit"
+                >
+                  Continue
+                </button>
+              </section>
+            )}
+            {formStep >= 1 && (
+              <section
+                style={{ display: `${formStep === 1 ? "block" : "none"}` }}
+              >
+                <FormHeadFlex title={"Item Details"} active={"2"} total={"4"} />
+
+                <SelectField
+                  label="Deal Type"
+                  id="role"
+                  name="dealType"
+                  selectOption={dealType.map((item) => ({
+                    label: item.label,
+                    value: item.value,
                   }))}
                 />
 
@@ -294,11 +347,14 @@ const PrivateDealForm1 = () => {
                 >
                   Continue
                 </button>
+                <button onClick={prevFormStep} type="button" className="cancel">
+                  back
+                </button>
               </section>
             )}
-            {formStep >= 1 && (
+            {formStep >= 2 && (
               <section
-                style={{ display: `${formStep === 1 ? "block" : "none"}` }}
+                style={{ display: `${formStep === 2 ? "block" : "none"}` }}
               >
                 <FormHeadFlex
                   title={"Product Information"}
@@ -365,9 +421,9 @@ const PrivateDealForm1 = () => {
                 </button>
               </section>
             )}
-            {formStep >= 2 && (
+            {formStep >= 3 && (
               <section
-                style={{ display: `${formStep === 2 ? "block" : "none"}` }}
+                style={{ display: `${formStep === 3 ? "block" : "none"}` }}
               >
                 {" "}
                 <FormHeadFlex
@@ -379,7 +435,10 @@ const PrivateDealForm1 = () => {
                   label="Select Vendor"
                   id="vendor"
                   name="vendor"
-                  selectOption={roleOption}
+                  selectOption={vendor.rows.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  }))}
                 />
                 <button
                   onClick={() => {
@@ -512,9 +571,9 @@ const PrivateDealForm1 = () => {
                 </button>
               </section>
             )}
-            {formStep >= 3 && (
+            {formStep >= 4 && (
               <section
-                style={{ display: `${formStep === 3 ? "block" : "none"}` }}
+                style={{ display: `${formStep === 4 ? "block" : "none"}` }}
               >
                 <FormHeadFlex
                   title={"Shipping Details"}
@@ -535,7 +594,7 @@ const PrivateDealForm1 = () => {
               </section>
             )}
             <button
-              style={{ display: `${formStep >= 3 ? "" : "none"}` }}
+              style={{ display: `${formStep >= 4 ? "" : "none"}` }}
               type="submit"
               className="submit"
               onClick={() => {

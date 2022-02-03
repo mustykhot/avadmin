@@ -42,7 +42,9 @@ export const authApi = createApi({
     "user",
     "admins",
     "chat",
+    "chatmessage",
     "audit",
+    "wallet",
   ],
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -60,15 +62,39 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["chat"],
     }),
+    sendChat: builder.mutation({
+      query: (credentials) => ({
+        url: "/chats/messages",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["chatmessage"],
+    }),
+
     getConversationBtwUsers: builder.query({
       query: ({ idFirst, idSecond }) =>
         `chats/conversations/${idFirst}/${idSecond}`,
-      providesTags: ["chat"],
+      providesTags: ["chatmessage"],
+      transformResponse: (response) => response,
+    }),
+    getUserDeal: builder.query({
+      query: (id) => `deals/user/${id}`,
+      providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
     getConversation: builder.query({
       query: (id) => `chats/conversations/${id}/user`,
       providesTags: ["chat"],
+      transformResponse: (response) => response,
+    }),
+    getWallet: builder.query({
+      query: (id) => `user/wallet/${id}`,
+      providesTags: ["wallet"],
+      transformResponse: (response) => response,
+    }),
+    getUserTrans: builder.query({
+      query: (id) => `transaction/all/${id}`,
+      providesTags: ["transaction"],
       transformResponse: (response) => response,
     }),
     getAdmins: builder.query({
@@ -77,7 +103,7 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getUsers: builder.query({
-      query: () => "users-reg/all",
+      query: () => "user/users-reg/all",
       providesTags: ["users"],
       transformResponse: (response) => response,
     }),
@@ -261,4 +287,8 @@ export const {
   useGetConversationQuery,
   useGetConversationBtwUsersQuery,
   useGetAuditQuery,
+  useSendChatMutation,
+  useGetWalletQuery,
+  useGetUserDealQuery,
+  useGetUserTransQuery,
 } = authApi;
