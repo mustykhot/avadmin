@@ -189,7 +189,9 @@ const Administrator = () => {
 
           <div className="overflowTable">
             {isError === true ? (
-              <p>{error.status}</p>
+              <NoProduct msg="Something is wrong...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
             ) : loading ? (
               <LoadingTable />
             ) : admins.message !== "no admin available!" ? (

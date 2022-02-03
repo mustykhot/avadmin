@@ -1,6 +1,8 @@
 import moment from "moment";
 import truncateString from "../utils/trunc";
+import { useState, useEffect } from "react";
 import "./style.scss";
+import { Avatar } from "@mui/material";
 const MessageBox = ({
   image,
   name,
@@ -14,25 +16,44 @@ const MessageBox = ({
   members,
   skipper,
 }) => {
+  const [sender, setSender] = useState(null);
+  // console.log(sender, "sender");
+  const userId = "61d57dbea7bc65c65b587c32";
+  // console.log(currentMsg, "currentMsg");
+  useEffect(() => {
+    const sendernew = members
+      ? members.filter((item) => {
+          return item.id === userId;
+        })
+      : "";
+
+    setSender(sendernew[0]);
+  }, [members]);
   return (
     <div
       onClick={() => {
-        console.log(members[1], members[0], "here");
+        console.log(members[1].id, members[0].id, "here");
         setActive(id);
-        setId(members[0], members[1]);
+        setId(members[0].id, members[1].id);
         skipper(false);
       }}
       className={`message_box ${active ? "active" : ""}`}
     >
-      <img src={image} alt="user" />
+      <Avatar
+        alt={"user"}
+        src={sender && sender.image}
+        sx={{ width: 35, height: 35 }}
+      />
       <div className="textBox">
         <div className="nameSide">
-          {/* <p className="name">{name}</p>
-          <p className="time">{moment(time).fromNow()}</p> */}
+          <p className="name">
+            {sender && `${sender.firstName} ${sender.lastName}`}
+          </p>
+          <p className="time">{moment(time).fromNow()}</p>
         </div>
         <div className="messageSide">
-          <p className="message">{truncateString(latestMessage, 66)}</p>
-          <p className="numberCircle">{numberOfNew}</p>
+          {/* <p className="message">{truncateString(latestMessage, 66)}</p> */}
+          {/* <p className="numberCircle">{numberOfNew}</p> */}
         </div>
       </div>
     </div>

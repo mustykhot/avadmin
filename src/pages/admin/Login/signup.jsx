@@ -8,6 +8,9 @@ import SubmitBtn from "../../../component/submitBtn";
 import "./style.scss";
 
 import Phone from "../../../component/input/phone";
+import { useSignupMutation } from "../../../services/api";
+import { SignalCellularAltSharp } from "@mui/icons-material";
+import { toastr } from "react-redux-toastr";
 const Signup = () => {
   const { register, formState, handleSubmit } = useForm();
 
@@ -16,12 +19,22 @@ const Signup = () => {
   const closeModal = () => {
     setModal(false);
   };
-  const onSubmit = (vals) => {
+  const [signup, { isLoading }] = useSignupMutation();
+  const onSubmit = async (vals) => {
     console.log(vals);
     const payload = {
       ...vals,
       phone,
     };
+    try {
+      // call login trigger from rtk query
+      const response = await signup(vals).unwrap();
+      console.log(response);
+      toastr.success("Success", "signup Successful");
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
     console.log(payload);
   };
   return (

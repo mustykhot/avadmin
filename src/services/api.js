@@ -54,6 +54,7 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+
     createChat: builder.mutation({
       query: (credentials) => ({
         url: "chats/conversations",

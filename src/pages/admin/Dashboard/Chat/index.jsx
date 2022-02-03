@@ -181,7 +181,7 @@ const Chat = () => {
                           id={item._id}
                           // latestMessage={item.latestMessage}
                           numberOfNew={item.numberOfNew}
-                          time={item.time}
+                          time={item.createdAt}
                           setActive={setActiveMsg}
                           active={item._id === activeMsg}
                           members={item.members}

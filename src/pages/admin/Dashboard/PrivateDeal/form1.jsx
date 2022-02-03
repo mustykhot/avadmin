@@ -259,15 +259,6 @@ const PrivateDealForm1 = () => {
                   errMsg="invalid  input"
                 />
 
-                <InputAmount
-                  type="text"
-                  name="max_amount"
-                  placeholder="Enter Amount"
-                  label="Max Amount"
-                  id="max_amount"
-                  errMsg="invalid  input"
-                />
-
                 <div className="coverGroup">
                   <label
                     style={{
@@ -571,30 +562,9 @@ const PrivateDealForm1 = () => {
                 </button>
               </section>
             )}
-            {formStep >= 4 && (
-              <section
-                style={{ display: `${formStep === 4 ? "block" : "none"}` }}
-              >
-                <FormHeadFlex
-                  title={"Shipping Details"}
-                  active={"4"}
-                  total={"4"}
-                />
 
-                <SelectField
-                  label="Select shipping option"
-                  id="shipping"
-                  name="shipping"
-                  selectOption={roleOption}
-                />
-
-                <button onClick={prevFormStep} type="button" className="cancel">
-                  previous
-                </button>
-              </section>
-            )}
             <button
-              style={{ display: `${formStep >= 4 ? "" : "none"}` }}
+              style={{ display: `${formStep >= 3 ? "" : "none"}` }}
               type="submit"
               className="submit"
               onClick={() => {
