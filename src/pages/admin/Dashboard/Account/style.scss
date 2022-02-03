@@ -52,4 +52,66 @@
       }
     }
   }
+  .flexPart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+    .toggleBox {
+      background: #ffffff;
+      box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+      border-radius: 9px;
+      height: 200px;
+      width: 25%;
+      padding-top: 40px;
+      .eachList {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 0;
+        cursor: pointer;
+        margin-bottom: 10px;
+        &.active {
+          background: #dcdff1;
+          p {
+            color: #0052bd;
+          }
+          .iconSide {
+            path {
+              stroke: #0052bd;
+            }
+            circle {
+              stroke: #0052bd;
+            }
+          }
+        }
+        p {
+          font-size: 12px;
+          line-height: 14px;
+          margin-left: 10px;
+          width: 150px;
+        }
+        .iconSide {
+          path {
+            stroke: #000000;
+          }
+          circle {
+            stroke: #000000;
+          }
+        }
+      }
+    }
+    .whiteGuy {
+      width: 70%;
+      background: #ffffff;
+      box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
+      border-radius: 9px;
+      padding: 80px;
+      .coverForm {
+        width: 60%;
+        margin: auto;
+      }
+    }
+  }
 }
