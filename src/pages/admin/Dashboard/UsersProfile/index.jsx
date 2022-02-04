@@ -173,7 +173,11 @@ const UsersProfile = () => {
                     <p className="tableTitle">Recent Activities</p>
                   </div>
                   {!isLoading ? (
-                    transaction.data.rows ? (
+                    !transaction ? (
+                      <NoProduct msg="No Transactions...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : transaction.data.rows ? (
                       <table>
                         <thead>
                           <tr>
@@ -262,7 +266,11 @@ const UsersProfile = () => {
                     <p className="tableTitle">Auction Participated</p>
                   </div>
                   {!isLoading ? (
-                    deal.userDeals ? (
+                    !deal ? (
+                      <NoProduct msg="No Deals...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : deal.userDeals ? (
                       <table>
                         <thead>
                           <tr>
@@ -301,7 +309,7 @@ const UsersProfile = () => {
                         </tbody>
                       </table>
                     ) : (
-                      <NoProduct msg="No Transactions...">
+                      <NoProduct msg="No Deals...">
                         <FontAwesomeIcon icon={faCommentSlash} />
                       </NoProduct>
                     )
