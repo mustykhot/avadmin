@@ -55,6 +55,21 @@ export const authApi = createApi({
       }),
     }),
 
+    update: builder.mutation({
+      query: (credentials) => ({
+        url: `user/av/users`,
+        method: "PUT",
+        body: credentials,
+      }),
+    }),
+    updatePassword: builder.mutation({
+      query: (credentials) => ({
+        url: `user/av/change-password`,
+        method: "PUT",
+        body: credentials,
+      }),
+    }),
+
     createChat: builder.mutation({
       query: (credentials) => ({
         url: "chats/conversations",
@@ -292,4 +307,6 @@ export const {
   useGetWalletQuery,
   useGetUserDealQuery,
   useGetUserTransQuery,
+  useUpdateMutation,
+  useUpdatePasswordMutation,
 } = authApi;

@@ -17,7 +17,6 @@ const InputAmount = ({
   id,
   name,
   placeholder,
-
   isDisabled,
   errMsg,
   IconPlaceholder,

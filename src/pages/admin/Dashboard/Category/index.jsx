@@ -38,6 +38,7 @@ import {
 import { IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
+import RajiFile from "../../../../component/input/RajiFile";
 // dropdown
 export const SubscribeDropDown = ({
   id,
@@ -92,7 +93,7 @@ const Category = () => {
 
   const [editModal, setEditModal] = useState(false);
   const [editId, setEditId] = useState("");
-
+  const [imgupload, setImgUpload] = useState("");
   // get category
   const {
     data: category = [],
@@ -104,8 +105,13 @@ const Category = () => {
   // add category
   const [addResponse, { isLoading }] = useAddCategoryMutation();
   const onSubmit = async (vals) => {
+    const payload = {
+      ...vals,
+      image: imgupload,
+    };
+    console.log(payload);
     try {
-      const response = await addResponse(vals).unwrap();
+      const response = await addResponse(payload).unwrap();
       closeModal();
       toastr.success("Success", response.message);
     } catch (err) {
@@ -203,6 +209,7 @@ const Category = () => {
     setOrderBy(property);
   };
 
+  console.log(imgupload);
   return (
     <AdminDashboardLayout active="category">
       <div className="pd-category">
@@ -215,7 +222,13 @@ const Category = () => {
                 action=""
               >
                 <FormHead title={"Create Category"} subTitle={""} />
-
+                <RajiFile
+                  name="image"
+                  placeholder="Categoy Image"
+                  label="Category Image"
+                  id="image"
+                  setFiler={setImgUpload}
+                />
                 <InputField
                   type="text"
                   name="categoryName"
@@ -232,7 +245,12 @@ const Category = () => {
                   id="description"
                 />
 
-                <SubmitBtn isLoading={isLoading} btnText="Add Category" />
+                <SubmitBtn
+                  isLoading={isLoading}
+                  // disable={imgupload ? false : true}
+                  disable={imgupload ? false : true}
+                  btnText="Add Category"
+                />
                 <button onClick={closeModal} className="cancel">
                   Cancel
                 </button>

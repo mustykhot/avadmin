@@ -23,6 +23,7 @@ import { toastr } from "react-redux-toastr";
 import NaijaStates from "naija-state-local-government";
 import SelectField from "../../../../component/input/select";
 import InputField from "../../../../component/input/indexField";
+import uploadImg from "../../../../hook/UploadImg";
 const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
@@ -62,21 +63,26 @@ const PrivateDealForm1 = () => {
   };
   // file adding
   const ref = useRef();
-
   const FileChangeHandler = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImageList([...imageList, URL.createObjectURL(e.target.files[0])]);
-      ref.current.value = "";
     } else {
       console.log("nothing");
     }
   };
+  // file list
+  const [imgupload, setImgUpload] = useState([]);
+  const uploader = async (file) => {
+    let url = await uploadImg(file, "n3mtymsx");
+    setImgUpload([...imgupload, url.secure_url]);
+  };
 
+  console.log(imgupload, "imgupload");
   // function for image gangan
 
   // const [isSelected, setIsSelected] = useState(false);
   const [images, setImages] = useState([]);
-  console.log(images);
+
   function createFileList(files) {
     var b = new ClipboardEvent("").clipboardData || new DataTransfer();
     for (var i = 0, len = files.length; i < len; i++) b.items.add(files[i]);
@@ -130,7 +136,7 @@ const PrivateDealForm1 = () => {
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      phone: images,
+      image: imgupload,
     };
     console.log(payload);
 
@@ -388,6 +394,7 @@ const PrivateDealForm1 = () => {
                           FileChangeHandler(e);
                           // FileChangeHandlerGan(e);
                           setImages([...images, e.target.files]);
+                          uploader(e.target.files[0]);
                         }}
                         accept="image/png, image/gif, image/jpeg"
                       />
@@ -420,7 +427,7 @@ const PrivateDealForm1 = () => {
                 <FormHeadFlex
                   title={"Create Private Deal"}
                   active={"3"}
-                  total={"4"}
+                  total={"3"}
                 />
                 <SelectField
                   label="Select Vendor"
@@ -550,13 +557,6 @@ const PrivateDealForm1 = () => {
                     </div>
                   </>
                 )}
-                <button
-                  onClick={completeFormStep}
-                  type="button"
-                  className="submit"
-                >
-                  Continue
-                </button>
                 <button onClick={prevFormStep} type="button" className="cancel">
                   Back
                 </button>

@@ -17,6 +17,13 @@ import Phone from "../../../../component/input/phone";
 import { ReactComponent as Loka } from "../../../../assets/icons/loka.svg";
 import { ReactComponent as Circ } from "../../../../assets/icons/circ.svg";
 import InputField from "../../../../component/input/indexField";
+import RajiFile from "../../../../component/input/RajiFile";
+import {
+  useUpdateMutation,
+  useUpdatePasswordMutation,
+} from "../../../../services/api";
+import { toastr } from "react-redux-toastr";
+import { useSelector } from "react-redux";
 const Account = () => {
   const list = [1, 2, 3];
   const [modal, setModal] = useState(false);
@@ -25,25 +32,50 @@ const Account = () => {
   const methods2 = useForm();
   const [isLoadng, setIsLoading] = useState(false);
   const [phone, setPhone] = useState("");
+  const [imgupload, setImgUpload] = useState("");
+  const [update, { isLoading }] = useUpdateMutation();
+  const [updatePassword, { isLoading: passLoading }] =
+    useUpdatePasswordMutation();
   const closeModal = () => {
     setModal(!modal);
   };
   const closeModalPop = () => {
     setModalPop(!modal);
   };
-
-  const onSubmit = (vals) => {
+  const { user } = useSelector((state) => state.auth);
+  const onSubmit = async (vals) => {
     const payload = {
       ...vals,
       phone: phone,
+      image: imgupload,
     };
     console.log(payload);
     setIsLoading(false);
+
+    try {
+      // call login trigger from rtk query
+      const response = await update(payload).unwrap();
+      console.log(response);
+      toastr.success("Success", "Successful");
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
   };
 
-  const onSubmit2 = (vals) => {
+  const onSubmit2 = async (vals) => {
     console.log(vals);
     setIsLoading(false);
+
+    try {
+      // call login trigger from rtk query
+      const response = await updatePassword(vals).unwrap();
+      console.log(response);
+      toastr.success("Success", "Successful");
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
   };
 
   const [focus, setFocus] = useState("profile");
@@ -116,6 +148,14 @@ const Account = () => {
                       </div>
                     </div>
 
+                    <RajiFile
+                      name="image"
+                      placeholder="Categoy Image"
+                      label="Category Image"
+                      id="image"
+                      setFiler={setImgUpload}
+                    />
+
                     <InputField
                       type="email"
                       name="email"
@@ -130,7 +170,11 @@ const Account = () => {
                       setTelVal={setPhone}
                     />
 
-                    <SubmitBtn isLoading={false} btnText="Update" />
+                    <SubmitBtn
+                      isLoading={isLoading}
+                      btnText="Update"
+                      disable={imgupload ? false : true}
+                    />
                   </form>
                 </FormProvider>
               </div>
@@ -151,7 +195,7 @@ const Account = () => {
                     />
                     <InputField
                       type="password"
-                      name="new_password"
+                      name="newPassword"
                       label="New Password"
                       placeholder="New Password"
                       id="password"
@@ -160,14 +204,14 @@ const Account = () => {
 
                     <InputField
                       type="password"
-                      name="con_password"
+                      name="confirmPassword"
                       label="Confirm Password"
                       placeholder="Confirm Password"
                       id="password"
                       errMsg="invalid password"
                     />
 
-                    <SubmitBtn isLoading={false} btnText="Update" />
+                    <SubmitBtn isLoading={passLoading} btnText="Update" />
                   </form>
                 </FormProvider>
               </div>
