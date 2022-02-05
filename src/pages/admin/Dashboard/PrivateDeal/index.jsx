@@ -18,17 +18,17 @@ import saveImg from "../../../../assets/icons/img.svg";
 import { useRef } from "react";
 import { useNavigate } from "react-router";
 import {
+  useActivatePrivateDealMutation,
   // useActivateDealMutation,
   useDeactivatePrivateDealMutation,
   useGetAllPrivateBuyDealQuery,
   useGetAllPrivateDealQuery,
-  useRejectDealMutation,
 } from "../../../../services/api";
 import LoadingTable from "../../../../component/loadingTable";
 import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { moneyFormatter } from "../../../../utils/utils";
+import { formatCurrency } from "../../../../utils/utils";
 import moment from "moment";
 import TableDrop from "../../../../component/TableDrop";
 import { toastr } from "react-redux-toastr";
@@ -43,7 +43,7 @@ import { IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 // dropdown
-export const SubscribeDropDown = ({ id, disable, rejectDeal }) => (
+export const SubscribeDropDown = ({ id, disable, activateDeal }) => (
   <DropDownWrapper
     className="more-actions"
     action={
@@ -72,11 +72,11 @@ export const SubscribeDropDown = ({ id, disable, rejectDeal }) => (
 
     <button
       onClick={() => {
-        rejectDeal(id);
+        activateDeal(id);
       }}
       className="btn-noBg"
     >
-      Reject
+      Activate
     </button>
   </DropDownWrapper>
 );
@@ -171,10 +171,11 @@ const PrivateDeal = () => {
   };
 
   // reject deal
-  const [rejectResponse, { isLoading: rejectoading }] = useRejectDealMutation();
-  const rejectDeal = async (id) => {
+  const [activateResponse, { isLoading: rejectoading }] =
+    useActivatePrivateDealMutation();
+  const activateDeal = async (id) => {
     try {
-      const response = await rejectResponse({ id: id }).unwrap();
+      const response = await activateResponse({ id: id }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -303,10 +304,12 @@ const PrivateDeal = () => {
                               <TableCell align="left">
                                 <div className="nameDiv">
                                   <div className="nameBox">
-                                    <p className="name">Emeka Phillips</p>
+                                    <p className="name">
+                                      {item.vendor && `${item.vendor.name}`}
+                                    </p>
 
                                     <p className="email">
-                                      emeka.phillips@gmail.com
+                                      {item.vendor && `${item.vendor.email}`}
                                     </p>
                                   </div>
                                 </div>
@@ -315,7 +318,7 @@ const PrivateDeal = () => {
                                 {item.product.productName}
                               </TableCell>
                               <TableCell align="left">
-                                {moneyFormatter(item.price)}
+                                {formatCurrency(item.basePrice)}
                               </TableCell>
                               <TableCell align="left">
                                 {moment(item.product.createdAt).format(
@@ -341,7 +344,7 @@ const PrivateDeal = () => {
                                   id={item._id}
                                   // activate={activateDeal}
                                   disable={deactivateDeal}
-                                  rejectDeal={rejectDeal}
+                                  activateDeal={activateDeal}
                                 />
                               </TableCell>
                             </TableRow>
@@ -369,99 +372,102 @@ const PrivateDeal = () => {
               <p className="tableTitle">Buy Now</p>
               <input type="text" placeholder="Search" className="search" />
             </div>
+            <div className="overflowTable">
+              {!isBuyError ? (
+                buyloading ? (
+                  <LoadingTable />
+                ) : buydeal.rows.length ? (
+                  <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                      <EnhancedTableHead
+                        headCells={headCells}
+                        // numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        // onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={buydeal.rows.length}
+                        align="left"
+                      />
+                      <TableBody>
+                        {stableSort(
+                          buydeal.rows,
+                          getComparator(order, orderBy)
+                        ).map((item) => {
+                          // const isItemSelected = isSelected(row.id);
+                          // const labelId = `enhanced-table-checkbox-${index}`
+                          return (
+                            <TableRow
+                              // hover
+                              // role="checkbox"
+                              // aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={item._id}
+                              // selected={isItemSelected}
+                            >
+                              <TableCell align="left">
+                                <div className="nameDiv">
+                                  <div className="nameBox">
+                                    <p className="name">
+                                      {item.vendor && `${item.vendor.name}`}
+                                    </p>
 
-            {!isBuyError ? (
-              buyloading ? (
-                <LoadingTable />
-              ) : buydeal.rows.length ? (
-                <TableContainer>
-                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                    <EnhancedTableHead
-                      headCells={headCells}
-                      // numSelected={selected.length}
-                      order={order}
-                      orderBy={orderBy}
-                      // onSelectAllClick={handleSelectAllClick}
-                      onRequestSort={handleRequestSort}
-                      rowCount={deal.rows.length}
-                      align="left"
-                    />
-                    <TableBody>
-                      {stableSort(
-                        buydeal.rows,
-                        getComparator(order, orderBy)
-                      ).map((item) => {
-                        // const isItemSelected = isSelected(row.id);
-                        // const labelId = `enhanced-table-checkbox-${index}`
-                        return (
-                          <TableRow
-                            // hover
-                            // role="checkbox"
-                            // aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={item._id}
-                            // selected={isItemSelected}
-                          >
-                            <TableCell align="left">
-                              <div className="nameDiv">
-                                <div className="nameBox">
-                                  <p className="name">Emeka Phillips</p>
-
-                                  <p className="email">
-                                    emeka.phillips@gmail.com
-                                  </p>
+                                    <p className="email">
+                                      {item.vendor && `${item.vendor.email}`}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            </TableCell>
-                            <TableCell align="left">
-                              {item.product.productName}
-                            </TableCell>
-                            <TableCell align="left">
-                              {moneyFormatter(item.price)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {moment(item.product.createdAt).format(
-                                "MMM Do YYYY"
-                              )}{" "}
-                              <br />{" "}
-                              <p className="time green">
-                                {moment(item.product.createdAt).format("LT")}
-                              </p>{" "}
-                            </TableCell>
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.product.productName}
+                              </TableCell>
+                              <TableCell align="left">
+                                {formatCurrency(item.basePrice)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {moment(item.product.createdAt).format(
+                                  "MMM Do YYYY"
+                                )}{" "}
+                                <br />{" "}
+                                <p className="time green">
+                                  {moment(item.product.createdAt).format("LT")}
+                                </p>{" "}
+                              </TableCell>
 
-                            <TableCell align="left">
-                              <p
-                                className={`status ${
-                                  item.status === "Active" ? "active" : "red"
-                                }`}
-                              >
-                                {item.status}
-                              </p>
-                            </TableCell>
-                            <TableCell className="action" align="left">
-                              <SubscribeDropDown
-                                id={item._id}
-                                // activate={activateDeal}
-                                disable={deactivateDeal}
-                                rejectDeal={rejectDeal}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                              <TableCell align="left">
+                                <p
+                                  className={`status ${
+                                    item.status === "Active" ? "active" : "red"
+                                  }`}
+                                >
+                                  {item.status}
+                                </p>
+                              </TableCell>
+                              <TableCell className="action" align="left">
+                                <SubscribeDropDown
+                                  id={item._id}
+                                  // activate={activateDeal}
+                                  disable={deactivateDeal}
+                                  activateDeal={activateDeal}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <NoProduct msg="No Data Yet...">
+                    <FontAwesomeIcon icon={faCommentSlash} />
+                  </NoProduct>
+                )
               ) : (
-                <NoProduct msg="No Data Yet...">
+                <NoProduct msg="There is a problem...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
-              )
-            ) : (
-              <NoProduct msg="There is a problem...">
-                <FontAwesomeIcon icon={faCommentSlash} />
-              </NoProduct>
-            )}
+              )}
+            </div>
           </div>
         )}
       </div>

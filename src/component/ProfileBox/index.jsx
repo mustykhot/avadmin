@@ -1,3 +1,4 @@
+import { Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
 import chat from "../../assets/icons/chat2.svg";
 import "./style.scss";
@@ -5,7 +6,9 @@ import "./style.scss";
 const ProfileBox = ({ name, email, account, tel, billing, img }) => {
   return (
     <div className="profileBox">
-      <img src={img} className="profileImg" alt="userprofile" />
+      {/* <img src={img} className="profileImg" alt="userprofile" /> */}
+      <Avatar alt={"user"} src={img} sx={{ width: 110, height: 110 }} />
+
       <p className="username">{name}</p>
       <p className="email">{email}</p>
       <div className="actionBtn">

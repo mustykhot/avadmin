@@ -39,6 +39,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import LoadingTable from "../../../../component/loadingTable";
 import { toastr } from "react-redux-toastr";
+import uploadImg from "../../../../hook/UploadImg";
+import { Avatar } from "@mui/material";
 const PrivateVendor = () => {
   const list = [1, 2, 3];
 
@@ -55,7 +57,6 @@ const PrivateVendor = () => {
   const FileChangeHandler = (e) => {
     if (e.target.files && e.target.files[0]) {
       setCompanyImg(URL.createObjectURL(e.target.files[0]));
-      ref.current.value = "";
     } else {
       console.log("nothing");
     }
@@ -107,11 +108,17 @@ const PrivateVendor = () => {
     setOrderBy(property);
   };
   const [addVendor, { isLoading: loader }] = useAddVendorMutation();
+
+  const [img, setImg] = useState("");
+  const uploader = async (file) => {
+    let url = await uploadImg(file, "n3mtymsx");
+    setImg(url.secure_url);
+  };
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      phoneNumber: phone,
-      Image: companyImg,
+      phonenumber: phone,
+      photo: img,
     };
     console.log(payload);
 
@@ -136,7 +143,7 @@ const PrivateVendor = () => {
           >
             <Input
               type="text"
-              name="vendor_name"
+              name="name"
               placeholder="Vendor's Name"
               label="Vendor's Name"
               id="vendor_name"
@@ -146,7 +153,7 @@ const PrivateVendor = () => {
             />
             <Input
               type="email"
-              name="vendor_email"
+              name="email"
               placeholder="Vendor's Email"
               label="Vendor's Email"
               id="vendor_email"
@@ -172,6 +179,7 @@ const PrivateVendor = () => {
                   ref={ref}
                   onChange={(e) => {
                     FileChangeHandler(e);
+                    uploader(e.target.files[0]);
                   }}
                   hidden
                   name="company"
@@ -180,7 +188,11 @@ const PrivateVendor = () => {
               </div>
             </div>
 
-            <SubmitBtn isLoading={loader} btnText="Submit" />
+            <SubmitBtn
+              isLoading={loader}
+              disable={img ? false : true}
+              btnText="Submit"
+            />
             <button onClick={closeModal} className="cancel">
               Cancel
             </button>
@@ -260,10 +272,10 @@ const PrivateVendor = () => {
                             >
                               <TableCell align="left">
                                 <div className="nameDiv">
-                                  <img
-                                    className="userImg"
-                                    src={userImg}
-                                    alt="user"
+                                  <Avatar
+                                    alt={"user"}
+                                    src={item.photo}
+                                    sx={{ width: 35, height: 35 }}
                                   />
                                   <div className="nameBox">
                                     <p className="name">{item.name}</p>

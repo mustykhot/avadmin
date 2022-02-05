@@ -78,6 +78,7 @@ const PrivateDealForm1 = () => {
   };
 
   console.log(imgupload, "imgupload");
+
   // function for image gangan
 
   // const [isSelected, setIsSelected] = useState(false);
@@ -120,10 +121,16 @@ const PrivateDealForm1 = () => {
   const FileChangeHandler2 = (e) => {
     if (e.target.files && e.target.files[0]) {
       setCompanyImg(URL.createObjectURL(e.target.files[0]));
-      ref.current.value = "";
+
+      // ref.current.value = "";
     } else {
       console.log("nothing");
     }
+  };
+  const [img, setImg] = useState("");
+  const uploader2 = async (file) => {
+    let url = await uploadImg(file, "n3mtymsx");
+    setImg(url.secure_url);
   };
   const [toggle, setToggle] = useState(true);
   const handleToggle = () => {
@@ -133,10 +140,11 @@ const PrivateDealForm1 = () => {
 
   // create deal
   const [addDeal, { isLoading }] = useAddPrivateDealMutation();
+
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      image: imgupload,
+      photo: imgupload,
     };
     console.log(payload);
 
@@ -158,11 +166,10 @@ const PrivateDealForm1 = () => {
   const [vendorCategory, setVendorCategory] = useState("");
   const createVendor = () => {
     const payload = {
-      vendor_name: vendor_name,
-      vendor_email: vendor_email,
-      phone: phone,
-      vendorCategory: vendorCategory,
-      companyImg: companyImg,
+      name: vendor_name,
+      email: vendor_email,
+      phonenumber: phone,
+      photo: img,
     };
     console.log(payload);
     onSubmitVendor(payload);
@@ -208,10 +215,10 @@ const PrivateDealForm1 = () => {
                 <SelectField
                   label="Select Category"
                   id="role"
-                  name="category"
+                  name="categoryName"
                   selectOption={category.map((item) => ({
                     label: item.categoryName,
-                    value: item._id,
+                    value: item.categoryName,
                   }))}
                 />
 
@@ -246,19 +253,21 @@ const PrivateDealForm1 = () => {
                   placeholder="Item Name"
                   label="Item Name"
                   id="item_name"
-                  errMsg="invalid email input"
+                  errMsg="invalid input"
                 />
 
-                <SelectField
+                <InputField
+                  type="number"
+                  name="quantity"
+                  placeholder=""
                   label="Quantity"
                   id="quantity"
-                  name="role"
-                  selectOption={roleOption}
+                  errMsg="invalid input"
                 />
 
                 <InputAmount
                   type="text"
-                  name="price"
+                  name="basePrice"
                   placeholder="Enter Amount"
                   label="Base Price"
                   id="base_price"
@@ -536,6 +545,7 @@ const PrivateDealForm1 = () => {
                           ref={ref2}
                           onChange={(e) => {
                             FileChangeHandler2(e);
+                            uploader2(e.target.files[0]);
                           }}
                           hidden
                           name="company"

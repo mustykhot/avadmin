@@ -162,13 +162,21 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["privatedeal"],
     }),
+    activatePrivateDeal: builder.mutation({
+      query: ({ id }) => ({
+        url: `private/deals-activate/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["privatedeal"],
+    }),
     deactivatePrivateDeal: builder.mutation({
       query: ({ id }) => ({
         url: `private/deals/deactivate/${id}`,
         method: "PUT",
       }),
-      invalidatesTags: ["deal"],
+      invalidatesTags: ["privatedeal"],
     }),
+
     // deal side
     getAllDeal: builder.query({
       query: () => "deals",
@@ -194,6 +202,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["deal"],
     }),
+
     getOneDeal: builder.query({
       query: (id) => `deals/single-deal/${id}`,
       providesTags: ["vendor"],
@@ -309,4 +318,5 @@ export const {
   useGetUserTransQuery,
   useUpdateMutation,
   useUpdatePasswordMutation,
+  useActivatePrivateDealMutation,
 } = authApi;

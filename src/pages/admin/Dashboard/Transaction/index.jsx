@@ -25,6 +25,7 @@ import TableRow from "@mui/material/TableRow";
 import Table from "@mui/material/Table";
 import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import Pagination from "@mui/material/Pagination";
+import { Avatar } from "@mui/material";
 const Transaction = () => {
   const [toggleBtn, setToggleBtn] = useState("auction");
   const [page, setPage] = useState(1);
@@ -162,10 +163,10 @@ const Transaction = () => {
                             </TableCell>
                             <TableCell align="left">
                               <div className="nameDiv">
-                                <img
-                                  className="userImg"
-                                  src={userImg}
-                                  alt="user"
+                                <Avatar
+                                  alt={"user"}
+                                  src={item.user.image}
+                                  sx={{ width: 35, height: 35 }}
                                 />
 
                                 <div className="nameBox">

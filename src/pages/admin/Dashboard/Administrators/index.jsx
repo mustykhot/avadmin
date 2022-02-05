@@ -39,7 +39,7 @@ import { Link } from "react-router-dom";
 import NoProduct from "../../../../component/NoProduct";
 
 // dropdown
-const SubscribeDropDown = ({ id, activate, deactivate, edit }) => (
+const SubscribeDropDown = ({ id, activate, deactivate }) => (
   <DropDownWrapper
     className="more-actions"
     action={
@@ -56,7 +56,6 @@ const SubscribeDropDown = ({ id, activate, deactivate, edit }) => (
     >
       Activate
     </button>
-
     <button
       onClick={() => {
         deactivate(id);
@@ -65,15 +64,7 @@ const SubscribeDropDown = ({ id, activate, deactivate, edit }) => (
     >
       Deactivate
     </button>
-
-    <button
-      onClick={() => {
-        edit(id);
-      }}
-      className="btn-noBg"
-    >
-      Edit
-    </button>
+    \
   </DropDownWrapper>
 );
 
@@ -263,7 +254,6 @@ const Administrator = () => {
                             <SubscribeDropDown
                               activate={approveDeal}
                               deactivate={rejectDeal}
-                              edit={editAdmin}
                               id={row.id}
                             />
                           </TableCell>
