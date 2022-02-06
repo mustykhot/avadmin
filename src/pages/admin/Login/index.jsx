@@ -38,7 +38,8 @@ const Login = () => {
         navigate("/dashboard", { replace: true });
       }, 1000);
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
+      // console.log(err.response.data, "err");
+      if (err) toastr.error("Error", err.message);
       else toastr.error("Error", "Something went wrong, please try again...");
     }
   };

@@ -18,7 +18,8 @@
         left: unset;
         right: 0px;
       }
-      button.download {
+      button.download,
+      #test-table-xls-button {
         @include downloadBtn;
       }
 

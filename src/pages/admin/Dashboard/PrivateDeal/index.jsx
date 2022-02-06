@@ -42,6 +42,8 @@ import { getComparator, stableSort } from "../../../../utils/utils";
 import { IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+
 // dropdown
 export const SubscribeDropDown = ({ id, disable, activateDeal }) => (
   <DropDownWrapper
@@ -127,20 +129,20 @@ const PrivateDeal = () => {
   };
   // get deal
   const {
-    data: deal = [],
+    data: deal = null,
     isLoading: loading,
     isError,
     error,
   } = useGetAllPrivateDealQuery();
-  console.log(deal.rows);
+  console.log(deal);
   // get buynow
   const {
-    data: buydeal = [],
+    data: buydeal = null,
     isLoading: buyloading,
     isError: isBuyError,
     error: buyError,
   } = useGetAllPrivateBuyDealQuery();
-  console.log(buydeal.rows);
+  console.log(buydeal);
 
   // activate Deal
   // const [activateResponse, { isLoading: activateLoading }] =
@@ -227,9 +229,27 @@ const PrivateDeal = () => {
         <div className="topicPart">
           <p className="pageTitle">Private Deals</p>
           <div className="btnBox">
-            <button className="download">
-              Download <Fill className="fill" />
-            </button>
+            {toggleBtn === "auction" && (
+              <ReactHTMLTableToExcel
+                id="test-table-xls-button"
+                className="download-table-xls-button btn btn-success mb-3"
+                table="table-to-xls"
+                filename="Auction"
+                sheet="tablexls"
+                buttonText="Download"
+              />
+            )}
+            {toggleBtn !== "auction" && (
+              <ReactHTMLTableToExcel
+                id="test-table-xls-button"
+                className="download-table-xls-button btn btn-success mb-3"
+                table="table-to-xls2"
+                filename="Buy Now"
+                sheet="tablexls"
+                buttonText="Download"
+              />
+            )}
+
             <button onClick={createDeal} className="create">
               Create New Deal
             </button>
@@ -268,11 +288,47 @@ const PrivateDeal = () => {
               />
             </div>
 
+            <div className="downloadTable" style={{ display: "none" }}>
+              <table id="table-to-xls">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+
+                    <th>Product Name</th>
+                    <th>Base Price</th>
+                    <th>Date Posted</th>
+
+                    <th className="extraTh">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {deal &&
+                    deal.rows &&
+                    deal.rows.map((item) => {
+                      return (
+                        <tr>
+                          <td> {item.vendor && `${item.vendor.name}`}</td>
+                          <td>{item.product && item.product.productName}</td>
+                          <td> {formatCurrency(item.basePrice)}</td>
+                          <td align="left">
+                            {moment(item.product.createdAt).format(
+                              "MMM Do YYYY"
+                            )}{" "}
+                          </td>
+
+                          <td>{item.status}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+
             <div className="overflowTable">
               {!isError ? (
                 loading ? (
                   <LoadingTable />
-                ) : deal.rows.length ? (
+                ) : deal.rows ? (
                   <TableContainer>
                     <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                       <EnhancedTableHead
@@ -371,6 +427,41 @@ const PrivateDeal = () => {
             <div className="tableHead">
               <p className="tableTitle">Buy Now</p>
               <input type="text" placeholder="Search" className="search" />
+            </div>
+            <div className="downloadTable" style={{ display: "none" }}>
+              <table id="table-to-xls2">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+
+                    <th>Product Name</th>
+                    <th>Base Price</th>
+                    <th>Date Posted</th>
+
+                    <th className="extraTh">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {buydeal &&
+                    buydeal.rows &&
+                    buydeal.rows.map((item) => {
+                      return (
+                        <tr>
+                          <td> {item.vendor && `${item.vendor.name}`}</td>
+                          <td>{item.product && item.product.productName}</td>
+                          <td> {formatCurrency(item.basePrice)}</td>
+                          <td align="left">
+                            {moment(item.product.createdAt).format(
+                              "MMM Do YYYY"
+                            )}
+                          </td>
+
+                          <td>{item.status}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
             </div>
             <div className="overflowTable">
               {!isBuyError ? (

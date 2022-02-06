@@ -34,8 +34,7 @@ const Account = () => {
   const [phone, setPhone] = useState("");
   const [imgupload, setImgUpload] = useState("");
   const [update, { isLoading }] = useUpdateMutation();
-  const [updatePassword, { isLoading: passLoading }] =
-    useUpdatePasswordMutation();
+
   const closeModal = () => {
     setModal(!modal);
   };
@@ -43,6 +42,8 @@ const Account = () => {
     setModalPop(!modal);
   };
   const { user } = useSelector((state) => state.auth);
+  const [updatePassword, { isLoading: passLoading }] =
+    useUpdatePasswordMutation();
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
@@ -54,7 +55,10 @@ const Account = () => {
 
     try {
       // call login trigger from rtk query
-      const response = await update(payload).unwrap();
+      const response = await update({
+        credentials: payload,
+        id: user.id,
+      }).unwrap();
       console.log(response);
       toastr.success("Success", "Successful");
     } catch (err) {

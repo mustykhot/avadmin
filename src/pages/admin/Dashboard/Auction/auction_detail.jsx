@@ -11,12 +11,17 @@ import SubmitBtn from "../../../../component/submitBtn";
 import Modal from "../../../../component/Modal";
 import Textarea from "../../../../component/input/textarea";
 import { useForm } from "react-hook-form";
-import { useGetOneDealQuery } from "../../../../services/api";
+import {
+  useApproveDealMutation,
+  useGetOneDealQuery,
+  useRejectDealMutation,
+} from "../../../../services/api";
 import { useParams } from "react-router-dom";
 import Loader from "../../../../component/Loader";
 import ErrorMsg from "../../../../component/ErrorMsg";
 import { formatCurrency } from "../../../../utils/utils";
 import moment from "moment";
+import { toastr } from "react-redux-toastr";
 const AuctionDetail = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
@@ -32,6 +37,34 @@ const AuctionDetail = () => {
   } = useGetOneDealQuery(id);
 
   console.log(deal);
+
+  // disable category
+  const [approveResponse, { isLoading: approveLoading }] =
+    useApproveDealMutation();
+  const approveDeal = async () => {
+    try {
+      const response = await approveResponse({ id: id }).unwrap();
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
+  };
+
+  // reject deal
+  const [rejectResponse, { isLoading: rejectLoading }] =
+    useRejectDealMutation();
+  const rejectDeal = async () => {
+    try {
+      const response = await rejectResponse({ id: id }).unwrap();
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
+  };
 
   const handleToggle = (type) => {
     setToggleBtn(type);
@@ -49,6 +82,7 @@ const AuctionDetail = () => {
   if (isError) {
     return <ErrorMsg error={error} />;
   }
+
   return (
     <AdminDashboardLayout active="auction">
       {modal && (
@@ -105,8 +139,10 @@ const AuctionDetail = () => {
                   <img src={arrow} alt="arrow" />
                 </p>
                 <div className={`actionPop moreLeft ${show ? "show" : ""}`}>
-                  <button className="pop">Approve</button>
-                  <button onClick={closeModal} className="pop">
+                  <button onClick={approveDeal} className="pop">
+                    Approve
+                  </button>
+                  <button onClick={rejectDeal} className="pop">
                     Reject
                   </button>
                 </div>

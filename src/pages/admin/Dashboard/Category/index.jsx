@@ -13,6 +13,7 @@ import Textarea from "../../../../component/input/textarea";
 import {
   useActivateCategoryMutation,
   useAddCategoryMutation,
+  useDeleteCategoryMutation,
   useDisableCategoryMutation,
   useEditCategoryMutation,
   useGetAllCategoryQuery,
@@ -45,6 +46,7 @@ export const SubscribeDropDown = ({
   activate,
   disable,
   setEditId,
+  deleteCat,
   closeModal,
 }) => (
   <DropDownWrapper
@@ -71,6 +73,15 @@ export const SubscribeDropDown = ({
       className="btn-noBg"
     >
       Deactivate
+    </button>
+
+    <button
+      onClick={() => {
+        deleteCat(id);
+      }}
+      className="btn-noBg"
+    >
+      Delete
     </button>
 
     <button
@@ -157,6 +168,20 @@ const Category = () => {
   const disableCategory = async (id) => {
     try {
       const response = await disableResponse({ id: id }).unwrap();
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    } finally {
+    }
+  };
+
+  // delete category
+  const [delResponse, { isLoading: delLoading }] = useDeleteCategoryMutation();
+  const deleteCat = async (id) => {
+    try {
+      const response = await delResponse({ id: id }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -364,6 +389,7 @@ const Category = () => {
                                 disable={disableCategory}
                                 closeModal={closeEditModal}
                                 setEditId={setEditId}
+                                deleteCat={deleteCat}
                               />
                             </TableCell>
                           </TableRow>

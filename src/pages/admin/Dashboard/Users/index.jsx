@@ -32,6 +32,8 @@ import moment from "moment";
 import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+
 const headCells = [
   {
     id: "name",
@@ -77,7 +79,7 @@ const Users = () => {
   //   },
   // ];
   const {
-    data: users,
+    data: users = null,
     isLoading: loading,
     isError,
     error,
@@ -130,19 +132,37 @@ const Users = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const [show, setShow] = useState(false);
 
   return (
     <AdminDashboardLayout active="user">
       <div className="pd-user">
         <div className="topicPart">
-          <p className="pageTitle">Administrators</p>
+          <p className="pageTitle">Users</p>
           <div className="btnBox">
-            <button className="download">
+            {/* <button className="download">
               <Download className="fill2" /> Export <Fill className="fill" />
-            </button>
-            {/* <button className="create">
-              Action <Fill className="fill" />
             </button> */}
+            <ReactHTMLTableToExcel
+              id="test-table-xls-button"
+              className="download-table-xls-button btn btn-success mb-3"
+              table="table-to-xls"
+              filename="Users"
+              sheet="tablexls"
+              buttonText="Export"
+            />
+            <button
+              onClick={() => {
+                setShow(!show);
+              }}
+              className="create"
+            >
+              Action <Fill className="fill" />
+            </button>
+            <div className={`actionPop  ${show ? "show" : ""}`}>
+              <button className="pop">Activate</button>
+              <button className="pop">Deactivate</button>
+            </div>
           </div>
         </div>
 
@@ -152,6 +172,42 @@ const Users = () => {
             <input type="text" placeholder="Search" className="search" />
           </div>
 
+          <div className="downloadTable" style={{ display: "none" }}>
+            <table id="table-to-xls">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>Wallet</th>
+                  <th>Joining Date</th>
+
+                  <th className="extraTh">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users &&
+                  users.message !== "no user available!" &&
+                  users.users &&
+                  users.users.map((item) => {
+                    return (
+                      <tr>
+                        <td>
+                          {" "}
+                          <p className="name">{`${item.firstName} ${item.lastName}`}</p>
+                        </td>
+                        <td align="left">{item.phone}</td>
+                        <td>{500}</td>
+                        <td align="left">
+                          {moment(item.updatedAt).format("L")}
+                        </td>
+                        <td> {item.active ? "Active" : "Inactive"}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+
           <div className="overflowTable">
             {isError ? (
               <NoProduct msg="There is a problem...">
@@ -159,7 +215,7 @@ const Users = () => {
               </NoProduct>
             ) : loading ? (
               <LoadingTable />
-            ) : users.message !== "no user available!" ? (
+            ) : users.users ? (
               <TableContainer>
                 <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                   <EnhancedTableHead
@@ -227,7 +283,7 @@ const Users = () => {
                             </TableCell>
 
                             <TableCell align="left">
-                              {moment().format("L")}
+                              {moment(row.updatedAt).format("L")}
                             </TableCell>
                             <TableCell align="left">
                               <p

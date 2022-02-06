@@ -81,7 +81,7 @@ const Audit = () => {
                 <tbody>
                   {audit.rows.map((item) => {
                     return (
-                      <tr>
+                      <tr key={item.id}>
                         <td className="left">
                           {/* <b>Give admin access to “Ads manager</b> <br />{" "}
                             <br />

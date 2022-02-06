@@ -9,7 +9,7 @@ import product from "../../../../assets/images/product.png";
 import { useParams } from "react-router-dom";
 import { useGetEachTransactionQuery } from "../../../../services/api";
 import moment from "moment";
-import { moneyFormatter } from "../../../../utils/utils";
+import { formatCurrency, moneyFormatter } from "../../../../utils/utils";
 const TransactionDownload = () => {
   const list = [1, 2, 3];
   let { id } = useParams();
@@ -48,9 +48,11 @@ const TransactionDownload = () => {
             <img src={product} alt="product" />
             <div className="productText">
               <p className="order">
-                Order ID: {transaction && transaction._id}
+                Order ID: {transaction && transaction.transaction._id}
               </p>
-              <p className="productName">{transaction && transaction.item}</p>
+              <p className="productName">
+                {transaction && transaction.transaction.item}
+              </p>
               <p className="auctionName">Automobile Auctions</p>
             </div>
           </div>
@@ -60,13 +62,15 @@ const TransactionDownload = () => {
               <p className="left">Date</p>
               <p className="right">
                 {transaction &&
-                  moment(transaction.createdAt).format("MM/DD/YYYY")}
+                  moment(transaction.transaction.createdAt).format(
+                    "MM/DD/YYYY"
+                  )}
               </p>
             </div>
             <div className="flexOrder">
               <p className="left">Product price:</p>
               <p className="right">
-                ₦{transaction && moneyFormatter(transaction.amount)}
+                ₦{transaction && formatCurrency(transaction.transaction.amount)}
               </p>
             </div>
             <div className="flexOrder">
@@ -84,18 +88,22 @@ const TransactionDownload = () => {
             <div className="flexOrder">
               <p className="left">Customer name:</p>
               <p className="right">
-                {`${transaction && transaction.user.firstName} ${
-                  transaction && transaction.user.lastName
+                {`${transaction && transaction.transaction.user.firstName} ${
+                  transaction && transaction.transaction.user.lastName
                 }`}
               </p>
             </div>
             <div className="flexOrder">
               <p className="left">Email:</p>
-              <p className="right">{transaction && transaction.user.email}</p>
+              <p className="right">
+                {transaction && transaction.transaction.user.email}
+              </p>
             </div>
             <div className="flexOrder">
               <p className="left">Phone:</p>
-              <p className="right">{transaction && transaction.user.phone}</p>
+              <p className="right">
+                {transaction && transaction.transaction.user.phone}
+              </p>
             </div>
           </div>
           <div className="line"></div>

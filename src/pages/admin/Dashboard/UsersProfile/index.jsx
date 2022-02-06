@@ -4,7 +4,7 @@ import { ReactComponent as Fill } from "../../../../assets/icons/Fill.svg";
 
 import shape from "../../../../assets/icons/shape.svg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import TableDrop from "../../../../component/TableDrop";
 import userProfile from "../../../../assets/images/userprofile.png";
@@ -19,8 +19,12 @@ import NoProduct from "../../../../component/NoProduct";
 import ProfileBox from "../../../../component/ProfileBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import { toastr } from "react-redux-toastr";
 import {
   useGetEachTransactionQuery,
+  useGetSellingQuery,
+  useGetSellingStatQuery,
+  useUpdateMutation,
   useGetUserDealQuery,
   useGetUserQuery,
   useGetUserTransQuery,
@@ -62,12 +66,65 @@ const UsersProfile = () => {
   console.log(deal, "deal");
 
   const {
+    data: statAuction = null,
+    isLoading: isStatAuction,
+    isError: isStatAuctionError,
+    error: statErrorAuction,
+  } = useGetSellingStatQuery(id);
+  console.log(statAuction, "statAuction");
+
+  const {
     data: wallet = null,
     isLoading: isWallet,
     isError: isWalletError,
     error: walletError,
   } = useGetWalletQuery(id);
   console.log(wallet, "wallet");
+
+  const {
+    data: selling = null,
+    isLoading: isSelling,
+    isError: isSellingError,
+    error: sellingError,
+  } = useGetSellingQuery(id);
+  console.log(selling, "selling");
+
+  const {
+    data: stat = null,
+    isLoading: isStat,
+    isError: isStatError,
+    error: statError,
+  } = useGetSellingStatQuery(id);
+  console.log(stat, "stat");
+
+  // activate
+
+  const [update, { isLoading: activateLoading }] = useUpdateMutation();
+
+  // useEffect(() => {
+  //   if (id) {
+  //     onSubmit();
+  //   }
+  // }, [id]);
+
+  const onSubmit = async (bool) => {
+    const payload = {
+      active: bool,
+    };
+    try {
+      // call login trigger from rtk query
+      const response = await update({
+        credentials: payload,
+        id: id,
+      }).unwrap();
+      console.log(response);
+      toastr.success("Success", "Successful");
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
+  };
+
   return (
     <AdminDashboardLayout active="user">
       <div className="pd-userprofile">
@@ -131,8 +188,20 @@ const UsersProfile = () => {
                   Action <Fill className="fill" />
                 </button>
                 <div className={`actionDrop ${show ? "show" : ""}`}>
-                  <button>Suspend</button>
-                  <button>Activate</button>
+                  <button
+                    onClick={() => {
+                      onSubmit(false);
+                    }}
+                  >
+                    Deactivate
+                  </button>
+                  <button
+                    onClick={() => {
+                      onSubmit(true);
+                    }}
+                  >
+                    Activate
+                  </button>
                 </div>
               </div>
             </div>
@@ -242,21 +311,21 @@ const UsersProfile = () => {
                   <SummaryCard
                     icon={clock}
                     increase={true}
-                    midText={"12"}
+                    midText={statAuction ? statAuction.data.totalItem : 0}
                     btmText={"Auctions participated"}
                     percent={"12%"}
                   />
                   <SummaryCard
                     icon={check}
                     increase={false}
-                    midText={"12"}
-                    btmText={"Winning Bids"}
+                    midText={statAuction ? statAuction.data.totalSold : 0}
+                    btmText={"Total Sold"}
                     percent={"12%"}
                   />
                   <SummaryCard
-                    midText={"530,504,000"}
+                    midText={statAuction ? statAuction.data.totalRevenue : 0}
                     currency={"₦"}
-                    btmText={"Total Amount Spent"}
+                    btmText={"Total Revenue"}
                     isAmount={true}
                   />
                 </div>
@@ -331,21 +400,21 @@ const UsersProfile = () => {
                   <SummaryCard
                     icon={clock}
                     increase={true}
-                    midText={"12"}
+                    midText={stat ? stat.data.totalItem : 0}
                     btmText={"No of Products"}
                     percent={"12%"}
                   />
                   <SummaryCard
                     icon={check}
                     increase={false}
-                    midText={"12"}
+                    midText={stat ? stat.data.totalSold : 0}
                     btmText={"Product sold"}
                     percent={"12%"}
                   />
                   <SummaryCard
-                    midText={"530,504,000"}
+                    midText={stat ? stat.data.totalRevenue : 0}
                     currency={"₦"}
-                    btmText={"Total Amount Spent"}
+                    btmText={"Total Revenue"}
                     isAmount={true}
                   />
                 </div>
@@ -354,44 +423,57 @@ const UsersProfile = () => {
                   <div className="tableHead">
                     <p className="tableTitle">Sales Performance</p>
                   </div>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Item ID</th>
-
-                        <th className="extraTh">
-                          Amount <img src={shape} alt="shape" />{" "}
-                        </th>
-                        <th className="extraTh">
-                          Status <img src={shape} alt="shape" />{" "}
-                        </th>
-                        <th className="extraTh">
-                          Quantity <img src={shape} alt="shape" />{" "}
-                        </th>
-
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item) => {
-                        return (
+                  {!isSelling ? (
+                    !selling ? (
+                      <NoProduct msg="No Products...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : selling.products ? (
+                      <table>
+                        <thead>
                           <tr>
-                            <td className="phone">8974-8743</td>
-                            <td className="role">₦ 54,000</td>
-                            <td className="statusTd">
-                              <p className="status active">In-stock</p>
-                            </td>
-                            <td className="role">5</td>
+                            <th>Item ID</th>
+                            <th className="extraTh">Amount</th>
+                            <th className="extraTh">Quantity</th>
+                            <th className="extraTh">Status</th>
 
-                            <td className="action">
-                              <TableDrop extra={true} />
-                            </td>
+                            <th className="extraTh">Date</th>
                           </tr>
-                        );
-                      })}
-                      <tr></tr>
-                    </tbody>
-                  </table>
+                        </thead>
+                        <tbody>
+                          {selling.products.map((item) => {
+                            return (
+                              <tr key={item.id}>
+                                <td className="phone">{item._id}</td>
+                                <td className="role">₦ {item.finalPrice}</td>
+                                <td>{item.quantity}</td>
+                                <td className="statusTd">
+                                  <p
+                                    className={`status ${
+                                      item.status === "pending"
+                                        ? "yellow"
+                                        : "active"
+                                    }`}
+                                  >
+                                    {item.status}
+                                  </p>
+                                </td>
+                                <td className="role">
+                                  {moment(item.createdAt).format("L")}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <NoProduct msg="No Deals...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    )
+                  ) : (
+                    <LoadingTable />
+                  )}
                 </div>
               </div>
             )}

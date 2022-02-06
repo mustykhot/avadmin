@@ -178,6 +178,7 @@ const Chat = () => {
                         <MessageBox
                           image={item.img}
                           name={item.name}
+                          key={item._id}
                           id={item._id}
                           // latestMessage={item.latestMessage}
                           numberOfNew={item.numberOfNew}
@@ -385,7 +386,7 @@ const Chat = () => {
                 <div className="coverMember">
                   {userList.map((item) => {
                     return (
-                      <div className="eachMember">
+                      <div key={item.id} className="eachMember">
                         <img src={item.image} alt="user" />
                         <div className="textPart">
                           <p className="name">

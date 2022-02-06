@@ -13,6 +13,8 @@ import Textarea from "../../../../component/input/textarea";
 import saveImg from "../../../../assets/icons/img.svg";
 import Phone from "../../../../component/input/phone";
 import PhoneInput from "react-phone-input-2";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   useAddPrivateDealMutation,
   useAddVendorMutation,
@@ -179,15 +181,21 @@ const PrivateDealForm1 = () => {
     { value: "AUCTION", label: "Auction" },
   ];
 
-  const [addVendor, { isLoading: loader }] = useAddVendorMutation();
+  const [addVendor] = useAddVendorMutation();
+
+  const [loader, setLoader] = useState(false);
+  console.log(loader, "loader");
   const onSubmitVendor = async (payload) => {
+    setLoader(true);
     try {
       const response = await addVendor(payload).unwrap();
       //  closeModal();
       console.log(response, "response");
 
       toastr.success("Success", response.message);
+      setLoader(false);
     } catch (err) {
+      setLoader(false);
       if (err.data) toastr.error("Error", err.data.message);
       else toastr.error("Error", "Something went wrong, please try again...");
     }
@@ -409,8 +417,8 @@ const PrivateDealForm1 = () => {
                       />
                     </div>
                     <div className="displayFile">
-                      {imageList.map((item) => {
-                        return <img src={item} alt="item" />;
+                      {imageList.map((item, i) => {
+                        return <img src={item} key={i} alt="item" />;
                       })}
                     </div>
                   </div>
@@ -502,29 +510,6 @@ const PrivateDealForm1 = () => {
                         />
                       </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="">Select Category</label>
-                      <div className="input-icon-wrap">
-                        <select
-                          className="selectClass"
-                          onChange={(e) => {
-                            setVendorCategory(e.target.value);
-                          }}
-                          id="vendor_category"
-                          name="vendor_category"
-                        >
-                          <option value="DEFAULT">Select</option>
-                          {category.length &&
-                            category.map((item) => {
-                              return (
-                                <option key={item._id} value={item._id}>
-                                  {item.categoryName}
-                                </option>
-                              );
-                            })}
-                        </select>
-                      </div>
-                    </div>
 
                     <div className="companyLogoDiv">
                       <p className="label">Company Logo (Optional)</p>
@@ -567,22 +552,25 @@ const PrivateDealForm1 = () => {
                     </div>
                   </>
                 )}
+                <button
+                  style={{ display: `${formStep >= 3 ? "" : "none"}` }}
+                  type="submit"
+                  className="submit"
+                  onClick={() => {
+                    console.log("ggg");
+                  }}
+                >
+                  {loader ? (
+                    <FontAwesomeIcon icon={faSpinner} pulse spin />
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
                 <button onClick={prevFormStep} type="button" className="cancel">
                   Back
                 </button>
               </section>
             )}
-
-            <button
-              style={{ display: `${formStep >= 3 ? "" : "none"}` }}
-              type="submit"
-              className="submit"
-              onClick={() => {
-                console.log("ggg");
-              }}
-            >
-              Submit
-            </button>
           </form>
         </FormProvider>
       </div>

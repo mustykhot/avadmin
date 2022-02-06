@@ -15,6 +15,7 @@ import {
   truncateString,
   stableSort,
   getComparator,
+  formatCurrency,
 } from "../../../../utils/utils";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +27,8 @@ import Table from "@mui/material/Table";
 import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import Pagination from "@mui/material/Pagination";
 import { Avatar } from "@mui/material";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+
 const Transaction = () => {
   const [toggleBtn, setToggleBtn] = useState("auction");
   const [page, setPage] = useState(1);
@@ -34,7 +37,7 @@ const Transaction = () => {
   };
   const navigate = useNavigate();
   const {
-    data: transaction = [],
+    data: transaction = null,
     isLoading: loading,
     isError,
     error,
@@ -96,9 +99,18 @@ const Transaction = () => {
         <div className="topicPart">
           <p className="pageTitle">Transactions List</p>
           <div className="btnBox">
-            <button className="download">
+            {/* <button className="download">
               Download <Fill className="fill" />
-            </button>
+            </button> */}
+
+            <ReactHTMLTableToExcel
+              id="test-table-xls-button"
+              className="download-table-xls-button btn btn-success mb-3"
+              table="table-to-xls"
+              filename="transactions"
+              sheet="tablexls"
+              buttonText="Download"
+            />
           </div>
         </div>
 
@@ -127,11 +139,49 @@ const Transaction = () => {
             <input type="text" placeholder="Search" className="search" />
           </div> */}
 
+          <div className="downloadTable" style={{ display: "none" }}>
+            <table id="table-to-xls">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Customer</th>
+                  <th>Product Name</th>
+
+                  <th className="extraTh">Amount</th>
+
+                  <th className="extraTh">Date</th>
+
+                  <th className="extraTh">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transaction &&
+                  transaction.rows &&
+                  transaction.rows.map((item) => {
+                    return (
+                      <tr>
+                        <td>{truncateString(item._id, 7)}</td>
+                        <td>
+                          {item.user.firstName}
+                          {item.user.lastName}
+                        </td>
+                        <td>{item.item}</td>
+                        <td>₦ {formatCurrency(item.amount)}</td>
+                        <td>{moment(item.createdAt).format("MM/DD/YYYY")}</td>
+
+                        <td>{item.status}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+
           <div className="overflowTable">
             {!isError ? (
               loading ? (
                 <LoadingTable />
-              ) : transaction.rows.length ? (
+              ) : transaction.rows ? (
                 <TableContainer>
                   <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                     <EnhancedTableHead

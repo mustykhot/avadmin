@@ -15,11 +15,13 @@ import TableDrop from "../../../../component/TableDrop";
 
 import Phone from "../../../../component/input/phone";
 import CreateAdminModal from "../../../../component/ModalPlace/CreateAdminModal";
+
 import {
   useAddAdminMutation,
   useApproveDealMutation,
   useGetAdminsQuery,
   useRejectDealMutation,
+  useUpdateMutation,
 } from "../../../../services/api";
 import { toastr } from "react-redux-toastr";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -37,9 +39,12 @@ import { IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
 import NoProduct from "../../../../component/NoProduct";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 // dropdown
-const SubscribeDropDown = ({ id, activate, deactivate }) => (
+const SubscribeDropDown = ({ id, setId, setActive, submit }) => (
   <DropDownWrapper
     className="more-actions"
     action={
@@ -50,7 +55,9 @@ const SubscribeDropDown = ({ id, activate, deactivate }) => (
   >
     <button
       onClick={() => {
-        activate(id);
+        setId(id);
+        setActive(true);
+        // submit();
       }}
       className="btn-noBg"
     >
@@ -58,13 +65,14 @@ const SubscribeDropDown = ({ id, activate, deactivate }) => (
     </button>
     <button
       onClick={() => {
-        deactivate(id);
+        setId(id);
+        setActive(false);
+        // submit();
       }}
       className="btn-noBg"
     >
       Deactivate
     </button>
-    \
   </DropDownWrapper>
 );
 
@@ -103,7 +111,7 @@ const Administrator = () => {
   };
 
   const {
-    data: admins,
+    data: admins = null,
     isLoading: loading,
     isError,
     error,
@@ -120,28 +128,31 @@ const Administrator = () => {
     setOrderBy(property);
   };
 
-  // disable category
-  const [approveResponse, { isLoading: approveLoading }] =
-    useApproveDealMutation();
-  const approveDeal = async (id) => {
-    try {
-      const response = await approveResponse({ id: id }).unwrap();
-
-      toastr.success("Success", response.message);
-    } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+  const [update, { isLoading }] = useUpdateMutation();
+  const [id, setId] = useState(null);
+  console.log(id, "idddddd");
+  const [active, setActive] = useState(null);
+  useEffect(() => {
+    if (id) {
+      onSubmit();
     }
-  };
+  }, [id]);
 
-  // reject deal
-  const [rejectResponse, { isLoading: rejectLoading }] =
-    useRejectDealMutation();
-  const rejectDeal = async (id) => {
+  const onSubmit = async () => {
+    const payload = {
+      active: active,
+    };
+    console.log(payload);
+
     try {
-      const response = await rejectResponse({ id: id }).unwrap();
-
-      toastr.success("Success", response.message);
+      // call login trigger from rtk query
+      const response = await update({
+        credentials: payload,
+        id: id,
+      }).unwrap();
+      console.log(response);
+      toastr.success("Success", "Successful");
+      setId(null);
     } catch (err) {
       if (err.data) toastr.error("Error", err.data.message);
       else toastr.error("Error", "Something went wrong, please try again...");
@@ -163,9 +174,17 @@ const Administrator = () => {
         <div className="topicPart">
           <p className="pageTitle">Administrators</p>
           <div className="btnBox">
-            <button className="download">
+            {/* <button className="download">
               Download <Fill className="fill" />
-            </button>
+            </button> */}
+            <ReactHTMLTableToExcel
+              id="test-table-xls-button"
+              className="download-table-xls-button btn btn-success mb-3"
+              table="table-to-xls"
+              filename="Administrators"
+              sheet="tablexls"
+              buttonText="Download"
+            />
             <button onClick={closeModal} className="create">
               Create New Admin
             </button>
@@ -178,6 +197,38 @@ const Administrator = () => {
             <input type="text" placeholder="Search" className="search" />
           </div>
 
+          <div className="downloadTable" style={{ display: "none" }}>
+            <table id="table-to-xls">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Mobile</th>
+                  <th>Admin Role</th>
+
+                  <th className="extraTh">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {admins &&
+                  admins.message !== "no admin available!" &&
+                  admins.admins.length &&
+                  admins.admins.map((item) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          {" "}
+                          <p className="name">{`${item.firstName} ${item.lastName}`}</p>
+                        </td>
+                        <td align="left">{item.phone}</td>
+                        <td align="left">{item.role}</td>
+                        <td> {item.active ? "Active" : "Inactive"}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+
           <div className="overflowTable">
             {isError === true ? (
               <NoProduct msg="Something is wrong...">
@@ -185,7 +236,7 @@ const Administrator = () => {
               </NoProduct>
             ) : loading ? (
               <LoadingTable />
-            ) : admins.message !== "no admin available!" ? (
+            ) : admins.admins ? (
               <TableContainer>
                 <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                   <EnhancedTableHead
@@ -252,8 +303,9 @@ const Administrator = () => {
 
                           <TableCell className="action" align="left">
                             <SubscribeDropDown
-                              activate={approveDeal}
-                              deactivate={rejectDeal}
+                              setActive={setActive}
+                              setId={setId}
+                              submit={onSubmit}
                               id={row.id}
                             />
                           </TableCell>

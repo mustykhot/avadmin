@@ -35,6 +35,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { toastr } from "react-redux-toastr";
 import { useDispatch } from "react-redux";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { logout } from "../../../../store/slice/AuthSlice";
 // dropdown
 const SubscribeDropDown = ({ id, reject, approve }) => (
@@ -117,13 +118,13 @@ const Auction = () => {
     navigate(`auction_detail/${id}`);
   };
   const {
-    data: deal,
+    data: deal = null,
     isLoading: loadingBuyNow,
     isError,
     error,
   } = useGetAllDealQuery();
   const {
-    data: dealPrivate,
+    data: dealPrivate = null,
     isLoading: loadingPrivate,
     isError: isPrivateError,
     error: privateError,
@@ -211,9 +212,26 @@ const Auction = () => {
         <div className="topicPart">
           <p className="pageTitle">Auctions</p>
           <div className="btnBox">
-            <button className="download">
-              Download <Fill className="fill" />
-            </button>
+            {toggleBtn === "regular" && (
+              <ReactHTMLTableToExcel
+                id="test-table-xls-button"
+                className="download-table-xls-button btn btn-success mb-3"
+                table="table-to-xls"
+                filename="Auction"
+                sheet="tablexls"
+                buttonText="Download"
+              />
+            )}
+            {toggleBtn !== "regular" && (
+              <ReactHTMLTableToExcel
+                id="test-table-xls-button"
+                className="download-table-xls-button btn btn-success mb-3"
+                table="table-to-xls2"
+                filename="Buy Now"
+                sheet="tablexls"
+                buttonText="Download"
+              />
+            )}
             <button
               onClick={() => {
                 setShow(!show);
@@ -223,6 +241,7 @@ const Auction = () => {
               Action <Fill className="fill" />
             </button>
             <div className={`actionPop  ${show ? "show" : ""}`}>
+              <button className="pop">Activate</button>
               <button className="pop">Deactivate</button>
             </div>
           </div>
@@ -252,6 +271,62 @@ const Auction = () => {
               <p className="tableTitle">Admin Users</p>
               <input type="text" placeholder="Search" className="search" />
             </div>
+
+            <div className="downloadTable" style={{ display: "none" }}>
+              <table id="table-to-xls">
+                <thead>
+                  <tr>
+                    <th>Trader</th>
+
+                    <th>Product Name</th>
+                    <th>Base Price</th>
+                    <th>Current Bid</th>
+                    <th>Date Posted</th>
+
+                    <th className="extraTh">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {deal &&
+                    deal.data.rows &&
+                    deal.data.rows.map((item) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>
+                            {" "}
+                            {
+                              <p className="name">
+                                {item.user
+                                  ? `${item.user.firstName} ${item.user.lastName}`
+                                  : "N/A"}
+                              </p>
+                            }
+                          </td>
+                          <td align="left">
+                            {item.product ? item.product.productName : "N/A"}
+                          </td>
+                          <td align="left">
+                            {item.product
+                              ? formatCurrency(item.product.price)
+                              : "N/A"}
+                          </td>
+                          <td align="left">
+                            {item.product
+                              ? formatCurrency(item.product.finalPrice)
+                              : "N/A"}
+                          </td>
+                          <td align="left">
+                            {moment(item.created_at).format("L")}
+                          </td>
+
+                          <td>{item.status}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+
             <div className="overflowTable">
               {!isError ? (
                 loadingBuyNow ? (
@@ -383,6 +458,60 @@ const Auction = () => {
             <div className="tableHead">
               <p className="tableTitle">Buy Now</p>
               <input type="text" placeholder="Search" className="search" />
+            </div>
+            <div className="downloadTable" style={{ display: "none" }}>
+              <table id="table-to-xls2">
+                <thead>
+                  <tr>
+                    <th>Trader</th>
+
+                    <th>Product Name</th>
+                    <th>Base Price</th>
+                    <th>Current Bid</th>
+                    <th>Date Posted</th>
+
+                    <th className="extraTh">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dealPrivate &&
+                    dealPrivate.data.rows &&
+                    dealPrivate.data.rows.map((item) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>
+                            {" "}
+                            {
+                              <p className="name">
+                                {item.user
+                                  ? `${item.user.firstName} ${item.user.lastName}`
+                                  : "N/A"}
+                              </p>
+                            }
+                          </td>
+                          <td align="left">
+                            {item.product ? item.product.productName : "N/A"}
+                          </td>
+                          <td align="left">
+                            {item.product
+                              ? formatCurrency(item.product.price)
+                              : "N/A"}
+                          </td>
+                          <td align="left">
+                            {item.product
+                              ? formatCurrency(item.product.finalPrice)
+                              : "N/A"}
+                          </td>
+                          <td align="left">
+                            {moment(item.created_at).format("L")}
+                          </td>
+
+                          <td>{item.status}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
             </div>
             <div className="overflowTable">
               {!isPrivateError ? (

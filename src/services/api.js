@@ -56,11 +56,12 @@ export const authApi = createApi({
     }),
 
     update: builder.mutation({
-      query: (credentials) => ({
-        url: `user/av/users`,
+      query: ({ credentials, id }) => ({
+        url: `user/av/users/${id}`,
         method: "PUT",
         body: credentials,
       }),
+      invalidatesTags: ["admins", "user"],
     }),
     updatePassword: builder.mutation({
       query: (credentials) => ({
@@ -205,12 +206,28 @@ export const authApi = createApi({
 
     getOneDeal: builder.query({
       query: (id) => `deals/single-deal/${id}`,
-      providesTags: ["vendor"],
+      providesTags: ["deal"],
       transformResponse: (response) => response.data,
     }),
     getAudit: builder.query({
       query: () => `user/audits/all`,
       providesTags: ["audit"],
+      transformResponse: (response) => response,
+    }),
+    // user sellings
+    getSelling: builder.query({
+      query: (id) => `product/get-products?user=${id}`,
+      providesTags: ["selling"],
+      transformResponse: (response) => response,
+    }),
+    getSellingStat: builder.query({
+      query: (id) => `product/stats?user=${id}`,
+      providesTags: ["selling"],
+      transformResponse: (response) => response,
+    }),
+    getAuctionStat: builder.query({
+      query: (id) => `bids/stats?user=${id}`,
+      providesTags: ["auction"],
       transformResponse: (response) => response,
     }),
     // private vendor
@@ -259,6 +276,13 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["category"],
     }),
+    deleteCategory: builder.mutation({
+      query: ({ id }) => ({
+        url: `categories/category-delete/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["category"],
+    }),
     signup: builder.mutation({
       query: (credentials) => ({
         url: "user/av/admin/root/login",
@@ -284,6 +308,10 @@ export const authApi = createApi({
 });
 export const {
   useLoginMutation,
+  useGetSellingQuery,
+  useGetSellingStatQuery,
+  useGetAuctionStatQuery,
+  useDeleteCategoryMutation,
   useSignupMutation,
   useAddAdminMutation,
   useResetPwdMutation,

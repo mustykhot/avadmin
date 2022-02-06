@@ -12,7 +12,8 @@
 
     .btnBox {
       display: flex;
-      button.download {
+      button.download,
+      #test-table-xls-button {
         @include downloadBtn;
       }
 

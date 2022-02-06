@@ -134,7 +134,7 @@ const Ads = () => {
               <tbody>
                 {list.map((item) => {
                   return (
-                    <tr>
+                    <tr key={item.id}>
                       <td className="nameTd">
                         <div className="nameDiv">
                           <img className="userImg" src={userImg} alt="user" />

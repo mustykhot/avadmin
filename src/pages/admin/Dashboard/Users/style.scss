@@ -12,13 +12,21 @@
 
     .btnBox {
       display: flex;
-      button.download {
+      position: relative;
+      button.download,
+      #test-table-xls-button {
         @include downloadBtn;
       }
 
       button.create {
         @include downloadBtn2;
         margin-left: 10px;
+      }
+      .actionPop {
+        @include actionPop;
+        top: 40px;
+        left: unset;
+        right: 0px;
       }
     }
   }

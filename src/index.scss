@@ -131,7 +131,8 @@
   width: max-content;
   margin: auto;
   padding: 6px 25px;
-  &.active {
+  &.active,
+  &.Active {
     color: #0c9c7a;
     background: #e5f5f4;
   }
