@@ -279,7 +279,7 @@ export const authApi = createApi({
     deleteCategory: builder.mutation({
       query: ({ id }) => ({
         url: `categories/category-delete/${id}`,
-        method: "PUT",
+        method: "DELETE",
       }),
       invalidatesTags: ["category"],
     }),
