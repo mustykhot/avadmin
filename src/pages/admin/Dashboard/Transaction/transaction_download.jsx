@@ -1,7 +1,7 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { ReactComponent as Download } from "../../../../assets/icons/download.svg";
 import { ReactComponent as Printer } from "../../../../assets/icons/printer.svg";
@@ -10,9 +10,12 @@ import { useParams } from "react-router-dom";
 import { useGetEachTransactionQuery } from "../../../../services/api";
 import moment from "moment";
 import { formatCurrency, moneyFormatter } from "../../../../utils/utils";
+import Pdf from "react-to-pdf";
+
 const TransactionDownload = () => {
   const list = [1, 2, 3];
   let { id } = useParams();
+  const ref = useRef();
 
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
@@ -38,12 +41,17 @@ const TransactionDownload = () => {
             {" "}
             <Printer className="fill2" /> Print
           </button>
-          <button className="download">
-            {" "}
-            <Download className="fill2" /> Download
-          </button>
+
+          <Pdf targetRef={ref} filename="code-example.pdf">
+            {({ toPdf }) => (
+              <button onClick={toPdf} className="download">
+                {" "}
+                <Download className="fill2" /> Download
+              </button>
+            )}
+          </Pdf>
         </div>
-        <div className="downloadBox">
+        <div ref={ref} className="downloadBox">
           <div className="aboutProduct">
             <img src={product} alt="product" />
             <div className="productText">

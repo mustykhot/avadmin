@@ -369,7 +369,7 @@ const Dashboard = () => {
           </div>
           <div className="sellers-wrap">
             <div className="section-head">
-              <p className="title">Top Sellers</p>
+              <p className="title">Admin Activities</p>
               <select name="" id="">
                 <option value="">Individual</option>
               </select>

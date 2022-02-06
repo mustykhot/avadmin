@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import {
   useApproveDealMutation,
   useGetOneDealQuery,
-  useRejectDealMutation,
 } from "../../../../services/api";
 import { useParams } from "react-router-dom";
 import Loader from "../../../../component/Loader";
@@ -41,23 +40,15 @@ const AuctionDetail = () => {
   // disable category
   const [approveResponse, { isLoading: approveLoading }] =
     useApproveDealMutation();
-  const approveDeal = async () => {
+  const approveDeal = async (status) => {
+    const payload = {
+      status: status,
+    };
     try {
-      const response = await approveResponse({ id: id }).unwrap();
-
-      toastr.success("Success", response.message);
-    } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
-    }
-  };
-
-  // reject deal
-  const [rejectResponse, { isLoading: rejectLoading }] =
-    useRejectDealMutation();
-  const rejectDeal = async () => {
-    try {
-      const response = await rejectResponse({ id: id }).unwrap();
+      const response = await approveResponse({
+        credentials: payload,
+        id,
+      }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -139,10 +130,20 @@ const AuctionDetail = () => {
                   <img src={arrow} alt="arrow" />
                 </p>
                 <div className={`actionPop moreLeft ${show ? "show" : ""}`}>
-                  <button onClick={approveDeal} className="pop">
+                  <button
+                    onClick={() => {
+                      approveDeal("Active");
+                    }}
+                    className="pop"
+                  >
                     Approve
                   </button>
-                  <button onClick={rejectDeal} className="pop">
+                  <button
+                    onClick={() => {
+                      approveDeal("Declined");
+                    }}
+                    className="pop"
+                  >
                     Reject
                   </button>
                 </div>

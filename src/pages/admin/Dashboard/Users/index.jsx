@@ -14,7 +14,10 @@ import { useState } from "react";
 // import Select from "../../../../component/input/selectt";
 // import SuccessModal from "../../../../component/popModal";
 import { useNavigate } from "react-router";
-import { useGetUsersQuery } from "../../../../services/api";
+import {
+  useGetUsersQuery,
+  useUpdateBatchMutation,
+} from "../../../../services/api";
 import LoadingTable from "../../../../component/loadingTable";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -33,6 +36,7 @@ import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import { toastr } from "react-redux-toastr";
 
 const headCells = [
   {
@@ -133,7 +137,26 @@ const Users = () => {
     setOrderBy(property);
   };
   const [show, setShow] = useState(false);
-
+  console.log(selected, "selected");
+  // update
+  const [update, { isLoading: activateLoading }] = useUpdateBatchMutation();
+  const onSubmit = async (bool) => {
+    const payload = {
+      active: bool,
+    };
+    try {
+      // call login trigger from rtk query
+      const response = await update({
+        credentials: payload,
+        id: selected,
+      }).unwrap();
+      console.log(response);
+      toastr.success("Success", "Successful");
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
+    }
+  };
   return (
     <AdminDashboardLayout active="user">
       <div className="pd-user">
@@ -160,8 +183,22 @@ const Users = () => {
               Action <Fill className="fill" />
             </button>
             <div className={`actionPop  ${show ? "show" : ""}`}>
-              <button className="pop">Activate</button>
-              <button className="pop">Deactivate</button>
+              <button
+                onClick={() => {
+                  onSubmit(true);
+                }}
+                className="pop"
+              >
+                Activate
+              </button>
+              <button
+                onClick={() => {
+                  onSubmit(false);
+                }}
+                className="pop"
+              >
+                Deactivate
+              </button>
             </div>
           </div>
         </div>

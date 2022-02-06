@@ -57,11 +57,19 @@ export const authApi = createApi({
 
     update: builder.mutation({
       query: ({ credentials, id }) => ({
-        url: `user/av/users/${id}`,
+        url: `user/av/users?id=${id}`,
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["admins", "user"],
+      invalidatesTags: ["admins", "user", "users"],
+    }),
+    updateBatch: builder.mutation({
+      query: ({ credentials, id }) => ({
+        url: `user/av/users?id=${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["admins", "user", "users"],
     }),
     updatePassword: builder.mutation({
       query: (credentials) => ({
@@ -190,19 +198,20 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     approveDeal: builder.mutation({
-      query: ({ id }) => ({
-        url: `deals/deals/approve/${id}`,
+      query: ({ credentials, id }) => ({
+        url: `deals/deals?id=${id}`,
         method: "PUT",
+        body: credentials,
       }),
       invalidatesTags: ["deal"],
     }),
-    rejectDeal: builder.mutation({
-      query: ({ id }) => ({
-        url: `deals/deals/decline/${id}`,
-        method: "PUT",
-      }),
-      invalidatesTags: ["deal"],
-    }),
+    // rejectDeal: builder.mutation({
+    //   query: ({ id }) => ({
+    //     url: `deals/deals/decline/${id}`,
+    //     method: "PUT",
+    //   }),
+    //   invalidatesTags: ["deal"],
+    // }),
 
     getOneDeal: builder.query({
       query: (id) => `deals/single-deal/${id}`,
@@ -312,6 +321,7 @@ export const {
   useGetSellingStatQuery,
   useGetAuctionStatQuery,
   useDeleteCategoryMutation,
+  useUpdateBatchMutation,
   useSignupMutation,
   useAddAdminMutation,
   useResetPwdMutation,
@@ -324,7 +334,7 @@ export const {
   useAddPrivateDealMutation,
   useGetAllDealQuery,
   useApproveDealMutation,
-  useRejectDealMutation,
+  // useRejectDealMutation,
   useDeactivatePrivateDealMutation,
   useGetTransactionQuery,
   useGetEachTransactionQuery,

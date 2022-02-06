@@ -14,7 +14,6 @@ import {
   useApproveDealMutation,
   useGetAllDealPrivateQuery,
   useGetAllDealQuery,
-  useRejectDealMutation,
 } from "../../../../services/api";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -36,9 +35,9 @@ import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { toastr } from "react-redux-toastr";
 import { useDispatch } from "react-redux";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import { logout } from "../../../../store/slice/AuthSlice";
+
 // dropdown
-const SubscribeDropDown = ({ id, reject, approve }) => (
+const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
     className="more-actions"
     action={
@@ -53,7 +52,7 @@ const SubscribeDropDown = ({ id, reject, approve }) => (
 
     <button
       onClick={() => {
-        approve(id);
+        approve("Active", id);
       }}
       className="btn-noBg"
     >
@@ -62,7 +61,7 @@ const SubscribeDropDown = ({ id, reject, approve }) => (
 
     <button
       onClick={() => {
-        reject(id);
+        approve("Declined", id);
       }}
       className="btn-noBg"
     >
@@ -181,23 +180,15 @@ const Auction = () => {
   // disable category
   const [approveResponse, { isLoading: approveLoading }] =
     useApproveDealMutation();
-  const approveDeal = async (id) => {
+  const approveDeal = async (status, id) => {
+    const payload = {
+      status,
+    };
     try {
-      const response = await approveResponse({ id: id }).unwrap();
-
-      toastr.success("Success", response.message);
-    } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
-    }
-  };
-
-  // reject deal
-  const [rejectResponse, { isLoading: rejectLoading }] =
-    useRejectDealMutation();
-  const rejectDeal = async (id) => {
-    try {
-      const response = await rejectResponse({ id: id }).unwrap();
+      const response = await approveResponse({
+        credentials: payload,
+        id: id,
+      }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -241,8 +232,22 @@ const Auction = () => {
               Action <Fill className="fill" />
             </button>
             <div className={`actionPop  ${show ? "show" : ""}`}>
-              <button className="pop">Activate</button>
-              <button className="pop">Deactivate</button>
+              <button
+                onClick={() => {
+                  approveDeal("Active", selected);
+                }}
+                className="pop"
+              >
+                Activate
+              </button>
+              <button
+                onClick={() => {
+                  approveDeal("Declined", selected);
+                }}
+                className="pop"
+              >
+                Deactivate
+              </button>
             </div>
           </div>
         </div>
@@ -268,7 +273,7 @@ const Auction = () => {
         {toggleBtn === "regular" && (
           <div className="whiteContainer">
             <div className="tableHead">
-              <p className="tableTitle">Admin Users</p>
+              <p className="tableTitle">All Auctions</p>
               <input type="text" placeholder="Search" className="search" />
             </div>
 
@@ -429,7 +434,6 @@ const Auction = () => {
                               <TableCell className="action" align="left">
                                 <SubscribeDropDown
                                   approve={approveDeal}
-                                  reject={rejectDeal}
                                   id={row.id}
                                 />
                               </TableCell>
@@ -614,7 +618,6 @@ const Auction = () => {
                               <TableCell className="action" align="left">
                                 <SubscribeDropDown
                                   approve={approveDeal}
-                                  reject={rejectDeal}
                                   id={row.id}
                                 />
                               </TableCell>
