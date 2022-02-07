@@ -130,7 +130,6 @@ const Chat = () => {
   const setId = (id1, id2) => {
     setFirstId(id1);
     setSecondId(id2);
-    console.log(id1, id2, "poo");
     // setSkip()
   };
   const {

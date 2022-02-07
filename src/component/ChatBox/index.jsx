@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import action from "../../assets/icons/action.svg";
 import TableDrop from "../TableDrop";
 import moment from "moment";
@@ -15,7 +15,7 @@ import { toastr } from "react-redux-toastr";
 import { useSendChatMutation } from "../../services/api";
 import uploadImg from "../../hook/UploadImg";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-
+import io from "socket.io-client";
 const ChatBox = ({ currentMsg }) => {
   const [show, setShow] = useState(false);
   const { register, formState, handleSubmit, reset } = useForm({
@@ -26,6 +26,13 @@ const ChatBox = ({ currentMsg }) => {
   // send message
   const [create, { isLoading }] = useSendChatMutation();
   const [img, setImg] = useState(null);
+  const [message, setMessage] = useState([]);
+
+  useEffect(() => {
+    if (currentMsg) {
+      setMessage(currentMsg.messages);
+    }
+  }, [currentMsg]);
 
   // upload
 
@@ -38,6 +45,27 @@ const ChatBox = ({ currentMsg }) => {
       format: url.format,
     });
   };
+  // sockett
+  const socketRef = useRef(null);
+  useEffect(() => {
+    if (currentMsg) {
+      // socketRef.current = io("wss://auction-village-be.herokuapp.com", {
+      //   // query: { chatId: currentMsg.id },
+      //   transports: ["websocket"],
+      // });
+      // socketRef.current.on("connect", () => {
+      //   console.log(`Connected to ID ${socketRef.current.id}`);
+      // });
+      // socketRef.current.on("newMessage", (newMsg) => {
+      //   setChatMessage((prev) => {
+      //     return [...prev, newMsg];
+      //   });
+      // });
+      // return () => {
+      //   socketRef.current.disconnect();
+      // };
+    }
+  }, [currentMsg]);
   const onSubmit = async (values) => {
     let payload = {
       text: values.message,
@@ -109,17 +137,18 @@ const ChatBox = ({ currentMsg }) => {
           </div>
           <div className="line"></div>
           <div className="allMessageBox">
-            {!currentMsg.messages.length ? (
+            {message && !message.length ? (
               <NoProduct msg="No Message...">
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             ) : (
-              currentMsg.messages.map((item) => {
+              message.map((item) => {
                 return (
                   <div
                     className={`eachMsg ${
                       item.sender.id === userId ? "left" : ""
                     }`}
+                    key={item.id}
                   >
                     <p className="time">
                       {" "}
