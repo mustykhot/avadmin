@@ -16,6 +16,7 @@ import { useSendChatMutation } from "../../services/api";
 import uploadImg from "../../hook/UploadImg";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import io from "socket.io-client";
+
 const ChatBox = ({ currentMsg }) => {
   const [show, setShow] = useState(false);
   const { register, formState, handleSubmit, reset } = useForm({
