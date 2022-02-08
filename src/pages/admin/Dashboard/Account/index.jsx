@@ -154,20 +154,20 @@ const Account = () => {
 
                     <RajiFile
                       name="image"
-                      placeholder="Categoy Image"
-                      label="Category Image"
+                      placeholder="Profile picture"
+                      label="Profile picture"
                       id="image"
                       setFiler={setImgUpload}
                     />
 
-                    <InputField
+                    {/* <InputField
                       type="email"
                       name="email"
                       placeholder="Enter email address"
                       label="Email"
                       id="email"
                       errMsg="invalid email input"
-                    />
+                    /> */}
                     <Phone
                       label={"Mobile no"}
                       telVal={phone}

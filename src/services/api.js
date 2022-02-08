@@ -188,14 +188,18 @@ export const authApi = createApi({
 
     // deal side
     getAllDeal: builder.query({
-      query: ({ page, status }) =>
-        `deals?page=${page}&limit=10${status && `&status=${status}`}`,
+      query: ({ page, status, search }) =>
+        `deals?page=${page}&limit=10${status && `&status=${status}`}${
+          search && `&search=${search}`
+        }`,
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
     getAllDealPrivate: builder.query({
-      query: ({ page, status }) =>
-        `deals/buy-now?page=${page}&limit=10${status && `&status=${status}`}`,
+      query: ({ page, status, search }) =>
+        `deals/buy-now?page=${page}&limit=10${status && `&status=${status}`}${
+          search && `&search=${search}`
+        }`,
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),

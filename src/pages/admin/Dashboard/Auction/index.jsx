@@ -128,7 +128,10 @@ const Auction = () => {
   const [show, setShow] = useState(false);
   const [show2, setShow2] = useState(false);
   let navigate = useNavigate();
-
+  const [searching, setSearchIng] = useState("");
+  const [search2, setSearch2] = useState("");
+  console.log(searching, "search");
+  console.log(search2, "search2");
   const handleToggle = (type) => {
     setToggleBtn(type);
   };
@@ -158,13 +161,17 @@ const Auction = () => {
     isLoading: loadingBuyNow,
     isError,
     error,
-  } = useGetAllDealQuery({ page, status });
+  } = useGetAllDealQuery({ page, status, search: searching });
   const {
     data: dealPrivate = null,
     isLoading: loadingPrivate,
     isError: isPrivateError,
     error: privateError,
-  } = useGetAllDealPrivateQuery({ page: page2, status: status2 });
+  } = useGetAllDealPrivateQuery({
+    page: page2,
+    status: status2,
+    search: search2,
+  });
   console.log(deal && deal.data.rows);
 
   // click table
@@ -359,7 +366,16 @@ const Auction = () => {
           <div className="whiteContainer">
             <div className="tableHead">
               <p className="tableTitle">All Auctions</p>
-              <input type="text" placeholder="Search" className="search" />
+              <input
+                type="text"
+                value={searching}
+                onChange={(e) => {
+                  console.log(e);
+                  setSearchIng(e.target.value);
+                }}
+                placeholder="Search"
+                className="search"
+              />
             </div>
 
             <div className="downloadTable" style={{ display: "none" }}>
@@ -565,7 +581,15 @@ const Auction = () => {
           <div className="whiteContainer">
             <div className="tableHead">
               <p className="tableTitle">Buy Now</p>
-              <input type="text" placeholder="Search" className="search" />
+              <input
+                type="text"
+                value={search2}
+                onChange={(e) => {
+                  setSearch2(e.target.value);
+                }}
+                placeholder="Search"
+                className="search"
+              />
             </div>
             <div className="downloadTable" style={{ display: "none" }}>
               <table id="table-to-xls2">
