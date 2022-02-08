@@ -41,14 +41,14 @@ const Transaction = () => {
     isLoading: loading,
     isError,
     error,
-  } = useGetTransactionQuery(page);
+  } = useGetTransactionQuery({ page: page });
   console.log(transaction);
   const view = (id) => {
     navigate(`/transaction/details/${id}`);
   };
 
-  const handlePage = (e, newPage) => {
-    setPage(newPage);
+  const handlePage = (e, value) => {
+    setPage(value);
   };
 
   // table head
@@ -254,8 +254,8 @@ const Transaction = () => {
                   <div className="pagination-wrap">
                     <Pagination
                       color="primary"
-                      onChangePage={handlePage}
-                      count={transaction.total}
+                      onChange={handlePage}
+                      count={transaction && transaction.total_pages}
                       defaultPage={1}
                       shape="rounded"
                     />

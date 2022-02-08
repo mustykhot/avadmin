@@ -139,7 +139,7 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getTransaction: builder.query({
-      query: () => "transaction",
+      query: ({ page }) => `transaction?page=${page}&limit=10`,
       providesTags: ["transaction"],
       transformResponse: (response) => response.data,
     }),
@@ -154,12 +154,12 @@ export const authApi = createApi({
       transformResponse: (response) => response.data,
     }),
     getAllPrivateDeal: builder.query({
-      query: () => "private",
+      query: ({ page }) => `private?page=${page}&limit=10`,
       providesTags: ["privatedeal"],
       transformResponse: (response) => response.data,
     }),
     getAllPrivateBuyDeal: builder.query({
-      query: () => "private/buy-now",
+      query: ({ page }) => `private/buy-now?page=${page}&limit=10`,
       providesTags: ["privatedeal"],
       transformResponse: (response) => response.data,
     }),
@@ -188,12 +188,14 @@ export const authApi = createApi({
 
     // deal side
     getAllDeal: builder.query({
-      query: () => "deals",
+      query: ({ page, status }) =>
+        `deals?page=${page}&limit=10${status && `&status=${status}`}`,
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
     getAllDealPrivate: builder.query({
-      query: () => "deals/buy-now",
+      query: ({ page, status }) =>
+        `deals/buy-now?page=${page}&limit=10${status && `&status=${status}`}`,
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
@@ -219,7 +221,7 @@ export const authApi = createApi({
       transformResponse: (response) => response.data,
     }),
     getAudit: builder.query({
-      query: () => `user/audits/all`,
+      query: ({ page }) => `user/audits/all?page=${page}&limit=10`,
       providesTags: ["audit"],
       transformResponse: (response) => response,
     }),
@@ -241,7 +243,7 @@ export const authApi = createApi({
     }),
     // private vendor
     getAllPrivateVendor: builder.query({
-      query: () => "vendors",
+      query: ({ page }) => `vendors?page=${page}&limit=10`,
       providesTags: ["vendor"],
       transformResponse: (response) => response.data,
     }),

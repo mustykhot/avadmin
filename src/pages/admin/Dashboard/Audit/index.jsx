@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import LoadingTable from "../../../../component/loadingTable";
 import moment from "moment";
+import { Pagination } from "@mui/material";
 const Audit = () => {
   const list = [1, 2, 3];
   const [isLoadng, setIsLoading] = useState(false);
@@ -28,17 +29,23 @@ const Audit = () => {
   const handleToggle = (type) => {
     setToggleBtn(type);
   };
+
   const onSubmit = (vals) => {
     console.log(vals);
     setIsLoading(false);
   };
+  const [page, setPage] = useState(1);
   const {
-    data: audit = [],
+    data: audit = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetAuditQuery();
+  } = useGetAuditQuery({ page: page });
   console.log(audit, "audit");
+
+  const handlePage = (e, value) => {
+    setPage(value);
+  };
 
   return (
     <AdminDashboardLayout active="audit">
@@ -52,8 +59,6 @@ const Audit = () => {
             <p className="tableTitle">Audit logs</p>
             <div className="otherBox">
               <input type="text" placeholder="Search" className="search" />
-              <input type="date" />
-              <input type="date" />
             </div>
           </div>
 
@@ -98,6 +103,15 @@ const Audit = () => {
                 </tbody>
               </table>
             )}
+
+            <div className="pagination-wrap">
+              <Pagination
+                color="primary"
+                onChange={handlePage}
+                count={audit && audit.total_pages}
+                shape="rounded"
+              />
+            </div>
           </div>
         </div>
       </div>

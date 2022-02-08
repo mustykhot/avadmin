@@ -119,8 +119,8 @@ const Chat = () => {
     isLoading: convLoading,
     isError: convIsError,
     error: convError,
-  } = useGetConversationQuery("61d57dbea7bc65c65b587c32");
-
+  } = useGetConversationQuery(user.id);
+  // 61d57dbea7bc65c65b587c32
   // get converstaion between two users
 
   const [firstId, setFirstId] = useState("");
@@ -310,7 +310,7 @@ const Chat = () => {
                 <p>Customers</p>
               </div>
             </div>
-            <input type="text" placeholder="Search" className="search" />
+            {/* <input type="text" placeholder="Search" className="search" /> */}
             <div className="coverMemberAll">
               <div
                 className={`memberList  ${
@@ -385,7 +385,13 @@ const Chat = () => {
                 <div className="coverMember">
                   {userList.map((item) => {
                     return (
-                      <div key={item.id} className="eachMember">
+                      <div
+                        onClick={() => {
+                          startChat(item.id);
+                        }}
+                        key={item.id}
+                        className="eachMember"
+                      >
                         <img src={item.image} alt="user" />
                         <div className="textPart">
                           <p className="name">

@@ -205,7 +205,7 @@ const Users = () => {
 
         <div className="whiteContainer">
           <div className="tableHead">
-            <p className="tableTitle">Admin Users</p>
+            <p className="tableTitle">All Users</p>
             <input type="text" placeholder="Search" className="search" />
           </div>
 

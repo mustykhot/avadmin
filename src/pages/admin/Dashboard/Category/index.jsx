@@ -261,6 +261,13 @@ const Category = () => {
                   label="Name"
                   id="category_name"
                 />
+                <InputField
+                  type="number"
+                  name="percentageIncrease"
+                  placeholder=""
+                  label="Percentage Increase"
+                  id="percentageIncrease"
+                />
 
                 <Textarea
                   type="text"
@@ -269,7 +276,6 @@ const Category = () => {
                   label="Description"
                   id="description"
                 />
-
                 <SubmitBtn
                   isLoading={isLoading}
                   // disable={imgupload ? false : true}

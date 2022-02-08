@@ -3,6 +3,7 @@ import truncateString from "../utils/trunc";
 import { useState, useEffect } from "react";
 import "./style.scss";
 import { Avatar } from "@mui/material";
+import { useSelector } from "react-redux";
 const MessageBox = ({
   image,
   name,
@@ -18,12 +19,13 @@ const MessageBox = ({
 }) => {
   const [sender, setSender] = useState(null);
   // console.log(sender, "sender");
-  const userId = "61d57dbea7bc65c65b587c32";
+  const { user } = useSelector((state) => state.auth);
+  // const userId = "61d57dbea7bc65c65b587c32";
   // console.log(currentMsg, "currentMsg");
   useEffect(() => {
     const sendernew = members
       ? members.filter((item) => {
-          return item.id === userId;
+          return item.id !== user.id;
         })
       : "";
 

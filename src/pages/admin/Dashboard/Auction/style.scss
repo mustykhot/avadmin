@@ -196,6 +196,7 @@
             color: #00ce6e;
           }
         }
+
         .status-drop {
           position: relative;
           p {
@@ -215,6 +216,7 @@
               color: #f98b2d;
             }
           }
+
           .actionPop {
             @include actionPop;
           }
@@ -270,4 +272,7 @@
       border-bottom: 1px solid #dcdff1;
     }
   }
+}
+.coverFilter {
+  position: relative;
 }

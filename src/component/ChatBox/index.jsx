@@ -16,6 +16,7 @@ import { useSendChatMutation } from "../../services/api";
 import uploadImg from "../../hook/UploadImg";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import io from "socket.io-client";
+import { useSelector } from "react-redux";
 
 const ChatBox = ({ currentMsg }) => {
   const [show, setShow] = useState(false);
@@ -28,6 +29,7 @@ const ChatBox = ({ currentMsg }) => {
   const [create, { isLoading }] = useSendChatMutation();
   const [img, setImg] = useState(null);
   const [message, setMessage] = useState([]);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (currentMsg) {
@@ -70,7 +72,7 @@ const ChatBox = ({ currentMsg }) => {
   const onSubmit = async (values) => {
     let payload = {
       text: values.message,
-      sender: userId,
+      sender: user.id,
       conversation: currentMsg.id,
     };
     if (img) {
@@ -97,12 +99,12 @@ const ChatBox = ({ currentMsg }) => {
   };
   const [sender, setSender] = useState(null);
   // console.log(sender, "sender");
-  const userId = "61d57dbea7bc65c65b587c32";
+  // const userId = "61d57dbea7bc65c65b587c32";
   // console.log(currentMsg, "currentMsg");
   useEffect(() => {
     const sendernew = currentMsg
       ? currentMsg.members.filter((item) => {
-          return item.id === userId;
+          return item.id === user.id;
         })
       : "";
 
@@ -147,7 +149,7 @@ const ChatBox = ({ currentMsg }) => {
                 return (
                   <div
                     className={`eachMsg ${
-                      item.sender.id === userId ? "left" : ""
+                      item.sender.id === user.id ? "left" : ""
                     }`}
                     key={item.id}
                   >

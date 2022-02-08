@@ -40,7 +40,7 @@ import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import LoadingTable from "../../../../component/loadingTable";
 import { toastr } from "react-redux-toastr";
 import uploadImg from "../../../../hook/UploadImg";
-import { Avatar } from "@mui/material";
+import { Avatar, Pagination } from "@mui/material";
 const PrivateVendor = () => {
   const list = [1, 2, 3];
 
@@ -71,13 +71,18 @@ const PrivateVendor = () => {
 
   const navigate = useNavigate();
 
+  const [page, setPage] = useState(1);
+  const handlePage = (e, value) => {
+    setPage(value);
+  };
+
   // get vendor
   const {
     data: vendor = [],
     isLoading: loading,
     isError,
     error,
-  } = useGetAllPrivateVendorQuery();
+  } = useGetAllPrivateVendorQuery({ page: page });
   console.log(vendor);
   // table head
   const headCells = [
@@ -132,6 +137,7 @@ const PrivateVendor = () => {
       else toastr.error("Error", "Something went wrong, please try again...");
     }
   };
+
   return (
     <AdminDashboardLayout active="vendor">
       {modal && (
@@ -305,6 +311,14 @@ const PrivateVendor = () => {
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
+              <div className="pagination-wrap">
+                <Pagination
+                  color="primary"
+                  onChange={handlePage}
+                  count={vendor && vendor.total_pages}
+                  shape="rounded"
+                />
+              </div>
             </div>
           </div>
         )}

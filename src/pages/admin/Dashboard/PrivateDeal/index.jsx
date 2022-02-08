@@ -39,7 +39,7 @@ import TableRow from "@mui/material/TableRow";
 import Table from "@mui/material/Table";
 import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import { getComparator, stableSort } from "../../../../utils/utils";
-import { IconButton } from "@mui/material";
+import { IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
@@ -127,13 +127,21 @@ const PrivateDeal = () => {
   const createDeal = () => {
     navigate("/private/form1");
   };
+  const [page, setPage] = useState(1);
+  const handlePage = (e, value) => {
+    setPage(value);
+  };
+  const [page2, setPage2] = useState(1);
+  const handlePage2 = (e, value) => {
+    setPage2(value);
+  };
   // get deal
   const {
     data: deal = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetAllPrivateDealQuery();
+  } = useGetAllPrivateDealQuery({ page: page });
   console.log(deal);
   // get buynow
   const {
@@ -141,7 +149,7 @@ const PrivateDeal = () => {
     isLoading: buyloading,
     isError: isBuyError,
     error: buyError,
-  } = useGetAllPrivateBuyDealQuery();
+  } = useGetAllPrivateBuyDealQuery({ page: page2 });
   console.log(buydeal);
 
   // activate Deal
@@ -419,6 +427,14 @@ const PrivateDeal = () => {
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
+              <div className="pagination-wrap">
+                <Pagination
+                  color="primary"
+                  onChange={handlePage}
+                  count={deal && deal.total_pages}
+                  shape="rounded"
+                />
+              </div>
             </div>
           </div>
         )}
@@ -558,6 +574,14 @@ const PrivateDeal = () => {
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
+              <div className="pagination-wrap">
+                <Pagination
+                  color="primary"
+                  onChange={handlePage2}
+                  count={buydeal && buydeal.total_pages}
+                  shape="rounded"
+                />
+              </div>
             </div>
           </div>
         )}
