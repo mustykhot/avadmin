@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 import TableDrop from "../../../../component/TableDrop";
 import userProfile from "../../../../assets/images/userprofile.png";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import chat from "../../../../assets/icons/chat2.svg";
 import SummaryCard from "../../../../component/SummaryCard";
 import trendingUp from "../../../../assets/icons/trending-up.svg";
@@ -36,6 +36,7 @@ const UsersProfile = () => {
   const list = [1, 2, 3];
   const [show, setShow] = useState(false);
   const [activeAction, setActiveAction] = useState("overview");
+  const navigate = useNavigate();
   const handleActiveAction = (type) => {
     setActiveAction(type);
   };
@@ -122,6 +123,16 @@ const UsersProfile = () => {
     } catch (err) {
       if (err.data) toastr.error("Error", err.data.message);
       else toastr.error("Error", "Something went wrong, please try again...");
+    }
+  };
+
+  const handleView = (id, place) => {
+    if (place === "trans") {
+      navigate(`/transaction/details/${id}`);
+    } else if (place === "auction") {
+      navigate(`/auction/auction_detail/${id}`);
+    } else if (place === "sale") {
+      navigate(`/transaction/details/${id}`);
     }
   };
 
@@ -261,14 +272,18 @@ const UsersProfile = () => {
                             <th className="extraTh">
                               Date <img src={shape} alt="shape" />{" "}
                             </th>
-
-                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
                           {transaction.data.rows.map((item) => {
                             return (
-                              <tr key={item.id}>
+                              <tr
+                                onClick={() => {
+                                  handleView(item.id, "trans");
+                                }}
+                                key={item.id}
+                                className="bgDark"
+                              >
                                 <td className="phone">{item.id}</td>
                                 <td className={`amount green`}>
                                   {item.user.phone}
@@ -279,10 +294,6 @@ const UsersProfile = () => {
                                 </td>
                                 <td className="role">
                                   {moment(item.createdAt).format("L")}
-                                </td>
-
-                                <td className="action">
-                                  <TableDrop extra={true} />
                                 </td>
                               </tr>
                             );
@@ -354,24 +365,24 @@ const UsersProfile = () => {
                             <th className="extraTh">
                               Date <img src={shape} alt="shape" />{" "}
                             </th>
-
-                            <th></th>
                           </tr>
                         </thead>
                         <tbody>
                           {deal.userDeals.map((item) => {
                             return (
-                              <tr key={item.id}>
+                              <tr
+                                onClick={() => {
+                                  handleView(item.id, "auction");
+                                }}
+                                key={item.id}
+                                className="bgDark"
+                              >
                                 <td className="phone">8974-8743</td>
                                 <td className="role">₦ 54,000</td>
                                 <td className="statusTd">
                                   <p className="status active">Auction Won</p>
                                 </td>
                                 <td className="role">10 Nov, 2021</td>
-
-                                <td className="action">
-                                  <TableDrop extra={true} />
-                                </td>
                               </tr>
                             );
                           })}
