@@ -107,7 +107,7 @@ const PrivateDealForm1 = () => {
   };
   // get vendor
   const {
-    data: vendor = [],
+    data: vendor = null,
     isLoading: isVendLoading,
     isError: isVendError,
     error: vendErr,
@@ -450,10 +450,14 @@ const PrivateDealForm1 = () => {
                   label="Select Vendor"
                   id="vendor"
                   name="vendor"
-                  selectOption={vendor.rows.map((item) => ({
-                    label: item.name,
-                    value: item.id,
-                  }))}
+                  selectOption={
+                    vendor
+                      ? vendor.rows.map((item) => ({
+                          label: item.name,
+                          value: item.id,
+                        }))
+                      : []
+                  }
                 />
                 <button
                   onClick={() => {

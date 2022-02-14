@@ -135,9 +135,13 @@ const Category = () => {
   const [editResponse, { isLoading: editLoading }] = useEditCategoryMutation();
   const editCategory = async (vals) => {
     console.log(vals);
+    const payload = {
+      ...vals,
+      image: imgupload,
+    };
     try {
       const response = await editResponse({
-        credentials: vals,
+        credentials: payload,
         id: editId,
       }).unwrap();
 
@@ -305,7 +309,13 @@ const Category = () => {
                 action=""
               >
                 <FormHead title={"Edit Category"} subTitle={""} />
-
+                <RajiFile
+                  name="image"
+                  placeholder="Categoy Image"
+                  label="Category Image"
+                  id="image"
+                  setFiler={setImgUpload}
+                />
                 <Textarea
                   type="text"
                   name="description"

@@ -238,12 +238,8 @@ const Transaction = () => {
                             </TableCell>
 
                             <TableCell align="left">
-                              <p
-                                className={`status ${
-                                  item.status === "paid" ? "active" : "red"
-                                }`}
-                              >
-                                {item.status}
+                              <p className={`status ${item.status}`}>
+                                {item.status.toLowerCase()}
                               </p>
                             </TableCell>
                           </TableRow>
