@@ -128,7 +128,7 @@ const SideBar = ({ active }) => {
         >
           <Chat1 className="iconSide" />
           <p>Chats</p>
-          <div style={chatCount}>
+          {/* <div style={chatCount}>
             <p
               style={{
                 color: "#fff",
@@ -144,7 +144,7 @@ const SideBar = ({ active }) => {
             >
               3
             </p>
-          </div>
+          </div> */}
         </Link>
         <Link
           className={`item ${active === "audit" ? "active" : ""}`}

@@ -315,30 +315,28 @@ const PrivateDealForm1 = () => {
                       <SelectField
                         label=""
                         id="state"
-                        name="state"
+                        name="country"
                         // onChange={(e) => {
                         //   console.log(e.target.value);
                         //   setRecState(e.target.value);
                         // }}
                         // selectOption={roleOption}
                         handleCustomChange={setRecState}
-                        selectOption={NaijaStates.states().map((item) => ({
-                          label: item,
-                          value: item,
-                        }))}
+                        selectOption={[
+                          { label: "Nigeria", value: "nigeria" },
+                          { label: "USA", value: "usa" },
+                        ]}
                       />
                     </div>
                     <div className="halfInput">
                       <SelectField
                         label=""
                         id="role"
-                        name="lga"
-                        selectOption={NaijaStates.lgas(recState).lgas.map(
-                          (item) => ({
-                            label: item,
-                            value: item,
-                          })
-                        )}
+                        name="state"
+                        selectOption={NaijaStates.states().map((item) => ({
+                          label: item,
+                          value: item,
+                        }))}
                         // selectOption={roleOption}
                       />
                     </div>
@@ -463,6 +461,31 @@ const PrivateDealForm1 = () => {
                   title={"Create Private Deal"}
                   active={"3"}
                   total={"3"}
+                />
+                <SelectField
+                  label="Pickup?"
+                  id="pickup"
+                  name="pickup"
+                  selectOption={[
+                    { label: "Yes", value: "Yes" },
+                    { label: "No", value: "No" },
+                  ]}
+                />
+                <InputField
+                  type="text"
+                  name="deliveryPeriod"
+                  placeholder="5 days"
+                  label="Delivery Period"
+                  id="deliveryPeriod"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="text"
+                  name="shippingDescription"
+                  placeholder=""
+                  label="Shipping Description"
+                  id="shippingDescription"
+                  errMsg="invalid input"
                 />
                 <SelectField
                   label="Select Vendor"
