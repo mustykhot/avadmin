@@ -130,13 +130,17 @@ const ChatBox = ({ currentMsg, messages }) => {
     setSender(sendernew[0]);
   }, [currentMsg]);
 
-  const messagesEndRef = useRef(null);
+  // const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  // };
 
-  useEffect(scrollToBottom, [messages]);
+  // useEffect(() => {
+  //   if (messages) {
+  //     scrollToBottom();
+  //   }
+  // }, [messages]);
 
   return (
     <>
@@ -197,7 +201,7 @@ const ChatBox = ({ currentMsg, messages }) => {
                 );
               })
             )}
-            <div ref={messagesEndRef} />
+            {/* <div ref={messagesEndRef}></div> */}
           </div>
 
           {/* chat footer */}

@@ -364,7 +364,7 @@ const Category = () => {
         <div className="whiteContainer">
           <div className="tableHead">
             <p className="tableTitle">Categories Lists</p>
-            <input type="text" placeholder="Search" className="search" />
+            {/* <input type="text" placeholder="Search" className="search" /> */}
           </div>
 
           <div className="overflowTable">
