@@ -11,6 +11,9 @@ import top from "../../../../assets/images/top.png";
 import { useState } from "react";
 import DateRange from "../../../../component/DateRange";
 import TopSeller from "../../../../component/TopSeller";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import { formatCurrency } from "../../../../utils/utils";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,6 +28,8 @@ import {
 import { useGetDashQuery } from "../../../../services/api";
 import ErrorMsg from "../../../../component/ErrorMsg";
 import Loader from "../../../../component/Loader";
+import NoProduct from "../../../../component/NoProduct";
+import moment from "moment";
 const Dashboard = () => {
   const [newDate, setNewDate] = useState([{}]);
   const handleSetDate = (dateRange) => {
@@ -46,6 +51,10 @@ const Dashboard = () => {
       },
     },
   };
+
+  // get category
+  const { data: dash = null, isLoading, isError, error } = useGetDashQuery();
+  console.log(dash, "dash");
 
   const data = {
     labels,
@@ -102,27 +111,39 @@ const Dashboard = () => {
         label: "",
         weight: 1,
         backgroundColor: ["#F98B2D", "#285ED3"],
-        data: [40, 60],
+        data: dash ? [dash.data.stats.auction, dash.data.stats.buyNow] : [0, 0],
       },
     ],
   };
 
   const donughtData = {
-    labels: ["Luxury Auctions", "Automobile Auctions", "Property Auctions"],
+    labels: dash
+      ? dash.data.stats.topSellingCategory.length
+        ? dash.data.stats.topSellingCategory.map((item, el) => {
+            if (el < 3) {
+              return item.categoryName;
+            }
+          })
+        : [0]
+      : [0],
 
     datasets: [
       {
         label: "",
         borderWidth: 1,
         backgroundColor: ["#F98B2D", "#285ED3", "#FBCC40"],
-        data: [30, 50, 20],
+        data: dash
+          ? dash.data.stats.topSellingCategory.length
+            ? dash.data.stats.topSellingCategory.map((item, el) => {
+                if (el < 3) {
+                  return item.totalCount;
+                }
+              })
+            : [0]
+          : [0],
       },
     ],
   };
-
-  // get category
-  const { data: dash = null, isLoading, isError, error } = useGetDashQuery();
-  console.log(dash, "dash");
 
   if (isLoading) {
     return <Loader />;
@@ -130,6 +151,12 @@ const Dashboard = () => {
   if (isError) {
     return <ErrorMsg error={error} />;
   }
+
+  const getPercent = (calc, total) => {
+    let perc = (calc / total) * 100;
+
+    return perc;
+  };
 
   return (
     <AdminDashboardLayout active="dashboard">
@@ -253,15 +280,34 @@ const Dashboard = () => {
               <div className="chatInfo">
                 <div className="eachInfo">
                   <p className="info-detail">
-                    <span className="red"></span>Auctions (214,345)
+                    <span className="red"></span>Auctions{" "}
+                    {dash ? dash.data.stats.auction : 0}
                   </p>
-                  <p className="percent">37%</p>
+                  <p className="percent">
+                    {dash
+                      ? getPercent(
+                          dash.data.stats.auction,
+                          dash.data.stats.auction + dash.data.stats.buyNow
+                        )
+                      : 0}
+                    %
+                  </p>
                 </div>
                 <div className="eachInfo">
                   <p className="info-detail">
-                    <span className="blue"></span>Buy Now (23,890)
+                    <span className="blue"></span>Buy Now{" "}
+                    {dash ? dash.data.stats.auction : 0}
                   </p>
-                  <p className="percent">37%</p>
+                  <p className="percent">
+                    {" "}
+                    {dash
+                      ? getPercent(
+                          dash.data.stats.buyNow,
+                          dash.data.stats.auction + dash.data.stats.buyNow
+                        )
+                      : 0}
+                    %
+                  </p>
                 </div>
               </div>
             </div>
@@ -269,22 +315,23 @@ const Dashboard = () => {
           <div className="sellers-wrap">
             <div className="section-head">
               <p className="title">Top Sellers</p>
-              <select name="" id="">
+              {/* <select name="" id="">
                 <option value="">Individual</option>
-              </select>
+              </select> */}
             </div>
             <div className="top-wrap">
-              {[1, 2, 3, 4].map((item) => {
-                return (
-                  <TopSeller
-                    key={item}
-                    name={"Carrie Thompson Balogun"}
-                    email={"emeka.phillips@gmail.com"}
-                    sales={1343}
-                    image={top}
-                  />
-                );
-              })}
+              {dash &&
+                dash.data.stats.topSellers.map((item) => {
+                  return (
+                    <TopSeller
+                      key={item}
+                      name={"Carrie Thompson Balogun"}
+                      email={"emeka.phillips@gmail.com"}
+                      sales={1343}
+                      image={top}
+                    />
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -294,60 +341,51 @@ const Dashboard = () => {
               <p className="title">Recent Activities</p>
             </div>
             <div className="recent-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Transaction ID</th>
-                    <th>
-                      Amount <img src="" alt="" />{" "}
-                    </th>
-                    <th>Status</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>8974-8743</td>
-                    <td>₦ 2,400,000</td>
-                    <td className="status">
-                      <p className="fail">Fail</p>
-                    </td>
-                    <td className="date">10/11/2021, 5:34 pm</td>
-                  </tr>
-                  <tr>
-                    <td>8974-8743</td>
-                    <td>₦ 2,400,000</td>
-                    <td className="status">
-                      <p className="succes">SuccessFul</p>
-                    </td>
-                    <td className="date">10/11/2021, 5:34 pm</td>
-                  </tr>
-                  <tr>
-                    <td>8974-8743</td>
-                    <td>₦ 2,400,000</td>
-                    <td className="status">
-                      <p className="succes">SuccessFul</p>
-                    </td>
-                    <td className="date">10/11/2021, 5:34 pm</td>
-                  </tr>
-                  <tr>
-                    <td>8974-8743</td>
-                    <td>₦ 2,400,000</td>
-                    <td className="status">
-                      <p className="fail">Fail</p>
-                    </td>
-                    <td className="date">10/11/2021, 5:34 pm</td>
-                  </tr>
-                  <tr>
-                    <td>8974-8743</td>
-                    <td>₦ 2,400,000</td>
-                    <td className="status">
-                      <p className="fail">Fail</p>
-                    </td>
-                    <td className="date">10/11/2021, 5:34 pm</td>
-                  </tr>
-                </tbody>
-              </table>
+              {dash ? (
+                dash.data.stats.recentTransaction.length ? (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Transaction ID</th>
+                        <th>
+                          Amount <img src="" alt="" />{" "}
+                        </th>
+                        <th>Status</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dash.data.stats.recentTransaction.map((item, el) => {
+                        if (el < 5) {
+                          return (
+                            <tr key={item.id}>
+                              <td> {item.id} </td>
+                              <td>₦ {formatCurrency(item.amount)}</td>
+                              <td>
+                                <p className={`status ${item.status}`}>
+                                  {item.status.toLowerCase()}
+                                </p>
+                              </td>
+                              <td className="date">
+                                {moment(item.createdAt).format("L")},{" "}
+                                {moment(item.createdAt).format("LT")}
+                              </td>
+                            </tr>
+                          );
+                        }
+                      })}
+                    </tbody>
+                  </table>
+                ) : (
+                  <NoProduct msg="No Data Yet...">
+                    <FontAwesomeIcon icon={faCommentSlash} />
+                  </NoProduct>
+                )
+              ) : (
+                <NoProduct msg="No Data Yet...">
+                  <FontAwesomeIcon icon={faCommentSlash} />
+                </NoProduct>
+              )}
             </div>
           </div>
           <div className="selling-wrap">
@@ -362,12 +400,34 @@ const Dashboard = () => {
                 }}
               />
               <div className="chatInfo">
-                <div className="eachInfo">
-                  <p className="info-detail">
-                    <span className="red"></span>Luxury Auctions
-                  </p>
-                  <p className="percent">37%</p>
-                </div>
+                {dash
+                  ? dash.data.stats.topSellingCategory.length
+                    ? dash.data.stats.topSellingCategory.map((item, el) => {
+                        if (el < 3) {
+                          return (
+                            <div key={el} className="eachInfo">
+                              <p className="info-detail">
+                                <span
+                                  className={
+                                    el === 1
+                                      ? "red"
+                                      : el === 2
+                                      ? "blue"
+                                      : "orange"
+                                  }
+                                ></span>
+                                {item.categoryName}
+                              </p>
+                              {/* <p className="percent">{
+                                getPercent(item.totalCount,  )
+                              }</p> */}
+                            </div>
+                          );
+                        }
+                      })
+                    : ""
+                  : ""}
+                {/* 
                 <div className="eachInfo">
                   <p className="info-detail">
                     <span className="blue"></span>Automobile Auctions
@@ -379,28 +439,36 @@ const Dashboard = () => {
                     <span className="orange"></span>Property Auctions
                   </p>
                   <p className="percent">37%</p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
           <div className="sellers-wrap">
             <div className="section-head">
               <p className="title">Admin Activities</p>
-              <select name="" id="">
+              {/* <select name="" id="">
                 <option value="">Individual</option>
-              </select>
+              </select> */}
             </div>
             <div className="top-wrap">
-              {[1, 2, 3, 4, 5].map((item) => {
-                return (
-                  <TopSeller
-                    key={item}
-                    name={"Carrie Thompson Balogun"}
-                    email={"Has joined the team"}
-                    image={top}
-                  />
-                );
-              })}
+              {dash && !dash.data.stats.adminActivities.length ? (
+                <NoProduct msg="No Data Yet...">
+                  <FontAwesomeIcon icon={faCommentSlash} />
+                </NoProduct>
+              ) : (
+                dash.data.stats.adminActivities.map((item, el) => {
+                  if (el < 5) {
+                    return (
+                      <TopSeller
+                        key={item._id}
+                        name={"Carrie Thompson Balogun"}
+                        email={"Has joined the team"}
+                        image={top}
+                      />
+                    );
+                  }
+                })
+              )}
             </div>
           </div>
         </div>
