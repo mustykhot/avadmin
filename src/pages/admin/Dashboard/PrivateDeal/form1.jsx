@@ -57,11 +57,12 @@ const PrivateDealForm1 = () => {
 
   // next step
   const completeFormStep = () => {
-    console.log(methods.formState.error);
-    console.log(methods.getValues());
-    if (methods.formState.isValid) {
-      setFormStep((cur) => cur + 1);
-    }
+    // console.log(methods.formState.error);
+    // console.log(methods.getValues());
+    // if (methods.formState.isValid) {
+    //   setFormStep((cur) => cur + 1);
+    // }
+    setFormStep((cur) => cur + 1);
   };
   const prevFormStep = () => {
     setFormStep((cur) => cur - 1);
@@ -289,7 +290,7 @@ const PrivateDealForm1 = () => {
                 />
 
                 <InputAmount
-                  type="text"
+                  type="number"
                   name="basePrice"
                   placeholder="Enter Amount"
                   label="Base Price"
