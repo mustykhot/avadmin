@@ -260,7 +260,8 @@ export const authApi = createApi({
     }),
     // private vendor
     getAllPrivateVendor: builder.query({
-      query: ({ page }) => `vendors?page=${page}&limit=10`,
+      query: ({ page, limit }) =>
+        `vendors?page=${page}&${limit ? `limit=${limit}` : "limit=10"}`,
       providesTags: ["vendor"],
       transformResponse: (response) => response.data,
     }),

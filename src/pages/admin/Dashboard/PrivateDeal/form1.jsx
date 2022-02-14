@@ -111,7 +111,8 @@ const PrivateDealForm1 = () => {
     isLoading: isVendLoading,
     isError: isVendError,
     error: vendErr,
-  } = useGetAllPrivateVendorQuery();
+  } = useGetAllPrivateVendorQuery({ page: 1, limit: 100 });
+  console.log(vendor, "sssssss");
 
   // form 2
 
@@ -333,7 +334,7 @@ const PrivateDealForm1 = () => {
                   <div style={{ marginTop: "5px" }} className="group">
                     <div className="halfInput">
                       <InputField
-                        type="date"
+                        type="datetime-local"
                         name="start_date"
                         placeholder="Start Date"
                         label="Start Date"
@@ -343,7 +344,7 @@ const PrivateDealForm1 = () => {
                     </div>
                     <div className="halfInput">
                       <InputField
-                        type="date"
+                        type="datetime-local"
                         name="end_date"
                         placeholder="End Date"
                         label="End Date"

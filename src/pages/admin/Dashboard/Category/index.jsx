@@ -101,6 +101,7 @@ const Category = () => {
   const [modal, setModal] = useState(false);
   const [modalPop, setModalPop] = useState(false);
   const methods = useForm();
+  const methods2 = useForm();
 
   const [editModal, setEditModal] = useState(false);
   const [editId, setEditId] = useState("");
