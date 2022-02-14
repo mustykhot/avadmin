@@ -30,6 +30,7 @@ const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
   const [formStep, setFormStep] = useState(0);
+  console.log(formStep);
   const [imageList, setImageList] = useState([]);
   // states
 
@@ -58,11 +59,23 @@ const PrivateDealForm1 = () => {
   const completeFormStep = () => {
     console.log(methods.formState.error);
     console.log(methods.getValues());
-    setFormStep((cur) => cur + 1);
+    if (methods.formState.isValid) {
+      setFormStep((cur) => cur + 1);
+    }
   };
   const prevFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
+
+  // const goNext = (num) => {
+  //   if (methods.formState.isValid) {
+  //     setPresentStep(presentStep + num);
+  //     console.log(methods.getValues());
+  //   } else {
+  //     console.log(methods.formState.errors, "not valid");
+  //   }
+  // };
+
   // file adding
   const ref = useRef();
   const FileChangeHandler = (e) => {
@@ -231,13 +244,14 @@ const PrivateDealForm1 = () => {
                   }))}
                 />
 
-                <button
+                {/* <button
                   onClick={completeFormStep}
                   type="button"
                   className="submit"
+                  disabled={!methods.formState.isValid}
                 >
                   Continue
-                </button>
+                </button> */}
               </section>
             )}
             {formStep >= 1 && (
@@ -355,16 +369,17 @@ const PrivateDealForm1 = () => {
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   onClick={completeFormStep}
                   type="button"
                   className="submit"
+                  disabled={!methods.formState.isValid}
                 >
                   Continue
                 </button>
                 <button onClick={prevFormStep} type="button" className="cancel">
                   back
-                </button>
+                </button> */}
               </section>
             )}
             {formStep >= 2 && (
@@ -425,16 +440,17 @@ const PrivateDealForm1 = () => {
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   onClick={completeFormStep}
                   type="button"
                   className="submit"
+                  disabled={!methods.formState.isValid}
                 >
                   Continue
                 </button>
                 <button onClick={prevFormStep} type="button" className="cancel">
                   back
-                </button>
+                </button> */}
               </section>
             )}
             {formStep >= 3 && (
@@ -557,24 +573,41 @@ const PrivateDealForm1 = () => {
                     </div>
                   </>
                 )}
-                <button
-                  style={{ display: `${formStep >= 3 ? "" : "none"}` }}
-                  type="submit"
-                  className="submit"
-                  onClick={() => {
-                    console.log("ggg");
-                  }}
-                >
-                  {loader ? (
-                    <FontAwesomeIcon icon={faSpinner} pulse spin />
-                  ) : (
-                    "Submit"
-                  )}
-                </button>
-                <button onClick={prevFormStep} type="button" className="cancel">
-                  Back
-                </button>
               </section>
+            )}
+
+            {formStep >= 3 ? (
+              <button
+                type="submit"
+                className="submit"
+                // disabled={!methods.formState.isValid}
+                style={{ display: `${formStep === 3 ? "" : "none"}` }}
+                onClick={() => {
+                  console.log("ggg");
+                }}
+              >
+                {loader ? (
+                  <FontAwesomeIcon icon={faSpinner} pulse spin />
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={completeFormStep}
+                type="button"
+                className="submit"
+                // disabled={!methods.formState.isValid}
+              >
+                Continue
+              </button>
+            )}
+            {formStep === 0 ? (
+              ""
+            ) : (
+              <button onClick={prevFormStep} type="button" className="cancel">
+                Back
+              </button>
             )}
           </form>
         </FormProvider>

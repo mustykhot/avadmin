@@ -47,7 +47,9 @@ export const SubscribeDropDown = ({
   disable,
   setEditId,
   deleteCat,
+  values,
   closeModal,
+  onEdit,
 }) => (
   <DropDownWrapper
     className="more-actions"
@@ -87,6 +89,12 @@ export const SubscribeDropDown = ({
     <button
       onClick={() => {
         setEditId(id);
+        onEdit({
+          percentageIncrease: values.percentageIncrease,
+          description: values.description,
+          charge: values.charge,
+          categoryName: values.categoryName,
+        });
         closeModal();
       }}
       className="btn-noBg"
@@ -126,6 +134,7 @@ const Category = () => {
       const response = await addResponse(payload).unwrap();
       closeModal();
       toastr.success("Success", response.message);
+      methods.reset();
     } catch (err) {
       if (err.data) toastr.error("Error", err.data.message);
       else toastr.error("Error", "Something went wrong, please try again...");
@@ -134,8 +143,20 @@ const Category = () => {
 
   // edit category
   const [editResponse, { isLoading: editLoading }] = useEditCategoryMutation();
+  const onEdit = ({
+    categoryName,
+    percentageIncrease,
+    charge,
+    description,
+  }) => {
+    methods2.setValue("categoryName", categoryName);
+    methods2.setValue("percentageIncrease", percentageIncrease);
+    methods2.setValue("charge", charge);
+    methods2.setValue("description", description);
+  };
   const editCategory = async (vals) => {
     console.log(vals);
+
     const payload = {
       ...vals,
       image: imgupload,
@@ -147,6 +168,7 @@ const Category = () => {
       }).unwrap();
 
       toastr.success("Success", response.message);
+      // methods2.reset();
     } catch (err) {
       if (err.data) toastr.error("Error", err.data.message);
       else toastr.error("Error", "Something went wrong, please try again...");
@@ -303,9 +325,9 @@ const Category = () => {
         )}
         {editModal && (
           <Modal>
-            <FormProvider {...methods}>
+            <FormProvider {...methods2}>
               <form
-                onSubmit={methods.handleSubmit(editCategory)}
+                onSubmit={methods2.handleSubmit(editCategory)}
                 className="createAdmin"
                 action=""
               >
@@ -316,6 +338,7 @@ const Category = () => {
                   label="Category Image"
                   id="image"
                   setFiler={setImgUpload}
+                  required={false}
                 />
                 <Textarea
                   type="text"
@@ -323,12 +346,14 @@ const Category = () => {
                   placeholder="Description"
                   label="Description"
                   id="description"
+                  required={false}
                 />
                 <InputField
                   type="number"
                   name="percentageIncrease"
                   placeholder=""
                   label="Percentage Increase"
+                  required={false}
                   id="percentageIncrease"
                 />
                 <InputField
@@ -337,6 +362,7 @@ const Category = () => {
                   placeholder=""
                   label="Charge (%)"
                   id="platformFee"
+                  required={false}
                 />
 
                 <SubmitBtn isLoading={editLoading} btnText="Edit Category" />
@@ -428,6 +454,13 @@ const Category = () => {
                                 closeModal={closeEditModal}
                                 setEditId={setEditId}
                                 deleteCat={deleteCat}
+                                onEdit={onEdit}
+                                values={{
+                                  categoryName: item.categoryName,
+                                  description: item.description,
+                                  percentageIncrease: item.percentageIncrease,
+                                  charge: item.charge,
+                                }}
                               />
                             </TableCell>
                           </TableRow>

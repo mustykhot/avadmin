@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 export const trapSpacesForRequiredFields = (value, required) => {
   if (required) {
-    return !!value.trim();
+    // return !!value.trim();
   }
 };
 
