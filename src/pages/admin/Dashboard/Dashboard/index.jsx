@@ -22,6 +22,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useGetDashQuery } from "../../../../services/api";
+import ErrorMsg from "../../../../component/ErrorMsg";
+import Loader from "../../../../component/Loader";
 const Dashboard = () => {
   const [newDate, setNewDate] = useState([{}]);
   const handleSetDate = (dateRange) => {
@@ -117,6 +120,17 @@ const Dashboard = () => {
     ],
   };
 
+  // get category
+  const { data: dash = null, isLoading, isError, error } = useGetDashQuery();
+  console.log(dash, "dash");
+
+  if (isLoading) {
+    return <Loader />;
+  }
+  if (isError) {
+    return <ErrorMsg error={error} />;
+  }
+
   return (
     <AdminDashboardLayout active="dashboard">
       <div className="pd-dashboard">
@@ -137,27 +151,29 @@ const Dashboard = () => {
         <div className="summaryFlex">
           <SummaryCard
             icon={userImg}
-            midText={"4,510"}
+            midText={dash ? (dash.data ? dash.data.stats.totalUsers : 0) : 0}
             btmText={"Total No Users"}
             increase={"none"}
             isFour={true}
           />
           <SummaryCard
             icon={monitor}
-            midText={"3521"}
+            midText={dash ? (dash.data ? dash.data.stats.totalProducts : 0) : 0}
             btmText={"Total Products"}
             increase={"none"}
             isFour={true}
           />
           <SummaryCard
             icon={cart}
-            midText={"3,003,999"}
+            midText={
+              dash ? (dash.data ? dash.data.stats.totalTransactions : 0) : 0
+            }
             increase={"none"}
             btmText={"Total Transactions"}
             isFour={true}
           />
           <SummaryCard
-            midText={"530,504,000"}
+            midText={dash ? (dash.data ? dash.data.stats.totalRevenue : 0) : 0}
             currency={"₦"}
             btmText={"Total Revenue"}
             isAmount={true}

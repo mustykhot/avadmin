@@ -45,11 +45,19 @@ export const authApi = createApi({
     "chatmessage",
     "audit",
     "wallet",
+    "dash",
   ],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
         url: "user/av/admin-root/login",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
+    loginnormal: builder.mutation({
+      query: (credentials) => ({
+        url: "user/av/admin-login",
         method: "POST",
         body: credentials,
       }),
@@ -136,6 +144,11 @@ export const authApi = createApi({
     getUser: builder.query({
       query: (id) => `user/av/users/view/${id}`,
       providesTags: ["user"],
+      transformResponse: (response) => response,
+    }),
+    getDash: builder.query({
+      query: () => `data/stats`,
+      providesTags: ["dash"],
       transformResponse: (response) => response,
     }),
     getTransaction: builder.query({
@@ -310,6 +323,7 @@ export const authApi = createApi({
         url: "user/av/admin/signup",
         method: "POST",
         body: credentials,
+        invalidatesTags: ["admins"],
       }),
     }),
     resetPwd: builder.mutation({
@@ -323,6 +337,8 @@ export const authApi = createApi({
 });
 export const {
   useLoginMutation,
+  useGetDashQuery,
+  useLoginnormalMutation,
   useGetSellingQuery,
   useGetSellingStatQuery,
   useGetAuctionStatQuery,

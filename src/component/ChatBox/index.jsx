@@ -18,7 +18,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
 
-const ChatBox = ({ currentMsg }) => {
+const ChatBox = ({ currentMsg, messages }) => {
   const [show, setShow] = useState(false);
   const { register, formState, handleSubmit, reset } = useForm({
     reValidateMode: "onChange",
@@ -31,60 +31,79 @@ const ChatBox = ({ currentMsg }) => {
   const [message, setMessage] = useState([]);
   const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (currentMsg) {
-      setMessage(currentMsg.messages);
-    }
-  }, [currentMsg]);
-
   // upload
 
   const uploader = async (file) => {
     let url = await uploadImg(file, "n3mtymsx");
 
-    setImg({
-      url: url.secure_url,
-      name: url.original_filename,
-      format: url.format,
-    });
-  };
-  // sockett
-  const socketRef = useRef(null);
-  useEffect(() => {
-    if (currentMsg) {
-      // socketRef.current = io("wss://auction-village-be.herokuapp.com", {
-      //   // query: { chatId: currentMsg.id },
-      //   transports: ["websocket"],
-      // });
-      // socketRef.current.on("connect", () => {
-      //   console.log(`Connected to ID ${socketRef.current.id}`);
-      // });
-      // socketRef.current.on("newMessage", (newMsg) => {
-      //   setChatMessage((prev) => {
-      //     return [...prev, newMsg];
-      //   });
-      // });
-      // return () => {
-      //   socketRef.current.disconnect();
-      // };
+    // setImg({
+    //   url: url.secure_url,
+    //   name: url.original_filename,
+    //   format: url.format,
+    // });
+    let payload = {
+      text: "yh",
+      sender: user.id,
+      conversation: currentMsg.id,
+      file: {
+        url: url.url,
+        name: url.name,
+        mimeType: url.format,
+      },
+    };
+    try {
+      const response = await create(payload).unwrap();
+      //  closeModal();
+
+      // toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.data) toastr.error("Error", err.data.message);
+      else toastr.error("Error", "Something went wrong, please try again...");
     }
-  }, [currentMsg]);
+  };
+  // // sockett join-conversation
+  // const socketRef = useRef(null);
+  // useEffect(() => {
+  //   if (currentMsg) {
+  //     socketRef.current = io("wss://auction-village-be.herokuapp.com", {
+  //       query: { conversationId: currentMsg.id },
+  //       transports: ["websocket"],
+  //     });
+
+  //     socketRef.current.on("connect", () => {
+  //       console.log(`Connected to ID ${socketRef.current.id}`);
+  //     });
+  //     // socketRef.current.emit("join-conversation", {
+  //     //   conversationId: currentMsg.id,
+  //     // });
+
+  //     socketRef.current.on("chat-message", (newMsg) => {
+  //       console.log(newMsg, "newMsg");
+  //       setMessage((prev) => {
+  //         return [...prev, newMsg];
+  //       });
+  //     });
+  //     return () => {
+  //       socketRef.current.disconnect();
+  //     };
+  //   }
+  // }, [currentMsg]);
   const onSubmit = async (values) => {
     let payload = {
       text: values.message,
       sender: user.id,
       conversation: currentMsg.id,
     };
-    if (img) {
-      payload = {
-        ...payload,
-        file: {
-          url: img.url,
-          name: img.name,
-          mimeType: img.format,
-        },
-      };
-    }
+    // if (img) {
+    //   payload = {
+    //     ...payload,
+    //     file: {
+    //       url: img.url,
+    //       name: img.name,
+    //       mimeType: img.format,
+    //     },
+    //   };
+    // }
     console.log(payload, "payload");
     try {
       const response = await create(payload).unwrap();
@@ -104,12 +123,20 @@ const ChatBox = ({ currentMsg }) => {
   useEffect(() => {
     const sendernew = currentMsg
       ? currentMsg.members.filter((item) => {
-          return item.id === user.id;
+          return item.id !== user.id;
         })
       : "";
 
     setSender(sendernew[0]);
   }, [currentMsg]);
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
 
   return (
     <>
@@ -140,12 +167,12 @@ const ChatBox = ({ currentMsg }) => {
           </div>
           <div className="line"></div>
           <div className="allMessageBox">
-            {message && !message.length ? (
+            {messages && !messages.length ? (
               <NoProduct msg="No Message...">
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             ) : (
-              message.map((item) => {
+              messages.map((item) => {
                 return (
                   <div
                     className={`eachMsg ${
@@ -153,6 +180,14 @@ const ChatBox = ({ currentMsg }) => {
                     }`}
                     key={item.id}
                   >
+                    {item.file.url && (
+                      <img
+                        src={item.file.url}
+                        style={{ width: "150px" }}
+                        alt="chat"
+                      />
+                    )}
+
                     <p className="time">
                       {" "}
                       {moment(item.createdAt).format("LT")}
@@ -162,6 +197,7 @@ const ChatBox = ({ currentMsg }) => {
                 );
               })
             )}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* chat footer */}

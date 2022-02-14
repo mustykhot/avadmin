@@ -22,6 +22,7 @@ import TransactionDownload from "./pages/admin/Dashboard/Transaction/transaction
 import Users from "./pages/admin/Dashboard/Users";
 import UsersProfile from "./pages/admin/Dashboard/UsersProfile";
 import Login from "./pages/admin/Login";
+import LoginNormal from "./pages/admin/Login/login";
 import Signup from "./pages/admin/Login/signup";
 import Reset from "./pages/admin/ResetPassword/reset";
 import SetPassword from "./pages/admin/ResetPassword/setPassword";
@@ -59,7 +60,8 @@ const Root = () => {
             />
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/shipping/:id" element={<ShippingDetail />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<LoginNormal />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forget" element={<Reset />} />
             <Route path="/set_password" element={<SetPassword />} />

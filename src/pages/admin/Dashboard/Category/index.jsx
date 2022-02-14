@@ -268,6 +268,13 @@ const Category = () => {
                   label="Percentage Increase"
                   id="percentageIncrease"
                 />
+                <InputField
+                  type="number"
+                  name="charge"
+                  placeholder=""
+                  label="Charge (%)"
+                  id="platformFee"
+                />
 
                 <Textarea
                   type="text"
@@ -305,6 +312,20 @@ const Category = () => {
                   placeholder="Description"
                   label="Description"
                   id="description"
+                />
+                <InputField
+                  type="number"
+                  name="percentageIncrease"
+                  placeholder=""
+                  label="Percentage Increase"
+                  id="percentageIncrease"
+                />
+                <InputField
+                  type="number"
+                  name="charge"
+                  placeholder=""
+                  label="Charge (%)"
+                  id="platformFee"
                 />
 
                 <SubmitBtn isLoading={editLoading} btnText="Edit Category" />

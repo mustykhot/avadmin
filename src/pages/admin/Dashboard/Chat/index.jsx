@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import ChatBox from "../../../../component/ChatBox";
 import MessageBox from "../../../../component/MessageBox";
@@ -24,6 +24,7 @@ import { Avatar, CardHeader } from "@mui/material";
 import { useSelector } from "react-redux";
 import { toastr } from "react-redux-toastr";
 import Skeleton from "@mui/material/Skeleton";
+import io from "socket.io-client";
 
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
@@ -127,6 +128,7 @@ const Chat = () => {
   const [secondId, setSecondId] = useState("");
   const [skip, setSkip] = useState(true);
   console.log(firstId, secondId, "ggggggg");
+  const [message, setMessage] = useState([]);
   const setId = (id1, id2) => {
     setFirstId(id1);
     setSecondId(id2);
@@ -147,7 +149,48 @@ const Chat = () => {
     }
   );
   console.log(twoconversation, "twoconversation");
+
   console.log(conversation, "conversation");
+
+  // socket
+
+  // sockett join-conversation
+  const [currentId, setCurrentId] = useState(null);
+
+  const socketRef = useRef(null);
+  useEffect(() => {
+    if (currentId) {
+      socketRef.current = io("wss://auction-village-be.herokuapp.com", {
+        query: { conversationId: currentId },
+        transports: ["websocket"],
+      });
+
+      socketRef.current.on("connect", () => {
+        console.log(currentId, "currentId");
+        console.log(`Connected to ID ${socketRef.current.id}`);
+      });
+      // socketRef.current.emit("join-conversation", {
+      //   conversationId: currentMsg.id,
+      // });
+
+      socketRef.current.on("new-message", (newMsg) => {
+        console.log(newMsg, "newMsg");
+        setMessage((prev) => {
+          return [...prev, newMsg.message];
+        });
+      });
+      return () => {
+        socketRef.current.disconnect();
+      };
+    }
+  }, [currentId]);
+
+  useEffect(() => {
+    if (twoconversation) {
+      setMessage(twoconversation.conversations[0].messages);
+      setCurrentId(twoconversation.conversations[0].id);
+    }
+  }, [twoconversation]);
 
   return (
     <AdminDashboardLayout active={"chat"}>
@@ -273,6 +316,7 @@ const Chat = () => {
           <div className="chatBoxDiv">
             <ChatBox
               currentMsg={twoconversation && twoconversation.conversations[0]}
+              messages={message}
             />
           </div>
         </div>
