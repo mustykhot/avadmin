@@ -17,8 +17,9 @@ import uploadImg from "../../hook/UploadImg";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
+import Loader from "../Loader";
 
-const ChatBox = ({ currentMsg, messages }) => {
+const ChatBox = ({ currentMsg, messages, loading }) => {
   const [show, setShow] = useState(false);
   const { register, formState, handleSubmit, reset } = useForm({
     reValidateMode: "onChange",
@@ -42,7 +43,7 @@ const ChatBox = ({ currentMsg, messages }) => {
     //   format: url.format,
     // });
     let payload = {
-      text: "yh",
+      text: "",
       sender: user.id,
       conversation: currentMsg.id,
       file: {
@@ -145,105 +146,109 @@ const ChatBox = ({ currentMsg, messages }) => {
   return (
     <>
       {currentMsg ? (
-        <div className="chatBox">
-          <div className="chatDetails">
-            <div className="userDetail">
-              <img
-                src={
-                  sender
-                    ? "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1613435284/pmmnrbuspg9d8vl5cqqe.jpg"
-                    : "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1613435284/pmmnrbuspg9d8vl5cqqe.jpg"
-                }
-                alt="user"
-              />
-              <div className="textPart">
-                <p className="name">
-                  {sender ? `${sender.firstName} ${sender.lastName}` : "N/A"}
-                </p>
-                {currentMsg.isActive && (
-                  <p className="userActive">
-                    <span></span> Active Now
+        loading ? (
+          <Loader />
+        ) : (
+          <div className="chatBox">
+            <div className="chatDetails">
+              <div className="userDetail">
+                <img
+                  src={
+                    sender
+                      ? "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1613435284/pmmnrbuspg9d8vl5cqqe.jpg"
+                      : "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1613435284/pmmnrbuspg9d8vl5cqqe.jpg"
+                  }
+                  alt="user"
+                />
+                <div className="textPart">
+                  <p className="name">
+                    {sender ? `${sender.firstName} ${sender.lastName}` : "N/A"}
                   </p>
-                )}
-              </div>
-            </div>
-            <TableDrop extra={true} />
-          </div>
-          <div className="line"></div>
-          <div className="allMessageBox">
-            {messages && !messages.length ? (
-              <NoProduct msg="No Message...">
-                <FontAwesomeIcon icon={faCommentSlash} />
-              </NoProduct>
-            ) : (
-              messages.map((item) => {
-                return (
-                  <div
-                    className={`eachMsg ${
-                      item.sender.id === user.id ? "left" : ""
-                    }`}
-                    key={item.id}
-                  >
-                    {item.file.url && (
-                      <img
-                        src={item.file.url}
-                        style={{ width: "150px" }}
-                        alt="chat"
-                      />
-                    )}
-
-                    <p className="time">
-                      {" "}
-                      {moment(item.createdAt).format("LT")}
+                  {currentMsg.isActive && (
+                    <p className="userActive">
+                      <span></span> Active Now
                     </p>
-                    <p className="msg">{item.text}</p>
-                  </div>
-                );
-              })
-            )}
-            {/* <div ref={messagesEndRef}></div> */}
-          </div>
+                  )}
+                </div>
+              </div>
+              <TableDrop extra={true} />
+            </div>
+            <div className="line"></div>
+            <div className="allMessageBox">
+              {messages && !messages.length ? (
+                <NoProduct msg="No Message...">
+                  <FontAwesomeIcon icon={faCommentSlash} />
+                </NoProduct>
+              ) : (
+                messages.map((item) => {
+                  return (
+                    <div
+                      className={`eachMsg ${
+                        item.sender.id === user.id ? "left" : ""
+                      }`}
+                      key={item.id}
+                    >
+                      {item.file.url && (
+                        <img
+                          src={item.file.url}
+                          style={{ width: "150px" }}
+                          alt="chat"
+                        />
+                      )}
 
-          {/* chat footer */}
-          <div className="chat-footer ">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <Input
-                type="text"
-                name="message"
-                placeholder="Type a Message..."
-                id="message"
-                register={register}
-                errors={formState.errors}
-              />
-              {/* <button className="btn round-btn">
+                      <p className="time">
+                        {" "}
+                        {moment(item.createdAt).format("LT")}
+                      </p>
+                      <p className="msg">{item.text}</p>
+                    </div>
+                  );
+                })
+              )}
+              {/* <div ref={messagesEndRef}></div> */}
+            </div>
+
+            {/* chat footer */}
+            <div className="chat-footer ">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Input
+                  type="text"
+                  name="message"
+                  placeholder="Type a Message..."
+                  id="message"
+                  register={register}
+                  errors={formState.errors}
+                />
+                {/* <button className="btn round-btn">
                 <AttachIcon className="attachIcon" />
               </button> */}
-              <input
-                onChange={(e) => {
-                  uploader(e.target.files[0]);
-                }}
-                type="file"
-                name="url"
-                hidden
-                id="url"
-              />
-              <label htmlFor="url" className="btn round-btn">
-                <Fileicon className="fileIcon" />
-              </label>
-              <button className="btn round-btn sendBtn">
-                {isLoading ? (
-                  <FontAwesomeIcon icon={faSpinner} pulse spin />
-                ) : (
-                  <>
-                    {" "}
-                    Send
-                    <SendIcon className="sendIcon" />
-                  </>
-                )}
-              </button>
-            </form>
+                <input
+                  onChange={(e) => {
+                    uploader(e.target.files[0]);
+                  }}
+                  type="file"
+                  name="url"
+                  hidden
+                  id="url"
+                />
+                <label htmlFor="url" className="btn round-btn">
+                  <Fileicon className="fileIcon" />
+                </label>
+                <button className="btn round-btn sendBtn">
+                  {isLoading ? (
+                    <FontAwesomeIcon icon={faSpinner} pulse spin />
+                  ) : (
+                    <>
+                      {" "}
+                      Send
+                      <SendIcon className="sendIcon" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        )
       ) : (
         <NoProduct msg="No Chats Selected...">
           <FontAwesomeIcon icon={faCommentSlash} />

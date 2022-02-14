@@ -317,6 +317,7 @@ const Chat = () => {
             <ChatBox
               currentMsg={twoconversation && twoconversation.conversations[0]}
               messages={message}
+              loading={twoconvLoading}
             />
           </div>
         </div>
