@@ -315,7 +315,7 @@ const PrivateDealForm1 = () => {
                       <SelectField
                         label=""
                         id="state"
-                        name="country"
+                        name="location"
                         // onChange={(e) => {
                         //   console.log(e.target.value);
                         //   setRecState(e.target.value);
@@ -348,7 +348,7 @@ const PrivateDealForm1 = () => {
                     <div className="halfInput">
                       <InputField
                         type="datetime-local"
-                        name="start_date"
+                        name="startDate"
                         placeholder="Start Date"
                         label="Start Date"
                         id="start_date"
@@ -358,7 +358,7 @@ const PrivateDealForm1 = () => {
                     <div className="halfInput">
                       <InputField
                         type="datetime-local"
-                        name="end_date"
+                        name="endDate"
                         placeholder="End Date"
                         label="End Date"
                         id="end_date"
