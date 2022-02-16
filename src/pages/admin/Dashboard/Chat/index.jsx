@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import { toastr } from "react-redux-toastr";
 import Skeleton from "@mui/material/Skeleton";
 import io from "socket.io-client";
+import { AnimatePresence } from "framer-motion/dist/framer-motion";
 
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
@@ -324,83 +325,84 @@ const Chat = () => {
       </div>
 
       {/* adding new chat */}
-      {modal && (
-        <Modal>
-          <div className="new-chat">
-            <div className="titleBox">
-              <p className="title">New Chat</p>
-              <Close onClick={closeModal} className="close" />
-            </div>
-            <div className="toggleBox">
-              <div
-                onClick={() => {
-                  handleToggleChat("admin");
-                }}
-                className={`eachToggle ${
-                  toggleChat === "admin" ? "active" : ""
-                }`}
-              >
-                <Users className="icon" />
-                <p>Administrators</p>
+      <AnimatePresence>
+        {modal && (
+          <Modal>
+            <div className="new-chat">
+              <div className="titleBox">
+                <p className="title">New Chat</p>
+                <Close onClick={closeModal} className="close" />
               </div>
-              <div
-                onClick={() => {
-                  handleToggleChat("customers");
-                }}
-                className={`eachToggle ${
-                  toggleChat === "customers" ? "active" : ""
-                }`}
-              >
-                <Chat1 className="icon" />
-                <p>Customers</p>
+              <div className="toggleBox">
+                <div
+                  onClick={() => {
+                    handleToggleChat("admin");
+                  }}
+                  className={`eachToggle ${
+                    toggleChat === "admin" ? "active" : ""
+                  }`}
+                >
+                  <Users className="icon" />
+                  <p>Administrators</p>
+                </div>
+                <div
+                  onClick={() => {
+                    handleToggleChat("customers");
+                  }}
+                  className={`eachToggle ${
+                    toggleChat === "customers" ? "active" : ""
+                  }`}
+                >
+                  <Chat1 className="icon" />
+                  <p>Customers</p>
+                </div>
               </div>
-            </div>
-            {/* <input type="text" placeholder="Search" className="search" /> */}
-            <div className="coverMemberAll">
-              <div
-                className={`memberList  ${
-                  toggleChat === "admin" ? "showUp2" : "leftShow2"
-                }`}
-              >
-                <p className="title">Administrative Members</p>
-                <div className="coverMember">
-                  {isError === true ? (
-                    <p>{error.status}</p>
-                  ) : loading ? (
-                    <p>Loading</p>
-                  ) : admins.message === "no admin available!" ? (
-                    <NoProduct msg="No Data Yet...">
-                      <FontAwesomeIcon icon={faCommentSlash} />
-                    </NoProduct>
-                  ) : (
-                    admins.admins.map((item) => {
-                      return (
-                        <div
-                          className="eachMember"
-                          onClick={() => {
-                            startChat(item.id);
-                          }}
-                          key={item.id}
-                        >
-                          {/* <img src={item.image} alt="user" /> */}
+              {/* <input type="text" placeholder="Search" className="search" /> */}
+              <div className="coverMemberAll">
+                <div
+                  className={`memberList  ${
+                    toggleChat === "admin" ? "showUp2" : "leftShow2"
+                  }`}
+                >
+                  <p className="title">Administrative Members</p>
+                  <div className="coverMember">
+                    {isError === true ? (
+                      <p>{error.status}</p>
+                    ) : loading ? (
+                      <p>Loading</p>
+                    ) : admins.message === "no admin available!" ? (
+                      <NoProduct msg="No Data Yet...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : (
+                      admins.admins.map((item) => {
+                        return (
+                          <div
+                            className="eachMember"
+                            onClick={() => {
+                              startChat(item.id);
+                            }}
+                            key={item.id}
+                          >
+                            {/* <img src={item.image} alt="user" /> */}
 
-                          <Avatar alt="Remy Sharp" src="" />
-                          <div className="textPart">
-                            <p className="name">
-                              {`${item.firstName} ${item.lastName}`}{" "}
-                              {
-                                <span
-                                  className={item.isOnline ? "active" : ""}
-                                ></span>
-                              }
-                            </p>
-                            <p className="email">{item.email}</p>
+                            <Avatar alt="Remy Sharp" src="" />
+                            <div className="textPart">
+                              <p className="name">
+                                {`${item.firstName} ${item.lastName}`}{" "}
+                                {
+                                  <span
+                                    className={item.isOnline ? "active" : ""}
+                                  ></span>
+                                }
+                              </p>
+                              <p className="email">{item.email}</p>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  )}
-                  {/* {userList.map((item) => {
+                        );
+                      })
+                    )}
+                    {/* {userList.map((item) => {
                     return (
                       <div className="eachMember">
                         <img src={item.image} alt="user" />
@@ -418,46 +420,47 @@ const Chat = () => {
                       </div>
                     );
                   })} */}
+                  </div>
                 </div>
-              </div>
 
-              <div
-                className={`memberList ${
-                  toggleChat === "customers" ? "showUp" : "leftShow"
-                }`}
-              >
-                <p className="title">Customers</p>
-                <div className="coverMember">
-                  {userList.map((item) => {
-                    return (
-                      <div
-                        onClick={() => {
-                          startChat(item.id);
-                        }}
-                        key={item.id}
-                        className="eachMember"
-                      >
-                        <img src={item.image} alt="user" />
-                        <div className="textPart">
-                          <p className="name">
-                            {item.name}{" "}
-                            {
-                              <span
-                                className={item.isOnline ? "active" : ""}
-                              ></span>
-                            }
-                          </p>
-                          <p className="email">{item.email}</p>
+                <div
+                  className={`memberList ${
+                    toggleChat === "customers" ? "showUp" : "leftShow"
+                  }`}
+                >
+                  <p className="title">Customers</p>
+                  <div className="coverMember">
+                    {userList.map((item) => {
+                      return (
+                        <div
+                          onClick={() => {
+                            startChat(item.id);
+                          }}
+                          key={item.id}
+                          className="eachMember"
+                        >
+                          <img src={item.image} alt="user" />
+                          <div className="textPart">
+                            <p className="name">
+                              {item.name}{" "}
+                              {
+                                <span
+                                  className={item.isOnline ? "active" : ""}
+                                ></span>
+                              }
+                            </p>
+                            <p className="email">{item.email}</p>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )}
+      </AnimatePresence>
     </AdminDashboardLayout>
   );
 };

@@ -41,7 +41,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 import RajiFile from "../../../../component/input/RajiFile";
 import { moveIn } from "../../../../utils/variants";
-import { motion } from "framer-motion/dist/framer-motion";
+import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 // dropdown
 export const SubscribeDropDown = ({
   id,
@@ -267,114 +267,118 @@ const Category = () => {
   return (
     <AdminDashboardLayout active="category">
       <div className="pd-category">
-        {modal && (
-          <Modal>
-            <FormProvider {...methods}>
-              <form
-                onSubmit={methods.handleSubmit(onSubmit)}
-                className="createAdmin"
-                action=""
-              >
-                <FormHead title={"Create Category"} subTitle={""} />
-                <RajiFile
-                  name="image"
-                  placeholder="Categoy Image"
-                  label="Category Image"
-                  id="image"
-                  setFiler={setImgUpload}
-                />
-                <InputField
-                  type="text"
-                  name="categoryName"
-                  placeholder="Category Name"
-                  label="Name"
-                  id="category_name"
-                />
-                <InputField
-                  type="number"
-                  name="percentageIncrease"
-                  placeholder=""
-                  label="Percentage Increase"
-                  id="percentageIncrease"
-                />
-                <InputField
-                  type="number"
-                  name="charge"
-                  placeholder=""
-                  label="Charge (%)"
-                  id="platformFee"
-                />
+        <AnimatePresence>
+          {modal && (
+            <Modal>
+              <FormProvider {...methods}>
+                <form
+                  onSubmit={methods.handleSubmit(onSubmit)}
+                  className="createAdmin"
+                  action=""
+                >
+                  <FormHead title={"Create Category"} subTitle={""} />
+                  <RajiFile
+                    name="image"
+                    placeholder="Categoy Image"
+                    label="Category Image"
+                    id="image"
+                    setFiler={setImgUpload}
+                  />
+                  <InputField
+                    type="text"
+                    name="categoryName"
+                    placeholder="Category Name"
+                    label="Name"
+                    id="category_name"
+                  />
+                  <InputField
+                    type="number"
+                    name="percentageIncrease"
+                    placeholder=""
+                    label="Percentage Increase"
+                    id="percentageIncrease"
+                  />
+                  <InputField
+                    type="number"
+                    name="charge"
+                    placeholder=""
+                    label="Charge (%)"
+                    id="platformFee"
+                  />
 
-                <Textarea
-                  type="text"
-                  name="description"
-                  placeholder="Description"
-                  label="Description"
-                  id="description"
-                />
-                <SubmitBtn
-                  isLoading={isLoading}
-                  // disable={imgupload ? false : true}
-                  disable={imgupload ? false : true}
-                  btnText="Add Category"
-                />
-                <button onClick={closeModal} className="cancel">
-                  Cancel
-                </button>
-              </form>
-            </FormProvider>
-          </Modal>
-        )}
-        {editModal && (
-          <Modal>
-            <FormProvider {...methods2}>
-              <form
-                onSubmit={methods2.handleSubmit(editCategory)}
-                className="createAdmin"
-                action=""
-              >
-                <FormHead title={"Edit Category"} subTitle={""} />
-                <RajiFile
-                  name="image"
-                  placeholder="Categoy Image"
-                  label="Category Image"
-                  id="image"
-                  setFiler={setImgUpload}
-                  required={false}
-                />
-                <Textarea
-                  type="text"
-                  name="description"
-                  placeholder="Description"
-                  label="Description"
-                  id="description"
-                  required={false}
-                />
-                <InputField
-                  type="number"
-                  name="percentageIncrease"
-                  placeholder=""
-                  label="Percentage Increase"
-                  required={false}
-                  id="percentageIncrease"
-                />
-                <InputField
-                  type="number"
-                  name="charge"
-                  placeholder=""
-                  label="Charge (%)"
-                  id="platformFee"
-                  required={false}
-                />
+                  <Textarea
+                    type="text"
+                    name="description"
+                    placeholder="Description"
+                    label="Description"
+                    id="description"
+                  />
+                  <SubmitBtn
+                    isLoading={isLoading}
+                    // disable={imgupload ? false : true}
+                    disable={imgupload ? false : true}
+                    btnText="Add Category"
+                  />
+                  <button onClick={closeModal} className="cancel">
+                    Cancel
+                  </button>
+                </form>
+              </FormProvider>
+            </Modal>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {editModal && (
+            <Modal>
+              <FormProvider {...methods2}>
+                <form
+                  onSubmit={methods2.handleSubmit(editCategory)}
+                  className="createAdmin"
+                  action=""
+                >
+                  <FormHead title={"Edit Category"} subTitle={""} />
+                  <RajiFile
+                    name="image"
+                    placeholder="Categoy Image"
+                    label="Category Image"
+                    id="image"
+                    setFiler={setImgUpload}
+                    required={false}
+                  />
+                  <Textarea
+                    type="text"
+                    name="description"
+                    placeholder="Description"
+                    label="Description"
+                    id="description"
+                    required={false}
+                  />
+                  <InputField
+                    type="number"
+                    name="percentageIncrease"
+                    placeholder=""
+                    label="Percentage Increase"
+                    required={false}
+                    id="percentageIncrease"
+                  />
+                  <InputField
+                    type="number"
+                    name="charge"
+                    placeholder=""
+                    label="Charge (%)"
+                    id="platformFee"
+                    required={false}
+                  />
 
-                <SubmitBtn isLoading={editLoading} btnText="Edit Category" />
-                <button onClick={closeEditModal} className="cancel">
-                  Cancel
-                </button>
-              </form>
-            </FormProvider>
-          </Modal>
-        )}
+                  <SubmitBtn isLoading={editLoading} btnText="Edit Category" />
+                  <button onClick={closeEditModal} className="cancel">
+                    Cancel
+                  </button>
+                </form>
+              </FormProvider>
+            </Modal>
+          )}
+        </AnimatePresence>
         {modalPop && (
           <SuccessModal
             closeModal={closeModalPop}

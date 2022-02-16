@@ -41,7 +41,7 @@ import LoadingTable from "../../../../component/loadingTable";
 import { toastr } from "react-redux-toastr";
 import uploadImg from "../../../../hook/UploadImg";
 import { Avatar, Pagination } from "@mui/material";
-import { motion } from "framer-motion/dist/framer-motion";
+import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
 const PrivateVendor = () => {
   const list = [1, 2, 3];
@@ -142,71 +142,73 @@ const PrivateVendor = () => {
 
   return (
     <AdminDashboardLayout active="vendor">
-      {modal && (
-        <Modal>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="createAdmin"
-            action=""
-          >
-            <Input
-              type="text"
-              name="name"
-              placeholder="Vendor's Name"
-              label="Vendor's Name"
-              id="vendor_name"
-              register={register}
-              errors={formState.errors}
-              errMsg="invalid input"
-            />
-            <Input
-              type="email"
-              name="email"
-              placeholder="Vendor's Email"
-              label="Vendor's Email"
-              id="vendor_email"
-              register={register}
-              errors={formState.errors}
-              errMsg="invalid email input"
-            />
+      <AnimatePresence>
+        {modal && (
+          <Modal>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="createAdmin"
+              action=""
+            >
+              <Input
+                type="text"
+                name="name"
+                placeholder="Vendor's Name"
+                label="Vendor's Name"
+                id="vendor_name"
+                register={register}
+                errors={formState.errors}
+                errMsg="invalid input"
+              />
+              <Input
+                type="email"
+                name="email"
+                placeholder="Vendor's Email"
+                label="Vendor's Email"
+                id="vendor_email"
+                register={register}
+                errors={formState.errors}
+                errMsg="invalid email input"
+              />
 
-            <Phone label={"Mobile no"} telVal={phone} setTelVal={setPhone} />
-            <div className="companyLogoDiv2">
-              <p className="label">Company Logo (Optional)</p>
+              <Phone label={"Mobile no"} telVal={phone} setTelVal={setPhone} />
+              <div className="companyLogoDiv2">
+                <p className="label">Company Logo (Optional)</p>
 
-              <div className="logoCover">
-                <label htmlFor="company">
-                  <img src={companyImg ? companyImg : saveImg} alt="save" />
-                  <p>
-                    Each picture must not exceed 5 Mb Supported formats are
-                    *.jpg, *.gif and *.png
-                  </p>
-                </label>
-                <input
-                  type="file"
-                  ref={ref}
-                  onChange={(e) => {
-                    FileChangeHandler(e);
-                    uploader(e.target.files[0]);
-                  }}
-                  hidden
-                  name="company"
-                  id="company"
-                />
+                <div className="logoCover">
+                  <label htmlFor="company">
+                    <img src={companyImg ? companyImg : saveImg} alt="save" />
+                    <p>
+                      Each picture must not exceed 5 Mb Supported formats are
+                      *.jpg, *.gif and *.png
+                    </p>
+                  </label>
+                  <input
+                    type="file"
+                    ref={ref}
+                    onChange={(e) => {
+                      FileChangeHandler(e);
+                      uploader(e.target.files[0]);
+                    }}
+                    hidden
+                    name="company"
+                    id="company"
+                  />
+                </div>
               </div>
-            </div>
 
-            <SubmitBtn
-              isLoading={loader}
-              disable={img ? false : true}
-              btnText="Submit"
-            />
-            <button onClick={closeModal} className="cancel">
-              Cancel
-            </button>
-          </form>
-        </Modal>
-      )}
+              <SubmitBtn
+                isLoading={loader}
+                disable={img ? false : true}
+                btnText="Submit"
+              />
+              <button onClick={closeModal} className="cancel">
+                Cancel
+              </button>
+            </form>
+          </Modal>
+        )}
+      </AnimatePresence>
       <div className="pd-privateVend">
         <div className="topicPart">
           <p className="pageTitle">Private Vendors</p>
