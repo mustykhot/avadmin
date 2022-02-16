@@ -25,7 +25,10 @@ import { toastr } from "react-redux-toastr";
 import NaijaStates from "naija-state-local-government";
 import SelectField from "../../../../component/input/select";
 import InputField from "../../../../component/input/indexField";
+import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 import uploadImg from "../../../../hook/UploadImg";
+import { moveIn, moveLeft } from "../../../../utils/variants";
+
 const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
@@ -153,7 +156,9 @@ const PrivateDealForm1 = () => {
   const handleToggle = () => {
     setToggle(!toggle);
   };
-  const methods = useForm();
+  const methods = useForm({
+    mode: "all",
+  });
 
   // create deal
   const [addDeal, { isLoading }] = useAddPrivateDealMutation();
@@ -222,11 +227,16 @@ const PrivateDealForm1 = () => {
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}
-            className="createAdmin"
+            className="createAdmin createForm"
             action=""
           >
+            {" "}
             {formStep >= 0 && (
-              <section
+              <motion.section
+                variants={moveIn}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
                 style={{ display: `${formStep === 0 ? "block" : "none"}` }}
               >
                 <FormHeadFlex
@@ -253,10 +263,14 @@ const PrivateDealForm1 = () => {
                 >
                   Continue
                 </button> */}
-              </section>
-            )}
+              </motion.section>
+            )}{" "}
             {formStep >= 1 && (
-              <section
+              <motion.section
+                variants={moveLeft}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
                 style={{ display: `${formStep === 1 ? "block" : "none"}` }}
               >
                 <FormHeadFlex title={"Item Details"} active={"2"} total={"4"} />
@@ -379,15 +393,19 @@ const PrivateDealForm1 = () => {
                 <button onClick={prevFormStep} type="button" className="cancel">
                   back
                 </button> */}
-              </section>
+              </motion.section>
             )}
             {formStep >= 2 && (
-              <section
+              <motion.section
+                variants={moveLeft}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
                 style={{ display: `${formStep === 2 ? "block" : "none"}` }}
               >
                 <FormHeadFlex
                   title={"Product Information"}
-                  active={"2"}
+                  active={"3"}
                   total={"4"}
                 />
 
@@ -450,17 +468,21 @@ const PrivateDealForm1 = () => {
                 <button onClick={prevFormStep} type="button" className="cancel">
                   back
                 </button> */}
-              </section>
+              </motion.section>
             )}
             {formStep >= 3 && (
-              <section
+              <motion.section
+                variants={moveLeft}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
                 style={{ display: `${formStep === 3 ? "block" : "none"}` }}
               >
                 {" "}
                 <FormHeadFlex
                   title={"Create Private Deal"}
-                  active={"3"}
-                  total={"3"}
+                  active={"4"}
+                  total={"4"}
                 />
                 <SelectField
                   label="Pickup?"
@@ -597,39 +619,41 @@ const PrivateDealForm1 = () => {
                     </div>
                   </>
                 )}
-              </section>
+              </motion.section>
             )}
-
-            {formStep >= 3 ? (
-              <button
-                type="submit"
-                className="submit"
-                // disabled={!methods.formState.isValid}
-                style={{ display: `${formStep === 3 ? "" : "none"}` }}
-                onClick={() => {
-                  console.log("ggg");
-                }}
-              >
-                {loader ? (
-                  <FontAwesomeIcon icon={faSpinner} pulse spin />
-                ) : (
-                  "Submit"
-                )}
-              </button>
-            ) : (
-              <button
-                onClick={completeFormStep}
-                type="button"
-                className="submit"
-                // disabled={!methods.formState.isValid}
-              >
-                Continue
-              </button>
-            )}
+            <button
+              type="submit"
+              className="submit"
+              // disabled={!methods.formState.isValid}
+              style={{ display: `${formStep === 3 ? "" : "none"}` }}
+              onClick={() => {
+                console.log("ggg");
+              }}
+            >
+              {loader ? (
+                <FontAwesomeIcon icon={faSpinner} pulse spin />
+              ) : (
+                "Submit"
+              )}
+            </button>
+            <button
+              onClick={completeFormStep}
+              type="button"
+              className="submit"
+              style={{ display: `${formStep !== 3 ? "block" : "none"}` }}
+              disabled={!methods.formState.isValid}
+            >
+              Continue
+            </button>
             {formStep === 0 ? (
               ""
             ) : (
-              <button onClick={prevFormStep} type="button" className="cancel">
+              <button
+                disabled={!methods.formState.isValid}
+                onClick={prevFormStep}
+                type="button"
+                className="cancel"
+              >
                 Back
               </button>
             )}

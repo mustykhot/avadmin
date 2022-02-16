@@ -43,7 +43,8 @@ import { IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 // dropdown
 export const SubscribeDropDown = ({ id, disable, activateDeal }) => (
   <DropDownWrapper
@@ -337,86 +338,100 @@ const PrivateDeal = () => {
                 loading ? (
                   <LoadingTable />
                 ) : deal.rows ? (
-                  <TableContainer>
-                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                      <EnhancedTableHead
-                        headCells={headCells}
-                        // numSelected={selected.length}
-                        order={order}
-                        orderBy={orderBy}
-                        // onSelectAllClick={handleSelectAllClick}
-                        onRequestSort={handleRequestSort}
-                        rowCount={deal.rows.length}
-                        align="left"
-                      />
-                      <TableBody>
-                        {stableSort(
-                          deal.rows,
-                          getComparator(order, orderBy)
-                        ).map((item) => {
-                          // const isItemSelected = isSelected(row.id);
-                          // const labelId = `enhanced-table-checkbox-${index}`
-                          return (
-                            <TableRow
-                              // hover
-                              // role="checkbox"
-                              // aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={item._id}
-                              // selected={isItemSelected}
-                            >
-                              <TableCell align="left">
-                                <div className="nameDiv">
-                                  <div className="nameBox">
-                                    <p className="name">
-                                      {item.vendor && `${item.vendor.name}`}
-                                    </p>
+                  <motion.div
+                    variants={moveIn}
+                    animate="visible"
+                    initial="hidden"
+                    className="pd-dashboard"
+                  >
+                    <TableContainer>
+                      <Table
+                        sx={{ minWidth: 750 }}
+                        aria-labelledby="tableTitle"
+                      >
+                        <EnhancedTableHead
+                          headCells={headCells}
+                          // numSelected={selected.length}
+                          order={order}
+                          orderBy={orderBy}
+                          // onSelectAllClick={handleSelectAllClick}
+                          onRequestSort={handleRequestSort}
+                          rowCount={deal.rows.length}
+                          align="left"
+                        />
+                        <TableBody>
+                          {stableSort(
+                            deal.rows,
+                            getComparator(order, orderBy)
+                          ).map((item) => {
+                            // const isItemSelected = isSelected(row.id);
+                            // const labelId = `enhanced-table-checkbox-${index}`
+                            return (
+                              <TableRow
+                                // hover
+                                // role="checkbox"
+                                // aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={item._id}
+                                // selected={isItemSelected}
+                              >
+                                <TableCell align="left">
+                                  <div className="nameDiv">
+                                    <div className="nameBox">
+                                      <p className="name">
+                                        {item.vendor && `${item.vendor.name}`}
+                                      </p>
 
-                                    <p className="email">
-                                      {item.vendor && `${item.vendor.email}`}
-                                    </p>
+                                      <p className="email">
+                                        {item.vendor && `${item.vendor.email}`}
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                              </TableCell>
-                              <TableCell align="left">
-                                {item.product.productName}
-                              </TableCell>
-                              <TableCell align="left">
-                                {formatCurrency(item.basePrice)}
-                              </TableCell>
-                              <TableCell align="left">
-                                {moment(item.product.createdAt).format(
-                                  "MMM Do YYYY"
-                                )}{" "}
-                                <br />{" "}
-                                <p className="time green">
-                                  {moment(item.product.createdAt).format("LT")}
-                                </p>{" "}
-                              </TableCell>
+                                </TableCell>
+                                <TableCell align="left">
+                                  {item.product.productName}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {formatCurrency(item.basePrice)}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {moment(item.product.createdAt).format(
+                                    "MMM Do YYYY"
+                                  )}{" "}
+                                  <br />{" "}
+                                  <p className="time green">
+                                    {moment(item.product.createdAt).format(
+                                      "LT"
+                                    )}
+                                  </p>{" "}
+                                </TableCell>
 
-                              <TableCell align="left">
-                                <p
-                                  className={`status ${
-                                    item.status === "Active" ? "active" : "red"
-                                  }`}
-                                >
-                                  {item.status}
-                                </p>
-                              </TableCell>
-                              <TableCell className="action" align="left">
-                                <SubscribeDropDown
-                                  id={item._id}
-                                  // activate={activateDeal}
-                                  disable={deactivateDeal}
-                                  activateDeal={activateDeal}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                                <TableCell align="left">
+                                  <p
+                                    className={`status ${
+                                      item.status === "Active"
+                                        ? "active"
+                                        : "red"
+                                    }`}
+                                  >
+                                    {item.status}
+                                  </p>
+                                </TableCell>
+                                <TableCell className="action" align="left">
+                                  <SubscribeDropDown
+                                    id={item._id}
+                                    // activate={activateDeal}
+                                    disable={deactivateDeal}
+                                    activateDeal={activateDeal}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </motion.div>
                 ) : (
                   <NoProduct msg="No Data Yet...">
                     <FontAwesomeIcon icon={faCommentSlash} />
@@ -484,86 +499,100 @@ const PrivateDeal = () => {
                 buyloading ? (
                   <LoadingTable />
                 ) : buydeal.rows.length ? (
-                  <TableContainer>
-                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                      <EnhancedTableHead
-                        headCells={headCells}
-                        // numSelected={selected.length}
-                        order={order}
-                        orderBy={orderBy}
-                        // onSelectAllClick={handleSelectAllClick}
-                        onRequestSort={handleRequestSort}
-                        rowCount={buydeal.rows.length}
-                        align="left"
-                      />
-                      <TableBody>
-                        {stableSort(
-                          buydeal.rows,
-                          getComparator(order, orderBy)
-                        ).map((item) => {
-                          // const isItemSelected = isSelected(row.id);
-                          // const labelId = `enhanced-table-checkbox-${index}`
-                          return (
-                            <TableRow
-                              // hover
-                              // role="checkbox"
-                              // aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={item._id}
-                              // selected={isItemSelected}
-                            >
-                              <TableCell align="left">
-                                <div className="nameDiv">
-                                  <div className="nameBox">
-                                    <p className="name">
-                                      {item.vendor && `${item.vendor.name}`}
-                                    </p>
+                  <motion.div
+                    variants={moveIn}
+                    animate="visible"
+                    initial="hidden"
+                    className="pd-dashboard"
+                  >
+                    <TableContainer>
+                      <Table
+                        sx={{ minWidth: 750 }}
+                        aria-labelledby="tableTitle"
+                      >
+                        <EnhancedTableHead
+                          headCells={headCells}
+                          // numSelected={selected.length}
+                          order={order}
+                          orderBy={orderBy}
+                          // onSelectAllClick={handleSelectAllClick}
+                          onRequestSort={handleRequestSort}
+                          rowCount={buydeal.rows.length}
+                          align="left"
+                        />
+                        <TableBody>
+                          {stableSort(
+                            buydeal.rows,
+                            getComparator(order, orderBy)
+                          ).map((item) => {
+                            // const isItemSelected = isSelected(row.id);
+                            // const labelId = `enhanced-table-checkbox-${index}`
+                            return (
+                              <TableRow
+                                // hover
+                                // role="checkbox"
+                                // aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={item._id}
+                                // selected={isItemSelected}
+                              >
+                                <TableCell align="left">
+                                  <div className="nameDiv">
+                                    <div className="nameBox">
+                                      <p className="name">
+                                        {item.vendor && `${item.vendor.name}`}
+                                      </p>
 
-                                    <p className="email">
-                                      {item.vendor && `${item.vendor.email}`}
-                                    </p>
+                                      <p className="email">
+                                        {item.vendor && `${item.vendor.email}`}
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                              </TableCell>
-                              <TableCell align="left">
-                                {item.product.productName}
-                              </TableCell>
-                              <TableCell align="left">
-                                {formatCurrency(item.basePrice)}
-                              </TableCell>
-                              <TableCell align="left">
-                                {moment(item.product.createdAt).format(
-                                  "MMM Do YYYY"
-                                )}{" "}
-                                <br />{" "}
-                                <p className="time green">
-                                  {moment(item.product.createdAt).format("LT")}
-                                </p>{" "}
-                              </TableCell>
+                                </TableCell>
+                                <TableCell align="left">
+                                  {item.product.productName}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {formatCurrency(item.basePrice)}
+                                </TableCell>
+                                <TableCell align="left">
+                                  {moment(item.product.createdAt).format(
+                                    "MMM Do YYYY"
+                                  )}{" "}
+                                  <br />{" "}
+                                  <p className="time green">
+                                    {moment(item.product.createdAt).format(
+                                      "LT"
+                                    )}
+                                  </p>{" "}
+                                </TableCell>
 
-                              <TableCell align="left">
-                                <p
-                                  className={`status ${
-                                    item.status === "Active" ? "active" : "red"
-                                  }`}
-                                >
-                                  {item.status}
-                                </p>
-                              </TableCell>
-                              <TableCell className="action" align="left">
-                                <SubscribeDropDown
-                                  id={item._id}
-                                  // activate={activateDeal}
-                                  disable={deactivateDeal}
-                                  activateDeal={activateDeal}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                                <TableCell align="left">
+                                  <p
+                                    className={`status ${
+                                      item.status === "Active"
+                                        ? "active"
+                                        : "red"
+                                    }`}
+                                  >
+                                    {item.status}
+                                  </p>
+                                </TableCell>
+                                <TableCell className="action" align="left">
+                                  <SubscribeDropDown
+                                    id={item._id}
+                                    // activate={activateDeal}
+                                    disable={deactivateDeal}
+                                    activateDeal={activateDeal}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </motion.div>
                 ) : (
                   <NoProduct msg="No Data Yet...">
                     <FontAwesomeIcon icon={faCommentSlash} />

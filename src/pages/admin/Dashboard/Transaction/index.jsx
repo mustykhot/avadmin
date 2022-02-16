@@ -28,7 +28,8 @@ import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import Pagination from "@mui/material/Pagination";
 import { Avatar } from "@mui/material";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 const Transaction = () => {
   const [toggleBtn, setToggleBtn] = useState("auction");
   const [page, setPage] = useState(1);
@@ -114,31 +115,7 @@ const Transaction = () => {
           </div>
         </div>
 
-        {/* <div className="transactionNav">
-          <button
-            onClick={() => {
-              handleToggle("auction");
-            }}
-            className={`auction ${toggleBtn === "auction" ? "active" : ""}`}
-          >
-            Auction
-          </button>
-          <button
-            onClick={() => {
-              handleToggle("payment");
-            }}
-            className={`payment ${toggleBtn === "payment" ? "active" : ""}`}
-          >
-            Instant Payments
-          </button>
-        </div> */}
-
         <div style={{ marginTop: "30px" }} className="whiteContainer">
-          {/* <div className="tableHead">
-            <p className="tableTitle">Admin Users</p>
-            <input type="text" placeholder="Search" className="search" />
-          </div> */}
-
           <div className="downloadTable" style={{ display: "none" }}>
             <table id="table-to-xls">
               <thead>
@@ -182,144 +159,89 @@ const Transaction = () => {
               loading ? (
                 <LoadingTable />
               ) : transaction.rows ? (
-                <TableContainer>
-                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                    <EnhancedTableHead
-                      headCells={headCells}
-                      // numSelected={selected.length}
-                      order={order}
-                      orderBy={orderBy}
-                      // onSelectAllClick={handleSelectAllClick}
-                      onRequestSort={handleRequestSort}
-                      rowCount={transaction.rows.length}
-                      align="left"
-                    />
-                    <TableBody>
-                      {stableSort(
-                        transaction.rows,
-                        getComparator(order, orderBy)
-                      ).map((item) => {
-                        return (
-                          <TableRow
-                            hover
-                            tabIndex={-1}
-                            key={item._id}
-                            onClick={() => {
-                              handleView(item._id);
-                            }}
-                          >
-                            <TableCell align="left">
-                              {truncateString(item.id, 10)}
-                            </TableCell>
-                            <TableCell align="left">
-                              <div className="nameDiv">
-                                <Avatar
-                                  alt={"user"}
-                                  src={item.user.image}
-                                  sx={{ width: 35, height: 35 }}
-                                />
+                <motion.div
+                  variants={moveIn}
+                  animate="visible"
+                  initial="hidden"
+                  className="pd-dashboard"
+                >
+                  <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                      <EnhancedTableHead
+                        headCells={headCells}
+                        // numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        // onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={transaction.rows.length}
+                        align="left"
+                      />
+                      <TableBody>
+                        {stableSort(
+                          transaction.rows,
+                          getComparator(order, orderBy)
+                        ).map((item) => {
+                          return (
+                            <TableRow
+                              hover
+                              tabIndex={-1}
+                              key={item._id}
+                              onClick={() => {
+                                handleView(item._id);
+                              }}
+                            >
+                              <TableCell align="left">
+                                {truncateString(item.id, 10)}
+                              </TableCell>
+                              <TableCell align="left">
+                                <div className="nameDiv">
+                                  <Avatar
+                                    alt={"user"}
+                                    src={item.user.image}
+                                    sx={{ width: 35, height: 35 }}
+                                  />
 
-                                <div className="nameBox">
-                                  <p className="name">
-                                    {item.user.firstName}
-                                    {item.user.lastName}
-                                  </p>
+                                  <div className="nameBox">
+                                    <p className="name">
+                                      {item.user.firstName}
+                                      {item.user.lastName}
+                                    </p>
 
-                                  <p className="email">{item.user.email}</p>
+                                    <p className="email">{item.user.email}</p>
+                                  </div>
                                 </div>
-                              </div>
-                            </TableCell>
-                            <TableCell align="left">{item.item}</TableCell>
-                            <TableCell align="left">
-                              ₦ {moneyFormatter(item.amount)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {moment(item.createdAt).format("MM/DD/YYYY")}
-                            </TableCell>
+                              </TableCell>
+                              <TableCell align="left">{item.item}</TableCell>
+                              <TableCell align="left">
+                                ₦ {moneyFormatter(item.amount)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {moment(item.createdAt).format("MM/DD/YYYY")}
+                              </TableCell>
 
-                            <TableCell align="left">
-                              <p className={`status ${item.status}`}>
-                                {item.status.toLowerCase()}
-                              </p>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                  <div className="pagination-wrap">
-                    <Pagination
-                      color="primary"
-                      onChange={handlePage}
-                      count={transaction && transaction.total_pages}
-                      defaultPage={1}
-                      shape="rounded"
-                    />
-                  </div>
-                </TableContainer>
+                              <TableCell align="left">
+                                <p className={`status ${item.status}`}>
+                                  {item.status.toLowerCase()}
+                                </p>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                    <div className="pagination-wrap">
+                      <Pagination
+                        color="primary"
+                        onChange={handlePage}
+                        count={transaction && transaction.total_pages}
+                        defaultPage={1}
+                        shape="rounded"
+                      />
+                    </div>
+                  </TableContainer>
+                </motion.div>
               ) : (
-                // <table>
-                //   <thead>
-                //     <tr>
-                //       <th>ID</th>
-                //       <th>Customer</th>
-                //       <th>Product Name</th>
-                //       <th className="extraTh">
-                //         Amount <img src={shape} alt="shape" />{" "}
-                //       </th>
-                //       <th className="extraTh">
-                //         Date <img src={shape} alt="shape" />{" "}
-                //       </th>
-                //       <th className="extraTh">
-                //         Status <img src={shape} alt="shape" />{" "}
-                //       </th>
-                //       <th></th>
-                //     </tr>
-                //   </thead>
-                //   <tbody>
-                //     {transaction.rows.map((item) => {
-                //       return (
-                //         <tr
-                //           onClick={() => {
-                //             view(item.id);
-                //           }}
-                //           style={{ cursor: "pointer" }}
-                //         >
-                //           <td>{truncateString(item._id, 7)}</td>
-                //           <td className="nameTd">
-                //             <div className="nameDiv">
-                //               <img className="userImg" src={userImg} alt="user" />
-                //               <div className="nameBox">
-                //                 <p className="name">Emeka Phillips</p>
-                //                 <p className="email">emeka.phillips@gmail.com</p>
-                //               </div>
-                //             </div>
-                //           </td>
-                //           <td className="phone">Toyota Camry 2012</td>
-                //           <td className="role">
-                //             ₦ {moneyFormatter(item.amount)}
-                //           </td>
-                //           <td className="role">
-                //             {moment(item.createdAt).format("MM/DD/YYYY")}
-                //           </td>
-                //           <td className="statusTd">
-                //             <p
-                //               className={`status ${
-                //                 item.status === "paid" ? "active" : "red"
-                //               }`}
-                //             >
-                //               {item.status}
-                //             </p>
-                //           </td>
-                //           {/* <td className="action">
-                //             <TableDrop extra={true} />
-                //           </td> */}
-                //         </tr>
-                //       );
-                //     })}
-                //     <tr></tr>
-                //   </tbody>
-                // </table>
                 <NoProduct msg="No Data Yet...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
@@ -329,99 +251,6 @@ const Transaction = () => {
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             )}
-            {/* {toggleBtn === "auction" && (
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Customer</th>
-                    <th>Product Name</th>
-                    <th className="extraTh">
-                      Amount <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Date <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Status <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map((item) => {
-                    return (
-                      <tr>
-                        <td>#84253</td>
-                        <td className="nameTd">
-                          <div className="nameDiv">
-                            <img className="userImg" src={userImg} alt="user" />
-                            <div className="nameBox">
-                              <p className="name">Emeka Phillips</p>
-                              <p className="email">emeka.phillips@gmail.com</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="phone">Toyota Camry 2012</td>
-                        <td className="role">₦ 54,000</td>
-                        <td className="role">10 Nov, 2021</td>
-                        <td className="statusTd">
-                          <p className="status active">Paid</p>
-                        </td>
-                  
-                      </tr>
-                    );
-                  })}
-                  <tr></tr>
-                </tbody>
-              </table>
-            )} */}
-            {/* {toggleBtn === "payment" && (
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Customer</th>
-                    <th>Product Name</th>
-                    <th className="extraTh">
-                      Amount <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Date <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Status <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map((item) => {
-                    return (
-                      <tr>
-                        <td>#84253</td>
-                        <td className="nameTd">
-                          <div className="nameDiv">
-                            <img className="userImg" src={userImg} alt="user" />
-                            <div className="nameBox">
-                              <p className="name">Emeka Phillips</p>
-                              <p className="email">emeka.phillips@gmail.com</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="phone">Toyota Camry 2012</td>
-                        <td className="role">₦ 54,000</td>
-                        <td className="role">10 Nov, 2021</td>
-                        <td className="statusTd">
-                          <p className="status active">Paid</p>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  <tr></tr>
-                </tbody>
-              </table>
-            )} */}
           </div>
         </div>
       </div>

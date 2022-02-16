@@ -18,6 +18,8 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import Loader from "../Loader";
+import { moveIn } from "../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 
 const ChatBox = ({ currentMsg, messages, loading }) => {
   const [show, setShow] = useState(false);
@@ -43,9 +45,9 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
     //   format: url.format,
     // });
     let payload = {
-      text: "",
+      // text: "",
       sender: user.id,
-      conversation: currentMsg.id,
+      // conversation: currentMsg.id,
       file: {
         url: url.url,
         name: url.name,
@@ -53,7 +55,10 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
       },
     };
     try {
-      const response = await create(payload).unwrap();
+      const response = await create({
+        credentials: payload,
+        id: currentMsg.id,
+      }).unwrap();
       //  closeModal();
 
       // toastr.success("Success", response.message);
@@ -93,7 +98,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
     let payload = {
       text: values.message,
       sender: user.id,
-      conversation: currentMsg.id,
+      // conversation: currentMsg.id,
     };
     // if (img) {
     //   payload = {
@@ -107,7 +112,10 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
     // }
     console.log(payload, "payload");
     try {
-      const response = await create(payload).unwrap();
+      const response = await create({
+        credentials: payload,
+        id: currentMsg.id,
+      }).unwrap();
       //  closeModal();
 
       toastr.success("Success", response.message);
@@ -131,17 +139,17 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
     setSender(sendernew[0]);
   }, [currentMsg]);
 
-  // const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-  // };
+  const scrollToBottom = () => {
+    currentMsg && messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
 
-  // useEffect(() => {
-  //   if (messages) {
-  //     scrollToBottom();
-  //   }
-  // }, [messages]);
+  useEffect(() => {
+    if (messages) {
+      scrollToBottom();
+    }
+  }, [messages]);
 
   return (
     <>
@@ -182,13 +190,16 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
               ) : (
                 messages.map((item) => {
                   return (
-                    <div
+                    <motion.div
+                      variants={moveIn}
+                      animate="visible"
+                      initial="hidden"
                       className={`eachMsg ${
                         item.sender.id === user.id ? "left" : ""
                       }`}
                       key={item.id}
                     >
-                      {item.file.url && (
+                      {item.file && item.file.url && (
                         <img
                           src={item.file.url}
                           style={{ width: "150px" }}
@@ -200,12 +211,12 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
                         {" "}
                         {moment(item.createdAt).format("LT")}
                       </p>
-                      <p className="msg">{item.text}</p>
-                    </div>
+                      {item.text && <p className="msg">{item.text}</p>}
+                    </motion.div>
                   );
                 })
               )}
-              {/* <div ref={messagesEndRef}></div> */}
+              <div ref={messagesEndRef}></div>
             </div>
 
             {/* chat footer */}

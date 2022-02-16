@@ -19,6 +19,7 @@ export default function SelectField({
 }) {
   const {
     control,
+    register,
     formState: { errors },
   } = useFormContext();
 
@@ -42,6 +43,9 @@ export default function SelectField({
               onChange(value);
               handleCustomChange && handleCustomChange(value.target.value);
             }}
+            {...register(name, {
+              required: required ? "This Field is required" : false,
+            })}
             {...otherProps}
             displayEmpty
           >

@@ -41,6 +41,8 @@ import LoadingTable from "../../../../component/loadingTable";
 import { toastr } from "react-redux-toastr";
 import uploadImg from "../../../../hook/UploadImg";
 import { Avatar, Pagination } from "@mui/material";
+import { motion } from "framer-motion/dist/framer-motion";
+import { moveIn } from "../../../../utils/variants";
 const PrivateVendor = () => {
   const list = [1, 2, 3];
 
@@ -248,59 +250,69 @@ const PrivateVendor = () => {
                 loading ? (
                   <LoadingTable />
                 ) : vendor.rows.length ? (
-                  <TableContainer>
-                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                      <EnhancedTableHead
-                        headCells={headCells}
-                        // numSelected={selected.length}
-                        order={order}
-                        orderBy={orderBy}
-                        // onSelectAllClick={handleSelectAllClick}
-                        onRequestSort={handleRequestSort}
-                        rowCount={vendor.rows.length}
-                        align="left"
-                      />
-                      <TableBody>
-                        {stableSort(
-                          vendor.rows,
-                          getComparator(order, orderBy)
-                        ).map((item) => {
-                          // const isItemSelected = isSelected(row.id);
-                          // const labelId = `enhanced-table-checkbox-${index}`
-                          return (
-                            <TableRow
-                              // hover
-                              // role="checkbox"
-                              // aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={item._id}
-                              // selected={isItemSelected}
-                            >
-                              <TableCell align="left">
-                                <div className="nameDiv">
-                                  <Avatar
-                                    alt={"user"}
-                                    src={item.photo}
-                                    sx={{ width: 35, height: 35 }}
-                                  />
-                                  <div className="nameBox">
-                                    <p className="name">{item.name}</p>
-                                    <p className="email">{item.email}</p>
+                  <motion.div
+                    variants={moveIn}
+                    animate="visible"
+                    initial="hidden"
+                    className="pd-dashboard"
+                  >
+                    <TableContainer>
+                      <Table
+                        sx={{ minWidth: 750 }}
+                        aria-labelledby="tableTitle"
+                      >
+                        <EnhancedTableHead
+                          headCells={headCells}
+                          // numSelected={selected.length}
+                          order={order}
+                          orderBy={orderBy}
+                          // onSelectAllClick={handleSelectAllClick}
+                          onRequestSort={handleRequestSort}
+                          rowCount={vendor.rows.length}
+                          align="left"
+                        />
+                        <TableBody>
+                          {stableSort(
+                            vendor.rows,
+                            getComparator(order, orderBy)
+                          ).map((item) => {
+                            // const isItemSelected = isSelected(row.id);
+                            // const labelId = `enhanced-table-checkbox-${index}`
+                            return (
+                              <TableRow
+                                // hover
+                                // role="checkbox"
+                                // aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={item._id}
+                                // selected={isItemSelected}
+                              >
+                                <TableCell align="left">
+                                  <div className="nameDiv">
+                                    <Avatar
+                                      alt={"user"}
+                                      src={item.photo}
+                                      sx={{ width: 35, height: 35 }}
+                                    />
+                                    <div className="nameBox">
+                                      <p className="name">{item.name}</p>
+                                      <p className="email">{item.email}</p>
+                                    </div>
                                   </div>
-                                </div>
-                              </TableCell>
-                              <TableCell align="left">
-                                {item.phonenumber}
-                              </TableCell>
-                              <TableCell align="left">₦ 54,000</TableCell>
+                                </TableCell>
+                                <TableCell align="left">
+                                  {item.phonenumber}
+                                </TableCell>
+                                <TableCell align="left">₦ 54,000</TableCell>
 
-                              <TableCell align="left">5</TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                                <TableCell align="left">5</TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </motion.div>
                 ) : (
                   <NoProduct msg="No Data Yet...">
                     <FontAwesomeIcon icon={faCommentSlash} />

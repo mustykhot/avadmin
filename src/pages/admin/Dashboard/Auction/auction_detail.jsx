@@ -21,6 +21,8 @@ import ErrorMsg from "../../../../component/ErrorMsg";
 import { formatCurrency } from "../../../../utils/utils";
 import moment from "moment";
 import { toastr } from "react-redux-toastr";
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 const AuctionDetail = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
@@ -67,9 +69,9 @@ const AuctionDetail = () => {
   const closeModal = () => {
     setModal(!modal);
   };
-  if (isLoading) {
-    return <Loader />;
-  }
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
   if (isError) {
     return <ErrorMsg error={error} />;
   }
@@ -98,166 +100,175 @@ const AuctionDetail = () => {
           </form>
         </Modal>
       )}
-      <div className="pd-auctionDetail">
-        <div className="downloadBox">
-          <div className="aboutProduct">
-            <img src={product} alt="product" />
-            <div className="productText">
-              <p className="order">Order ID: ${deal && deal.id} </p>
-              <p className="productName">
-                {deal
-                  ? deal.product
-                    ? deal.product.productName
-                    : "N/A"
-                  : "N/A"}
-              </p>
-              <p className="auctionName">{deal && deal.dealType}</p>
-            </div>
-          </div>
-          <div className="line"></div>
-          <div className="eachOrder">
-            <p className="orderTopic">Auction Summary</p>
-            <div className="flexOrder">
-              <p className="left">Status</p>
-              <div className="status-drop">
-                <p
-                  onClick={() => {
-                    setShow(!show);
-                  }}
-                  className={`status ${deal && deal.status}`}
-                >
-                  {deal && deal.status}
-                  <img src={arrow} alt="arrow" />
-                </p>
-                <div className={`actionPop moreLeft ${show ? "show" : ""}`}>
-                  <button
-                    onClick={() => {
-                      approveDeal("Active");
-                    }}
-                    className="pop"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => {
-                      approveDeal("Declined");
-                    }}
-                    className="pop"
-                  >
-                    Reject
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Date Posted:</p>
-              <p className="right">
-                {deal && moment(deal.datePosted).format("L")}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">End Date:</p>
-              <p className="right">
-                {deal && moment(deal.endDate).format("L")}
-              </p>
-            </div>
-          </div>
-          <div className="line"></div>
-          <div className="eachOrder">
-            <p className="orderTopic">Trader Details</p>
-            <div className="flexOrder">
-              <p className="left">Customer name:</p>
-              <p className="right">
-                <b>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <motion.div
+          variants={moveIn}
+          animate="visible"
+          initial="hidden"
+          className="pd-auctionDetail"
+        >
+          <div className="downloadBox">
+            <div className="aboutProduct">
+              <img src={product} alt="product" />
+              <div className="productText">
+                <p className="order">Order ID: ${deal && deal.id} </p>
+                <p className="productName">
                   {deal
-                    ? deal.user
-                      ? `${deal.user.firstName} ${deal.user.lastName}`
+                    ? deal.product
+                      ? deal.product.productName
                       : "N/A"
                     : "N/A"}
-                  c
-                </b>
-              </p>
+                </p>
+                <p className="auctionName">{deal && deal.dealType}</p>
+              </div>
             </div>
-            <div className="flexOrder">
-              <p className="left">Contact Email:</p>
-              <p className="right">
-                {" "}
-                <b>
-                  {deal ? (deal.user ? deal.user.email : "N/A") : "N/A"}
-                </b>{" "}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Phone:</p>
-              <p className="right">
-                {" "}
-                <b>
-                  {deal ? (deal.user ? deal.user.phone : "N/A") : "N/A"}
-                </b>{" "}
-              </p>
-            </div>
-          </div>
-          <div className="line"></div>
-          <div className="eachOrder">
-            <p className="orderTopic">Auction Activities</p>
-            <div className="flexOrder">
-              <p className="left">Based Price:</p>
-              <p className="right">
-                ₦{" "}
-                {deal && deal.product
-                  ? formatCurrency(deal.product.price)
-                  : "0,00"}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Max Increment:</p>
-              <p className="right">
-                ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Highest Bid:</p>
-              <p className="right green">
-                ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
-              </p>
-            </div>
-          </div>
-          <div className="line"></div>
-          <div className="eachOrder">
-            <p className="orderTopic">Recent Bidding</p>
-            <div className="flexOrder">
-              <div className="cover">
-                <div className="eachBidding">
-                  <img src={product} alt="bid" />
-                  <div className="leftBid">
-                    <div className="nameBid">
-                      <p className="name">Raji Mustapha</p>
-                      <p className="price"> ₦ 754,000,000</p>
-                    </div>
-                    <div className="nameBid">
-                      <p className="date">09 Nov -02:32:12</p>
-                      <p className="bid">Current Bid</p>
-                    </div>
+            <div className="line"></div>
+            <div className="eachOrder">
+              <p className="orderTopic">Auction Summary</p>
+              <div className="flexOrder">
+                <p className="left">Status</p>
+                <div className="status-drop">
+                  <p
+                    onClick={() => {
+                      setShow(!show);
+                    }}
+                    className={`status ${deal && deal.status}`}
+                  >
+                    {deal && deal.status}
+                    <img src={arrow} alt="arrow" />
+                  </p>
+                  <div className={`actionPop moreLeft ${show ? "show" : ""}`}>
+                    <button
+                      onClick={() => {
+                        approveDeal("Active");
+                      }}
+                      className="pop"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => {
+                        approveDeal("Declined");
+                      }}
+                      className="pop"
+                    >
+                      Reject
+                    </button>
                   </div>
                 </div>
-                <div className="eachBidding">
-                  <img src={product} alt="bid" />
-                  <div className="leftBid">
-                    <div className="nameBid">
-                      <p className="name">Raji Mustapha</p>
-                      <p className="price"> ₦ 754,000,000</p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Date Posted:</p>
+                <p className="right">
+                  {deal && moment(deal.datePosted).format("L")}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">End Date:</p>
+                <p className="right">
+                  {deal && moment(deal.endDate).format("L")}
+                </p>
+              </div>
+            </div>
+            <div className="line"></div>
+            <div className="eachOrder">
+              <p className="orderTopic">Trader Details</p>
+              <div className="flexOrder">
+                <p className="left">Customer name:</p>
+                <p className="right">
+                  <b>
+                    {deal
+                      ? deal.user
+                        ? `${deal.user.firstName} ${deal.user.lastName}`
+                        : "N/A"
+                      : "N/A"}
+                    c
+                  </b>
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Contact Email:</p>
+                <p className="right">
+                  {" "}
+                  <b>
+                    {deal ? (deal.user ? deal.user.email : "N/A") : "N/A"}
+                  </b>{" "}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Phone:</p>
+                <p className="right">
+                  {" "}
+                  <b>
+                    {deal ? (deal.user ? deal.user.phone : "N/A") : "N/A"}
+                  </b>{" "}
+                </p>
+              </div>
+            </div>
+            <div className="line"></div>
+            <div className="eachOrder">
+              <p className="orderTopic">Auction Activities</p>
+              <div className="flexOrder">
+                <p className="left">Based Price:</p>
+                <p className="right">
+                  ₦{" "}
+                  {deal && deal.product
+                    ? formatCurrency(deal.product.price)
+                    : "0,00"}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Max Increment:</p>
+                <p className="right">
+                  ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Highest Bid:</p>
+                <p className="right green">
+                  ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
+                </p>
+              </div>
+            </div>
+            <div className="line"></div>
+            <div className="eachOrder">
+              <p className="orderTopic">Recent Bidding</p>
+              <div className="flexOrder">
+                <div className="cover">
+                  <div className="eachBidding">
+                    <img src={product} alt="bid" />
+                    <div className="leftBid">
+                      <div className="nameBid">
+                        <p className="name">Raji Mustapha</p>
+                        <p className="price"> ₦ 754,000,000</p>
+                      </div>
+                      <div className="nameBid">
+                        <p className="date">09 Nov -02:32:12</p>
+                        <p className="bid">Current Bid</p>
+                      </div>
                     </div>
-                    <div className="nameBid">
-                      <p className="name">09 Nov -02:32:12</p>
-                      <p className="price">Current Bid</p>
+                  </div>
+                  <div className="eachBidding">
+                    <img src={product} alt="bid" />
+                    <div className="leftBid">
+                      <div className="nameBid">
+                        <p className="name">Raji Mustapha</p>
+                        <p className="price"> ₦ 754,000,000</p>
+                      </div>
+                      <div className="nameBid">
+                        <p className="name">09 Nov -02:32:12</p>
+                        <p className="price">Current Bid</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      )}
     </AdminDashboardLayout>
   );
 };

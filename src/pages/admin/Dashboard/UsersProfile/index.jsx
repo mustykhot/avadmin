@@ -32,6 +32,9 @@ import {
 } from "../../../../services/api";
 import LoadingTable from "../../../../component/loadingTable";
 import moment from "moment";
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
+import Loader from "../../../../component/Loader";
 const UsersProfile = () => {
   const list = [1, 2, 3];
   const [show, setShow] = useState(false);
@@ -138,359 +141,383 @@ const UsersProfile = () => {
 
   return (
     <AdminDashboardLayout active="user">
-      <div className="pd-userprofile">
-        <div className="topicPart">
-          <p className="pageTitle">Customer’s Profile</p>
-        </div>
-
-        <div className="profileFlex">
-          <ProfileBox
-            name={user && `${user.firstName} ${user.lastName}`}
-            email={user && user.email}
-            account={id}
-            tel={user && user.phone}
-            billing={
-              " 235 Ikorodu road, Anthony-iyanaoworo, Lagos state, Nigeria"
-            }
-            img={user && user.image}
-          />
-
-          <div className="activityBox">
-            <div className="userNav">
-              <div className="left">
-                <p
-                  onClick={() => {
-                    handleActiveAction("overview");
-                  }}
-                  className={`eachnav ${
-                    activeAction === "overview" ? "active" : ""
-                  }`}
-                >
-                  Overview
-                </p>
-                <p
-                  onClick={() => {
-                    handleActiveAction("auction");
-                  }}
-                  className={`eachnav ${
-                    activeAction === "auction" ? "active" : ""
-                  }`}
-                >
-                  Auction Activities
-                </p>
-                <p
-                  onClick={() => {
-                    handleActiveAction("selling");
-                  }}
-                  className={`eachnav ${
-                    activeAction === "selling" ? "active" : ""
-                  }`}
-                >
-                  My Sales
-                </p>
-              </div>
-              <div className="action">
-                <button
-                  onClick={() => {
-                    setShow(!show);
-                  }}
-                  className="actionbtn"
-                >
-                  Action <Fill className="fill" />
-                </button>
-                <div className={`actionDrop ${show ? "show" : ""}`}>
-                  <button
-                    onClick={() => {
-                      onSubmit(false);
-                    }}
-                  >
-                    Deactivate
-                  </button>
-                  <button
-                    onClick={() => {
-                      onSubmit(true);
-                    }}
-                  >
-                    Activate
-                  </button>
-                </div>
-              </div>
-            </div>
-            {activeAction === "overview" && (
-              <div className="whiteContainer">
-                <div className="tableHead">
-                  <p className="tableTitle">Transactions</p>
-                  <input type="date" placeholder="" className="search" />
-                </div>
-
-                <div className="summaryFlex">
-                  <SummaryCard
-                    icon={trendingUp}
-                    currency={"₦"}
-                    increase={true}
-                    midText={"4,000"}
-                    btmText={"Total Expense"}
-                    percent={"12%"}
-                  />
-                  <SummaryCard
-                    icon={trendingUp}
-                    currency={"₦"}
-                    increase={false}
-                    midText={"4,000"}
-                    btmText={"Total Expense"}
-                    percent={"12%"}
-                  />
-                  <SummaryCard
-                    midText={wallet && wallet.data.balance}
-                    currency={"₦"}
-                    btmText={"Wallet Balance"}
-                    isAmount={true}
-                  />
-                </div>
-
-                <div className="overflowTable">
-                  <div className="tableHead">
-                    <p className="tableTitle">Recent Activities</p>
-                  </div>
-                  {!isLoading ? (
-                    !transaction ? (
-                      <NoProduct msg="No Transactions...">
-                        <FontAwesomeIcon icon={faCommentSlash} />
-                      </NoProduct>
-                    ) : transaction.data.rows ? (
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Transaction ID</th>
-                            <th>Mobile No</th>
-                            <th className="extraTh">
-                              Amount <img src={shape} alt="shape" />{" "}
-                            </th>
-                            <th className="extraTh">
-                              Status <img src={shape} alt="shape" />{" "}
-                            </th>
-                            <th className="extraTh">
-                              Date <img src={shape} alt="shape" />{" "}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {transaction.data.rows.map((item) => {
-                            return (
-                              <tr
-                                onClick={() => {
-                                  handleView(item.id, "trans");
-                                }}
-                                key={item.id}
-                                className="bgDark"
-                              >
-                                <td className="phone">{item.id}</td>
-                                <td className={`amount green`}>
-                                  {item.user.phone}
-                                </td>
-                                <td className="role">₦ {item.amount}</td>
-                                <td className="statusTd">
-                                  <p className="status active">Successful</p>
-                                </td>
-                                <td className="role">
-                                  {moment(item.createdAt).format("L")}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    ) : (
-                      <NoProduct msg="No Transactions...">
-                        <FontAwesomeIcon icon={faCommentSlash} />
-                      </NoProduct>
-                    )
-                  ) : (
-                    <LoadingTable />
-                  )}
-                </div>
-              </div>
-            )}
-            {activeAction === "auction" && (
-              <div className="whiteContainer">
-                <div className="tableHead">
-                  <p className="tableTitle">Auction Activities</p>
-                  <input type="date" placeholder="" className="search" />
-                </div>
-
-                <div className="summaryFlex">
-                  <SummaryCard
-                    icon={clock}
-                    increase={true}
-                    midText={statAuction ? statAuction.data.totalItem : 0}
-                    btmText={"Auctions participated"}
-                    percent={"12%"}
-                  />
-                  <SummaryCard
-                    icon={check}
-                    increase={false}
-                    midText={statAuction ? statAuction.data.totalSold : 0}
-                    btmText={"Total Sold"}
-                    percent={"12%"}
-                  />
-                  <SummaryCard
-                    midText={statAuction ? statAuction.data.totalRevenue : 0}
-                    currency={"₦"}
-                    btmText={"Total Revenue"}
-                    isAmount={true}
-                  />
-                </div>
-
-                <div className="overflowTable">
-                  <div className="tableHead">
-                    <p className="tableTitle">Auction Participated</p>
-                  </div>
-                  {!isLoading ? (
-                    !deal ? (
-                      <NoProduct msg="No Deals...">
-                        <FontAwesomeIcon icon={faCommentSlash} />
-                      </NoProduct>
-                    ) : deal.userDeals ? (
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Item ID</th>
-
-                            <th className="extraTh">
-                              Amount <img src={shape} alt="shape" />{" "}
-                            </th>
-                            <th className="extraTh">
-                              Status <img src={shape} alt="shape" />{" "}
-                            </th>
-                            <th className="extraTh">
-                              Date <img src={shape} alt="shape" />{" "}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {deal.userDeals.map((item) => {
-                            return (
-                              <tr
-                                onClick={() => {
-                                  handleView(item.id, "auction");
-                                }}
-                                key={item.id}
-                                className="bgDark"
-                              >
-                                <td className="phone">8974-8743</td>
-                                <td className="role">₦ 54,000</td>
-                                <td className="statusTd">
-                                  <p className="status active">Auction Won</p>
-                                </td>
-                                <td className="role">10 Nov, 2021</td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    ) : (
-                      <NoProduct msg="No Deals...">
-                        <FontAwesomeIcon icon={faCommentSlash} />
-                      </NoProduct>
-                    )
-                  ) : (
-                    <LoadingTable />
-                  )}
-                </div>
-              </div>
-            )}
-
-            {activeAction === "selling" && (
-              <div className="whiteContainer">
-                <div className="tableHead">
-                  <p className="tableTitle">Selling</p>
-                  <input type="date" placeholder="" className="search" />
-                </div>
-
-                <div className="summaryFlex">
-                  <SummaryCard
-                    icon={clock}
-                    increase={true}
-                    midText={stat ? stat.data.totalItem : 0}
-                    btmText={"No of Products"}
-                    percent={"12%"}
-                  />
-                  <SummaryCard
-                    icon={check}
-                    increase={false}
-                    midText={stat ? stat.data.totalSold : 0}
-                    btmText={"Product sold"}
-                    percent={"12%"}
-                  />
-                  <SummaryCard
-                    midText={stat ? stat.data.totalRevenue : 0}
-                    currency={"₦"}
-                    btmText={"Total Revenue"}
-                    isAmount={true}
-                  />
-                </div>
-
-                <div className="overflowTable">
-                  <div className="tableHead">
-                    <p className="tableTitle">Sales Performance</p>
-                  </div>
-                  {!isSelling ? (
-                    !selling ? (
-                      <NoProduct msg="No Products...">
-                        <FontAwesomeIcon icon={faCommentSlash} />
-                      </NoProduct>
-                    ) : selling.products ? (
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Item ID</th>
-                            <th className="extraTh">Amount</th>
-                            <th className="extraTh">Quantity</th>
-                            <th className="extraTh">Status</th>
-
-                            <th className="extraTh">Date</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {selling.products.map((item) => {
-                            return (
-                              <tr key={item.id}>
-                                <td className="phone">{item._id}</td>
-                                <td className="role">₦ {item.finalPrice}</td>
-                                <td>{item.quantity}</td>
-                                <td className="statusTd">
-                                  <p
-                                    className={`status ${
-                                      item.status === "pending"
-                                        ? "yellow"
-                                        : "active"
-                                    }`}
-                                  >
-                                    {item.status}
-                                  </p>
-                                </td>
-                                <td className="role">
-                                  {moment(item.createdAt).format("L")}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    ) : (
-                      <NoProduct msg="No Deals...">
-                        <FontAwesomeIcon icon={faCommentSlash} />
-                      </NoProduct>
-                    )
-                  ) : (
-                    <LoadingTable />
-                  )}
-                </div>
-              </div>
-            )}
+      {loading ? (
+        <Loader />
+      ) : (
+        <motion.div
+          variants={moveIn}
+          animate="visible"
+          initial="hidden"
+          className="pd-userprofile"
+        >
+          <div className="topicPart">
+            <p className="pageTitle">Customer’s Profile</p>
           </div>
-        </div>
-      </div>
+
+          <div className="profileFlex">
+            <ProfileBox
+              name={user && `${user.firstName} ${user.lastName}`}
+              email={user && user.email}
+              account={id}
+              tel={user && user.phone}
+              billing={
+                " 235 Ikorodu road, Anthony-iyanaoworo, Lagos state, Nigeria"
+              }
+              img={user && user.image}
+            />
+
+            <div className="activityBox">
+              <div className="userNav">
+                <div className="left">
+                  <p
+                    onClick={() => {
+                      handleActiveAction("overview");
+                    }}
+                    className={`eachnav ${
+                      activeAction === "overview" ? "active" : ""
+                    }`}
+                  >
+                    Overview
+                  </p>
+                  <p
+                    onClick={() => {
+                      handleActiveAction("auction");
+                    }}
+                    className={`eachnav ${
+                      activeAction === "auction" ? "active" : ""
+                    }`}
+                  >
+                    Auction Activities
+                  </p>
+                  <p
+                    onClick={() => {
+                      handleActiveAction("selling");
+                    }}
+                    className={`eachnav ${
+                      activeAction === "selling" ? "active" : ""
+                    }`}
+                  >
+                    My Sales
+                  </p>
+                </div>
+                <div className="action">
+                  <button
+                    onClick={() => {
+                      setShow(!show);
+                    }}
+                    className="actionbtn"
+                  >
+                    Action <Fill className="fill" />
+                  </button>
+                  <div className={`actionDrop ${show ? "show" : ""}`}>
+                    <button
+                      onClick={() => {
+                        onSubmit(false);
+                      }}
+                    >
+                      Deactivate
+                    </button>
+                    <button
+                      onClick={() => {
+                        onSubmit(true);
+                      }}
+                    >
+                      Activate
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {activeAction === "overview" && (
+                <motion.div
+                  variants={moveIn}
+                  animate="visible"
+                  initial="hidden"
+                  className="whiteContainer"
+                >
+                  <div className="tableHead">
+                    <p className="tableTitle">Transactions</p>
+                    <input type="date" placeholder="" className="search" />
+                  </div>
+
+                  <div className="summaryFlex">
+                    <SummaryCard
+                      icon={trendingUp}
+                      currency={"₦"}
+                      increase={true}
+                      midText={"4,000"}
+                      btmText={"Total Expense"}
+                      percent={"12%"}
+                    />
+                    <SummaryCard
+                      icon={trendingUp}
+                      currency={"₦"}
+                      increase={false}
+                      midText={"4,000"}
+                      btmText={"Total Expense"}
+                      percent={"12%"}
+                    />
+                    <SummaryCard
+                      midText={wallet && wallet.data.balance}
+                      currency={"₦"}
+                      btmText={"Wallet Balance"}
+                      isAmount={true}
+                    />
+                  </div>
+
+                  <div className="overflowTable">
+                    <div className="tableHead">
+                      <p className="tableTitle">Recent Activities</p>
+                    </div>
+                    {!isLoading ? (
+                      !transaction ? (
+                        <NoProduct msg="No Transactions...">
+                          <FontAwesomeIcon icon={faCommentSlash} />
+                        </NoProduct>
+                      ) : transaction.data.rows ? (
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Transaction ID</th>
+                              <th>Mobile No</th>
+                              <th className="extraTh">
+                                Amount <img src={shape} alt="shape" />{" "}
+                              </th>
+                              <th className="extraTh">
+                                Status <img src={shape} alt="shape" />{" "}
+                              </th>
+                              <th className="extraTh">
+                                Date <img src={shape} alt="shape" />{" "}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {transaction.data.rows.map((item) => {
+                              return (
+                                <tr
+                                  onClick={() => {
+                                    handleView(item.id, "trans");
+                                  }}
+                                  key={item.id}
+                                  className="bgDark"
+                                >
+                                  <td className="phone">{item.id}</td>
+                                  <td className={`amount green`}>
+                                    {item.user.phone}
+                                  </td>
+                                  <td className="role">₦ {item.amount}</td>
+                                  <td className="statusTd">
+                                    <p className="status active">Successful</p>
+                                  </td>
+                                  <td className="role">
+                                    {moment(item.createdAt).format("L")}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <NoProduct msg="No Transactions...">
+                          <FontAwesomeIcon icon={faCommentSlash} />
+                        </NoProduct>
+                      )
+                    ) : (
+                      <LoadingTable />
+                    )}
+                  </div>
+                </motion.div>
+              )}
+              {activeAction === "auction" && (
+                <motion.div
+                  variants={moveIn}
+                  animate="visible"
+                  initial="hidden"
+                  className="whiteContainer"
+                >
+                  <div className="tableHead">
+                    <p className="tableTitle">Auction Activities</p>
+                    <input type="date" placeholder="" className="search" />
+                  </div>
+
+                  <div className="summaryFlex">
+                    <SummaryCard
+                      icon={clock}
+                      increase={true}
+                      midText={statAuction ? statAuction.data.totalItem : 0}
+                      btmText={"Auctions participated"}
+                      percent={"12%"}
+                    />
+                    <SummaryCard
+                      icon={check}
+                      increase={false}
+                      midText={statAuction ? statAuction.data.totalSold : 0}
+                      btmText={"Total Sold"}
+                      percent={"12%"}
+                    />
+                    <SummaryCard
+                      midText={statAuction ? statAuction.data.totalRevenue : 0}
+                      currency={"₦"}
+                      btmText={"Total Revenue"}
+                      isAmount={true}
+                    />
+                  </div>
+
+                  <div className="overflowTable">
+                    <div className="tableHead">
+                      <p className="tableTitle">Auction Participated</p>
+                    </div>
+                    {!isLoading ? (
+                      !deal ? (
+                        <NoProduct msg="No Deals...">
+                          <FontAwesomeIcon icon={faCommentSlash} />
+                        </NoProduct>
+                      ) : deal.userDeals ? (
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Item ID</th>
+
+                              <th className="extraTh">
+                                Amount <img src={shape} alt="shape" />{" "}
+                              </th>
+                              <th className="extraTh">
+                                Status <img src={shape} alt="shape" />{" "}
+                              </th>
+                              <th className="extraTh">
+                                Date <img src={shape} alt="shape" />{" "}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {deal.userDeals.map((item) => {
+                              return (
+                                <tr
+                                  onClick={() => {
+                                    handleView(item.id, "auction");
+                                  }}
+                                  key={item.id}
+                                  className="bgDark"
+                                >
+                                  <td className="phone">8974-8743</td>
+                                  <td className="role">₦ 54,000</td>
+                                  <td className="statusTd">
+                                    <p className="status active">Auction Won</p>
+                                  </td>
+                                  <td className="role">10 Nov, 2021</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <NoProduct msg="No Deals...">
+                          <FontAwesomeIcon icon={faCommentSlash} />
+                        </NoProduct>
+                      )
+                    ) : (
+                      <LoadingTable />
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {activeAction === "selling" && (
+                <motion.div
+                  variants={moveIn}
+                  animate="visible"
+                  initial="hidden"
+                  className="whiteContainer"
+                >
+                  <div className="tableHead">
+                    <p className="tableTitle">Selling</p>
+                    <input type="date" placeholder="" className="search" />
+                  </div>
+
+                  <div className="summaryFlex">
+                    <SummaryCard
+                      icon={clock}
+                      increase={true}
+                      midText={stat ? stat.data.totalItem : 0}
+                      btmText={"No of Products"}
+                      percent={"12%"}
+                    />
+                    <SummaryCard
+                      icon={check}
+                      increase={false}
+                      midText={stat ? stat.data.totalSold : 0}
+                      btmText={"Product sold"}
+                      percent={"12%"}
+                    />
+                    <SummaryCard
+                      midText={stat ? stat.data.totalRevenue : 0}
+                      currency={"₦"}
+                      btmText={"Total Revenue"}
+                      isAmount={true}
+                    />
+                  </div>
+
+                  <div className="overflowTable">
+                    <div className="tableHead">
+                      <p className="tableTitle">Sales Performance</p>
+                    </div>
+                    {!isSelling ? (
+                      !selling ? (
+                        <NoProduct msg="No Products...">
+                          <FontAwesomeIcon icon={faCommentSlash} />
+                        </NoProduct>
+                      ) : selling.products ? (
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Item ID</th>
+                              <th className="extraTh">Amount</th>
+                              <th className="extraTh">Quantity</th>
+                              <th className="extraTh">Status</th>
+
+                              <th className="extraTh">Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {selling.products.map((item) => {
+                              return (
+                                <tr key={item.id}>
+                                  <td className="phone">{item._id}</td>
+                                  <td className="role">₦ {item.finalPrice}</td>
+                                  <td>{item.quantity}</td>
+                                  <td className="statusTd">
+                                    <p
+                                      className={`status ${
+                                        item.status === "pending"
+                                          ? "yellow"
+                                          : "active"
+                                      }`}
+                                    >
+                                      {item.status}
+                                    </p>
+                                  </td>
+                                  <td className="role">
+                                    {moment(item.createdAt).format("L")}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <NoProduct msg="No Deals...">
+                          <FontAwesomeIcon icon={faCommentSlash} />
+                        </NoProduct>
+                      )
+                    ) : (
+                      <LoadingTable />
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
     </AdminDashboardLayout>
   );
 };

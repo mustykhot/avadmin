@@ -42,7 +42,9 @@ import NoProduct from "../../../../component/NoProduct";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-
+import { moveIn } from "../../../../utils/variants";
+import moment from "moment";
+import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 // dropdown
 const SubscribeDropDown = ({ id, setId, setActive, submit }) => (
   <DropDownWrapper
@@ -162,9 +164,14 @@ const Administrator = () => {
   return (
     <AdminDashboardLayout active="admin">
       <div className="pd-admin">
-        {modal && (
-          <CreateAdminModal setModalPop={setModalPop} closeModal={closeModal} />
-        )}
+        <AnimatePresence>
+          {modal && (
+            <CreateAdminModal
+              setModalPop={setModalPop}
+              closeModal={closeModal}
+            />
+          )}
+        </AnimatePresence>
         {modalPop && (
           <SuccessModal
             closeModal={closeModalPop}
@@ -237,46 +244,52 @@ const Administrator = () => {
             ) : loading ? (
               <LoadingTable />
             ) : admins.admins ? (
-              <TableContainer>
-                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                  <EnhancedTableHead
-                    headCells={headCells}
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={handleRequestSort}
-                    rowCount={admins.admins.length}
-                    align="left"
-                  />
-                  <TableBody>
-                    {stableSort(
-                      admins.admins,
-                      getComparator(order, orderBy)
-                    ).map((row, index) => {
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.id}
-                        >
-                          <TableCell align="left">
-                            {" "}
-                            <div className="nameDiv">
-                              <img
-                                className="userImg"
-                                src={userImg}
-                                alt="user"
-                              />
-                              <div className="nameBox">
-                                <p className="name">{`${row.firstName} ${row.lastName}`}</p>
-                                <p className="email">{row.email}</p>
+              <motion.div
+                variants={moveIn}
+                animate="visible"
+                initial="hidden"
+                className="pd-dashboard"
+              >
+                <TableContainer>
+                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                    <EnhancedTableHead
+                      headCells={headCells}
+                      order={order}
+                      orderBy={orderBy}
+                      onRequestSort={handleRequestSort}
+                      rowCount={admins.admins.length}
+                      align="left"
+                    />
+                    <TableBody>
+                      {stableSort(
+                        admins.admins,
+                        getComparator(order, orderBy)
+                      ).map((row, index) => {
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={row.id}
+                          >
+                            <TableCell align="left">
+                              {" "}
+                              <div className="nameDiv">
+                                <img
+                                  className="userImg"
+                                  src={userImg}
+                                  alt="user"
+                                />
+                                <div className="nameBox">
+                                  <p className="name">{`${row.firstName} ${row.lastName}`}</p>
+                                  <p className="email">{row.email}</p>
+                                </div>
                               </div>
-                            </div>
-                          </TableCell>
-                          <TableCell align="left">{row.phone}</TableCell>
-                          <TableCell align="left">{row.role}</TableCell>
+                            </TableCell>
+                            <TableCell align="left">{row.phone}</TableCell>
+                            <TableCell align="left">{row.role}</TableCell>
 
-                          {/* <TableCell align="left">
+                            {/* <TableCell align="left">
                             <p
                               className={`status ${
                                 row.status === "Deactivated" ||
@@ -291,30 +304,31 @@ const Administrator = () => {
                             </p>
                           </TableCell> */}
 
-                          <TableCell align="left">
-                            <p
-                              className={`status ${
-                                !row.active ? "red" : "active"
-                              }`}
-                            >
-                              {row.active ? "Active" : "Inactive"}
-                            </p>
-                          </TableCell>
+                            <TableCell align="left">
+                              <p
+                                className={`status ${
+                                  !row.active ? "red" : "active"
+                                }`}
+                              >
+                                {row.active ? "Active" : "Inactive"}
+                              </p>
+                            </TableCell>
 
-                          <TableCell className="action" align="left">
-                            <SubscribeDropDown
-                              setActive={setActive}
-                              setId={setId}
-                              submit={onSubmit}
-                              id={row.id}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                            <TableCell className="action" align="left">
+                              <SubscribeDropDown
+                                setActive={setActive}
+                                setId={setId}
+                                submit={onSubmit}
+                                id={row.id}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </motion.div>
             ) : (
               <NoProduct msg="No Data Yet...">
                 <FontAwesomeIcon icon={faCommentSlash} />

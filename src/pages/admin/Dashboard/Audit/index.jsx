@@ -19,6 +19,9 @@ import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import LoadingTable from "../../../../component/loadingTable";
 import moment from "moment";
 import { Pagination } from "@mui/material";
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
+
 const Audit = () => {
   const list = [1, 2, 3];
   const [isLoadng, setIsLoading] = useState(false);
@@ -86,7 +89,12 @@ const Audit = () => {
                 <tbody>
                   {audit.rows.map((item) => {
                     return (
-                      <tr key={item.id}>
+                      <motion.tr
+                        variants={moveIn}
+                        animate="visible"
+                        initial="hidden"
+                        key={item.id}
+                      >
                         <td className="left">
                           {/* <b>Give admin access to “Ads manager</b> <br />{" "}
                             <br />
@@ -97,7 +105,7 @@ const Audit = () => {
                         <td className="right">
                           {moment(item.createdAt).fromNow()}
                         </td>
-                      </tr>
+                      </motion.tr>
                     );
                   })}
                 </tbody>

@@ -37,6 +37,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { toastr } from "react-redux-toastr";
+import { motion } from "framer-motion/dist/framer-motion";
+import { moveIn } from "../../../../utils/variants";
 
 const headCells = [
   {
@@ -253,22 +255,30 @@ const Users = () => {
             ) : loading ? (
               <LoadingTable />
             ) : users.users ? (
-              <TableContainer>
-                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                  <EnhancedTableHead
-                    headCells={headCells}
-                    numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onSelectAllClick={handleSelectAllClick}
-                    onRequestSort={handleRequestSort}
-                    rowCount={users.users.length}
-                    align="left"
-                    isCheck={true}
-                  />
-                  <TableBody>
-                    {stableSort(users.users, getComparator(order, orderBy)).map(
-                      (row, index) => {
+              <motion.div
+                variants={moveIn}
+                animate="visible"
+                initial="hidden"
+                className="pd-dashboard"
+              >
+                <TableContainer>
+                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                    <EnhancedTableHead
+                      headCells={headCells}
+                      numSelected={selected.length}
+                      order={order}
+                      orderBy={orderBy}
+                      onSelectAllClick={handleSelectAllClick}
+                      onRequestSort={handleRequestSort}
+                      rowCount={users.users.length}
+                      align="left"
+                      isCheck={true}
+                    />
+                    <TableBody>
+                      {stableSort(
+                        users.users,
+                        getComparator(order, orderBy)
+                      ).map((row, index) => {
                         const isItemSelected = isSelected(row.id);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -345,11 +355,11 @@ const Users = () => {
                             </TableCell>
                           </TableRow>
                         );
-                      }
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </motion.div>
             ) : (
               <NoProduct msg="No Data Yet...">
                 <FontAwesomeIcon icon={faCommentSlash} />

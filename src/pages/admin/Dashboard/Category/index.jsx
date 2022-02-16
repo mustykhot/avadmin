@@ -40,6 +40,8 @@ import { IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 import RajiFile from "../../../../component/input/RajiFile";
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 // dropdown
 export const SubscribeDropDown = ({
   id,
@@ -377,6 +379,7 @@ const Category = () => {
           <SuccessModal
             closeModal={closeModalPop}
             text={"Category addedd successfully!!"}
+            d
           />
         )}
         <div className="topicPart">
@@ -398,78 +401,85 @@ const Category = () => {
             {loading ? (
               <LoadingTable />
             ) : category.length ? (
-              <TableContainer>
-                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
-                  <EnhancedTableHead
-                    headCells={headCells}
-                    // numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    // onSelectAllClick={handleSelectAllClick}
-                    onRequestSort={handleRequestSort}
-                    rowCount={category.length}
-                    align="left"
-                  />
-                  <TableBody>
-                    {stableSort(category, getComparator(order, orderBy)).map(
-                      (item) => {
-                        // const isItemSelected = isSelected(row.id);
-                        // const labelId = `enhanced-table-checkbox-${index}`
-                        return (
-                          <TableRow
-                            // hover
-                            // role="checkbox"
-                            // aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={item._id}
-                            // selected={isItemSelected}
-                          >
-                            <TableCell align="left">
-                              {truncateString(item._id, 10)}
-                              {/* {item.id} */}
-                            </TableCell>
-                            <TableCell align="left">
-                              {item.categoryName}
-                            </TableCell>
-                            <TableCell align="left">
-                              {truncateString(item.description, 20)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {item.productsAssigned}
-                            </TableCell>
-                            <TableCell align="left">
-                              <p
-                                className={`status ${
-                                  item.status === "active" ? "active" : "red"
-                                }`}
-                              >
-                                {item.status}
-                              </p>
-                            </TableCell>
-                            <TableCell className="action" align="left">
-                              <SubscribeDropDown
-                                id={item._id}
-                                activate={activateCategory}
-                                disable={disableCategory}
-                                closeModal={closeEditModal}
-                                setEditId={setEditId}
-                                deleteCat={deleteCat}
-                                onEdit={onEdit}
-                                values={{
-                                  categoryName: item.categoryName,
-                                  description: item.description,
-                                  percentageIncrease: item.percentageIncrease,
-                                  charge: item.charge,
-                                }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      }
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <motion.div
+                variants={moveIn}
+                animate="visible"
+                initial="hidden"
+                className="pd-dashboard"
+              >
+                <TableContainer>
+                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                    <EnhancedTableHead
+                      headCells={headCells}
+                      // numSelected={selected.length}
+                      order={order}
+                      orderBy={orderBy}
+                      // onSelectAllClick={handleSelectAllClick}
+                      onRequestSort={handleRequestSort}
+                      rowCount={category.length}
+                      align="left"
+                    />
+                    <TableBody>
+                      {stableSort(category, getComparator(order, orderBy)).map(
+                        (item) => {
+                          // const isItemSelected = isSelected(row.id);
+                          // const labelId = `enhanced-table-checkbox-${index}`
+                          return (
+                            <TableRow
+                              // hover
+                              // role="checkbox"
+                              // aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={item._id}
+                              // selected={isItemSelected}
+                            >
+                              <TableCell align="left">
+                                {truncateString(item._id, 10)}
+                                {/* {item.id} */}
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.categoryName}
+                              </TableCell>
+                              <TableCell align="left">
+                                {truncateString(item.description, 20)}
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.productsAssigned}
+                              </TableCell>
+                              <TableCell align="left">
+                                <p
+                                  className={`status ${
+                                    item.status === "active" ? "active" : "red"
+                                  }`}
+                                >
+                                  {item.status}
+                                </p>
+                              </TableCell>
+                              <TableCell className="action" align="left">
+                                <SubscribeDropDown
+                                  id={item._id}
+                                  activate={activateCategory}
+                                  disable={disableCategory}
+                                  closeModal={closeEditModal}
+                                  setEditId={setEditId}
+                                  deleteCat={deleteCat}
+                                  onEdit={onEdit}
+                                  values={{
+                                    categoryName: item.categoryName,
+                                    description: item.description,
+                                    percentageIncrease: item.percentageIncrease,
+                                    charge: item.charge,
+                                  }}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </motion.div>
             ) : (
               // <table className="unset">
               //   <thead>

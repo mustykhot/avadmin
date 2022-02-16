@@ -35,7 +35,8 @@ import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import { toastr } from "react-redux-toastr";
 import { useDispatch } from "react-redux";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 // dropdown
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
@@ -443,117 +444,124 @@ const Auction = () => {
                       <FontAwesomeIcon icon={faCommentSlash} />
                     </NoProduct>
                   ) : (
-                    <TableContainer>
-                      <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                      >
-                        <EnhancedTableHead
-                          headCells={headCells}
-                          numSelected={selected.length}
-                          order={order}
-                          orderBy={orderBy}
-                          onSelectAllClick={handleSelectAllClick}
-                          onRequestSort={handleRequestSort}
-                          rowCount={deal.data.rows.length}
-                          align="left"
-                          isCheck={true}
-                        />
-                        <TableBody>
-                          {stableSort(
-                            deal.data.rows,
-                            getComparator(order, orderBy)
-                          ).map((row, index) => {
-                            const isItemSelected = isSelected(row.id);
-                            const labelId = `enhanced-table-checkbox-${index}`;
+                    <motion.div
+                      variants={moveIn}
+                      animate="visible"
+                      initial="hidden"
+                      className="pd-dashboard"
+                    >
+                      <TableContainer>
+                        <Table
+                          sx={{ minWidth: 750 }}
+                          aria-labelledby="tableTitle"
+                        >
+                          <EnhancedTableHead
+                            headCells={headCells}
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={deal.data.rows.length}
+                            align="left"
+                            isCheck={true}
+                          />
+                          <TableBody>
+                            {stableSort(
+                              deal.data.rows,
+                              getComparator(order, orderBy)
+                            ).map((row, index) => {
+                              const isItemSelected = isSelected(row.id);
+                              const labelId = `enhanced-table-checkbox-${index}`;
 
-                            return (
-                              <TableRow
-                                hover
-                                role="checkbox"
-                                aria-checked={isItemSelected}
-                                tabIndex={-1}
-                                key={row.id}
-                                selected={isItemSelected}
-                              >
-                                <TableCell padding="checkbox">
-                                  <Checkbox
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                      "aria-labelledby": labelId,
-                                    }}
-                                    onChange={(event) =>
-                                      handleClick(event, row.id)
-                                    }
-                                  />
-                                </TableCell>
-
-                                <TableCell align="left">
-                                  {" "}
-                                  <div className="nameDiv">
-                                    <Avatar
-                                      alt={"user"}
-                                      src={row.user ? row.user.image : ""}
-                                      sx={{ width: 35, height: 35 }}
+                              return (
+                                <TableRow
+                                  hover
+                                  role="checkbox"
+                                  aria-checked={isItemSelected}
+                                  tabIndex={-1}
+                                  key={row.id}
+                                  selected={isItemSelected}
+                                >
+                                  <TableCell padding="checkbox">
+                                    <Checkbox
+                                      color="primary"
+                                      checked={isItemSelected}
+                                      inputProps={{
+                                        "aria-labelledby": labelId,
+                                      }}
+                                      onChange={(event) =>
+                                        handleClick(event, row.id)
+                                      }
                                     />
-                                    <div className="nameBox">
-                                      <p className="name">
-                                        {row.user
-                                          ? `${row.user.firstName} ${row.user.lastName}`
-                                          : "N/A"}
-                                      </p>
-                                      <p className="email">
-                                        {row.user ? row.user.email : "N/A"}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </TableCell>
-                                <TableCell align="left">
-                                  {row.product
-                                    ? row.product.productName
-                                    : "N/A"}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {row.product
-                                    ? formatCurrency(row.product.price)
-                                    : "N/A"}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {row.product
-                                    ? formatCurrency(row.product.finalPrice)
-                                    : "N/A"}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {moment(row.created_at).format("L")}
-                                </TableCell>
-                                <TableCell align="left">
-                                  <p
-                                    className={`status ${
-                                      row.status === "Deactivated" ||
-                                      row.status === "Declined"
-                                        ? "red"
-                                        : row.status === "pending"
-                                        ? "yellow"
-                                        : "active"
-                                    }`}
-                                  >
-                                    {row.status}
-                                  </p>
-                                </TableCell>
+                                  </TableCell>
 
-                                <TableCell className="action" align="left">
-                                  <SubscribeDropDown
-                                    approve={approveDeal}
-                                    id={row.id}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                                  <TableCell align="left">
+                                    {" "}
+                                    <div className="nameDiv">
+                                      <Avatar
+                                        alt={"user"}
+                                        src={row.user ? row.user.image : ""}
+                                        sx={{ width: 35, height: 35 }}
+                                      />
+                                      <div className="nameBox">
+                                        <p className="name">
+                                          {row.user
+                                            ? `${row.user.firstName} ${row.user.lastName}`
+                                            : "N/A"}
+                                        </p>
+                                        <p className="email">
+                                          {row.user ? row.user.email : "N/A"}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {row.product
+                                      ? row.product.productName
+                                      : "N/A"}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {row.product
+                                      ? formatCurrency(row.product.price)
+                                      : "N/A"}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {row.product
+                                      ? formatCurrency(row.product.finalPrice)
+                                      : "N/A"}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {moment(row.created_at).format("L")}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    <p
+                                      className={`status ${
+                                        row.status === "Deactivated" ||
+                                        row.status === "Declined"
+                                          ? "red"
+                                          : row.status === "pending"
+                                          ? "yellow"
+                                          : "active"
+                                      }`}
+                                    >
+                                      {row.status}
+                                    </p>
+                                  </TableCell>
+
+                                  <TableCell className="action" align="left">
+                                    <SubscribeDropDown
+                                      approve={approveDeal}
+                                      id={row.id}
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </motion.div>
                   )
                 ) : (
                   <NoProduct msg="No Data Yet...">
@@ -651,112 +659,119 @@ const Auction = () => {
                       <FontAwesomeIcon icon={faCommentSlash} />
                     </NoProduct>
                   ) : (
-                    <TableContainer>
-                      <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                      >
-                        <EnhancedTableHead
-                          headCells={headCells2}
-                          numSelected={selected.length}
-                          order={order}
-                          orderBy={orderBy}
-                          onSelectAllClick={handleSelectAllClick}
-                          onRequestSort={handleRequestSort}
-                          rowCount={dealPrivate.data.rows.length}
-                          align="left"
-                          isCheck={true}
-                        />
-                        <TableBody>
-                          {stableSort(
-                            dealPrivate.data.rows,
-                            getComparator(order, orderBy)
-                          ).map((row, index) => {
-                            const isItemSelected = isSelected(row.id);
-                            const labelId = `enhanced-table-checkbox-${index}`;
+                    <motion.div
+                      variants={moveIn}
+                      animate="visible"
+                      initial="hidden"
+                      className="pd-dashboard"
+                    >
+                      <TableContainer>
+                        <Table
+                          sx={{ minWidth: 750 }}
+                          aria-labelledby="tableTitle"
+                        >
+                          <EnhancedTableHead
+                            headCells={headCells2}
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={dealPrivate.data.rows.length}
+                            align="left"
+                            isCheck={true}
+                          />
+                          <TableBody>
+                            {stableSort(
+                              dealPrivate.data.rows,
+                              getComparator(order, orderBy)
+                            ).map((row, index) => {
+                              const isItemSelected = isSelected(row.id);
+                              const labelId = `enhanced-table-checkbox-${index}`;
 
-                            return (
-                              <TableRow
-                                hover
-                                role="checkbox"
-                                aria-checked={isItemSelected}
-                                tabIndex={-1}
-                                key={row.id}
-                                selected={isItemSelected}
-                              >
-                                <TableCell padding="checkbox">
-                                  <Checkbox
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                      "aria-labelledby": labelId,
-                                    }}
-                                    onChange={(event) =>
-                                      handleClick(event, row.id)
-                                    }
-                                  />
-                                </TableCell>
-
-                                <TableCell align="left">
-                                  <div className="nameDiv">
-                                    <Avatar
-                                      alt={"user"}
-                                      src={row.user ? row.user.image : ""}
-                                      sx={{ width: 35, height: 35 }}
+                              return (
+                                <TableRow
+                                  hover
+                                  role="checkbox"
+                                  aria-checked={isItemSelected}
+                                  tabIndex={-1}
+                                  key={row.id}
+                                  selected={isItemSelected}
+                                >
+                                  <TableCell padding="checkbox">
+                                    <Checkbox
+                                      color="primary"
+                                      checked={isItemSelected}
+                                      inputProps={{
+                                        "aria-labelledby": labelId,
+                                      }}
+                                      onChange={(event) =>
+                                        handleClick(event, row.id)
+                                      }
                                     />
-                                    <div className="nameBox">
-                                      <p className="name">
-                                        {row.user
-                                          ? `${row.user.firstName} ${row.user.lastName}`
-                                          : "N/A"}
-                                      </p>
-                                      <p className="email">
-                                        {row.user ? row.user.email : "N/A"}
-                                      </p>
+                                  </TableCell>
+
+                                  <TableCell align="left">
+                                    <div className="nameDiv">
+                                      <Avatar
+                                        alt={"user"}
+                                        src={row.user ? row.user.image : ""}
+                                        sx={{ width: 35, height: 35 }}
+                                      />
+                                      <div className="nameBox">
+                                        <p className="name">
+                                          {row.user
+                                            ? `${row.user.firstName} ${row.user.lastName}`
+                                            : "N/A"}
+                                        </p>
+                                        <p className="email">
+                                          {row.user ? row.user.email : "N/A"}
+                                        </p>
+                                      </div>
                                     </div>
-                                  </div>
-                                </TableCell>
-                                <TableCell align="left">
-                                  {row.product
-                                    ? row.product.productName
-                                    : "N/A"}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {formatCurrency(
-                                    row.product ? row.product.price : "N/A"
-                                  )}
-                                </TableCell>
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {row.product
+                                      ? row.product.productName
+                                      : "N/A"}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {formatCurrency(
+                                      row.product ? row.product.price : "N/A"
+                                    )}
+                                  </TableCell>
 
-                                <TableCell align="left">
-                                  {moment(row.created_at).format("L")}
-                                </TableCell>
-                                <TableCell align="left">
-                                  <p
-                                    className={`status ${
-                                      row.status === "Deactivated" ||
-                                      row.status === "Declined"
-                                        ? "red"
-                                        : row.status === "pending"
-                                        ? "yellow"
-                                        : "active"
-                                    }`}
-                                  >
-                                    {row.status}
-                                  </p>
-                                </TableCell>
+                                  <TableCell align="left">
+                                    {moment(row.created_at).format("L")}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    <p
+                                      className={`status ${
+                                        row.status === "Deactivated" ||
+                                        row.status === "Declined"
+                                          ? "red"
+                                          : row.status === "pending"
+                                          ? "yellow"
+                                          : "active"
+                                      }`}
+                                    >
+                                      {row.status}
+                                    </p>
+                                  </TableCell>
 
-                                <TableCell className="action" align="left">
-                                  <SubscribeDropDown
-                                    approve={approveDeal}
-                                    id={row.id}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                                  <TableCell className="action" align="left">
+                                    <SubscribeDropDown
+                                      approve={approveDeal}
+                                      id={row.id}
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </motion.div>
                   )
                 ) : (
                   <NoProduct msg="No Data Yet...">
@@ -780,171 +795,6 @@ const Auction = () => {
             </div>
           </div>
         )}
-
-        {/* <div className="whiteContainer">
-          <div className="tableHead">
-            <p className="tableTitle">Admin Users</p>
-            <input type="text" placeholder="Search" className="search" />
-          </div>
-
-          <div className="overflowTable">
-            {toggleBtn === "regular" && (
-              <table className="unset">
-                <thead>
-                  <tr>
-                    <th>
-                      <input
-                        onChange={(e) => {
-                          addAll(e.target.checked);
-                        }}
-                        type="checkbox"
-                        name=""
-                        id=""
-                      />
-                    </th>
-                    <th>Trader</th>
-                    <th>Product Name</th>
-                    <th className="extraTh">
-                      Based Price <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Current Bid <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Date Posted <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">Status</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map((item) => {
-                    return (
-                      <tr className={`${selected.includes(item) && "bgDark"}`}>
-                        <td>
-                          <input
-                            onChange={(e) => {
-                              handleCheckList(e.target.checked, item);
-                            }}
-                            checked={selected.includes(item)}
-                            type="checkbox"
-                            name=""
-                            id=""
-                          />
-                        </td>
-                        <td className="nameTd">
-                          <div className="nameDiv">
-                            <img className="userImg" src={userImg} alt="user" />
-                            <div className="nameBox">
-                              <p className="name">Emeka Phillips</p>
-                              <p className="email">emeka.phillips@gmail.com</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="phone">Toyota Camry 2012</td>
-                        <td className="role">₦ 54,000</td>
-                        <td className="role bidTd">
-                          ₦ 54,000 <br /> <p className="bid">24 Bids</p>{" "}
-                        </td>
-                        <td className="role timeTd">
-                          10 Nov, 2021 <br />
-                          <p className="time green">2:45</p>
-                        </td>
-                        <td className="statusTd">
-                          <p className="status active">Active</p>
-                        </td>
-                        <td>
-                          <TableDrop
-                            extra={true}
-                            handleView={() => {
-                              viewAuction(1);
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  <tr></tr>
-                </tbody>
-              </table>
-            )}
-            {toggleBtn === "private" && (
-              <table className="unset">
-                <thead>
-                  <tr>
-                    <th>
-                      <input
-                        onChange={(e) => {
-                          addAll(e.target.checked);
-                        }}
-                        type="checkbox"
-                        name=""
-                        id=""
-                      />
-                    </th>
-                    <th>Trader</th>
-                    <th>Product Name</th>
-                    <th className="extraTh">
-                      Based Price <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Current Bid <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">
-                      Date Posted <img src={shape} alt="shape" />{" "}
-                    </th>
-                    <th className="extraTh">Status</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map((item) => {
-                    return (
-                      <tr className={`${selected.includes(item) && "bgDark"}`}>
-                        <td>
-                          <input
-                            onChange={(e) => {
-                              handleCheckList(e.target.checked, item);
-                            }}
-                            checked={selected.includes(item)}
-                            type="checkbox"
-                            name=""
-                            id=""
-                          />
-                        </td>
-                        <td className="nameTd">
-                          <div className="nameDiv">
-                            <img className="userImg" src={userImg} alt="user" />
-                            <div className="nameBox">
-                              <p className="name">Emeka Phillips</p>
-                              <p className="email">emeka.phillips@gmail.com</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="phone">Toyota Camry 2012</td>
-                        <td className="role">₦ 54,000</td>
-                        <td className="role bidTd">
-                          ₦ 54,000 <br /> <p className="bid">24 Bids</p>{" "}
-                        </td>
-                        <td className="role timeTd">
-                          10 Nov, 2021 <br />
-                          <p className="time green">2:45</p>
-                        </td>
-                        <td className="statusTd">
-                          <p className="status active">Active</p>
-                        </td>
-                        <td>
-                          <TableDrop extra={true} />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                  <tr></tr>
-                </tbody>
-              </table>
-            )}
-          </div>
-        </div> */}
       </div>
     </AdminDashboardLayout>
   );

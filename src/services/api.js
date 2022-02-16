@@ -96,8 +96,8 @@ export const authApi = createApi({
       invalidatesTags: ["chat"],
     }),
     sendChat: builder.mutation({
-      query: (credentials) => ({
-        url: "/chats/messages",
+      query: ({ credentials, id }) => ({
+        url: `/chats/conversations/${id}/messages`,
         method: "PUT",
         body: credentials,
       }),

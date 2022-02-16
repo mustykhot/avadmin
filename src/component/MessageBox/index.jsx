@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import "./style.scss";
 import { Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
+
+import { motion } from "framer-motion/dist/framer-motion";
+import { moveIn } from "../../utils/variants";
 const MessageBox = ({
   image,
   name,
@@ -32,7 +35,10 @@ const MessageBox = ({
     setSender(sendernew[0]);
   }, [members]);
   return (
-    <div
+    <motion.div
+      variants={moveIn}
+      animate="visible"
+      initial="hidden"
       onClick={() => {
         console.log(members[1].id, members[0].id, "here");
         setActive(id);
@@ -58,7 +64,7 @@ const MessageBox = ({
           {/* <p className="numberCircle">{numberOfNew}</p> */}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

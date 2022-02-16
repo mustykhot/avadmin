@@ -11,7 +11,9 @@ import { useGetEachTransactionQuery } from "../../../../services/api";
 import moment from "moment";
 import { formatCurrency, moneyFormatter } from "../../../../utils/utils";
 import Pdf from "react-to-pdf";
-
+import Loader from "../../../../component/Loader";
+import { motion } from "framer-motion/dist/framer-motion";
+import { moveIn } from "../../../../utils/variants";
 const TransactionDownload = () => {
   const list = [1, 2, 3];
   let { id } = useParams();
@@ -35,97 +37,108 @@ const TransactionDownload = () => {
   console.log(transaction);
   return (
     <AdminDashboardLayout active="transaction">
-      <div className="pd-transaction-download">
-        <div className="topSide">
-          <button className="print">
-            {" "}
-            <Printer className="fill2" /> Print
-          </button>
+      {loading ? (
+        <Loader />
+      ) : (
+        <motion.div
+          variants={moveIn}
+          animate="visible"
+          initial="hidden"
+          className="pd-transaction-download"
+        >
+          <div className="topSide">
+            <button className="print">
+              {" "}
+              <Printer className="fill2" /> Print
+            </button>
 
-          <Pdf targetRef={ref} filename="code-example.pdf">
-            {({ toPdf }) => (
-              <button onClick={toPdf} className="download">
-                {" "}
-                <Download className="fill2" /> Download
-              </button>
-            )}
-          </Pdf>
-        </div>
-        <div ref={ref} className="downloadBox">
-          <div className="aboutProduct">
-            <img src={product} alt="product" />
-            <div className="productText">
-              <p className="order">
-                Order ID: {transaction && transaction.transaction._id}
-              </p>
-              <p className="productName">
-                {transaction && transaction.transaction.item}
-              </p>
-              <p className="auctionName">Automobile Auctions</p>
+            <Pdf targetRef={ref} filename="code-example.pdf">
+              {({ toPdf }) => (
+                <button onClick={toPdf} className="download">
+                  {" "}
+                  <Download className="fill2" /> Download
+                </button>
+              )}
+            </Pdf>
+          </div>
+          <div ref={ref} className="downloadBox">
+            <div className="aboutProduct">
+              <img src={product} alt="product" />
+              <div className="productText">
+                <p className="order">
+                  Order ID: {transaction && transaction.transaction._id}
+                </p>
+                <p className="productName">
+                  {transaction && transaction.transaction.item}
+                </p>
+                <p className="auctionName">Automobile Auctions</p>
+              </div>
+            </div>
+            <div className="eachOrder">
+              <p className="orderTopic">Order Summary</p>
+              <div className="flexOrder">
+                <p className="left">Date</p>
+                <p className="right">
+                  {transaction &&
+                    moment(transaction.transaction.createdAt).format(
+                      "MM/DD/YYYY"
+                    )}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Product price:</p>
+                <p className="right">
+                  ₦
+                  {transaction &&
+                    formatCurrency(transaction.transaction.amount)}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Surge:</p>
+                <p className="right">₦ 0.00</p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Sub-Total</p>
+                <p className="right green">10 Nov, 2021</p>
+              </div>
+            </div>
+            <div className="line"></div>
+            <div className="eachOrder">
+              <p className="orderTopic">Customer Details</p>
+              <div className="flexOrder">
+                <p className="left">Customer name:</p>
+                <p className="right">
+                  {`${transaction && transaction.transaction.user.firstName} ${
+                    transaction && transaction.transaction.user.lastName
+                  }`}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Email:</p>
+                <p className="right">
+                  {transaction && transaction.transaction.user.email}
+                </p>
+              </div>
+              <div className="flexOrder">
+                <p className="left">Phone:</p>
+                <p className="right">
+                  {transaction && transaction.transaction.user.phone}
+                </p>
+              </div>
+            </div>
+            <div className="line"></div>
+            <div className="eachOrder">
+              <p className="orderTopic">Shipping Address</p>
+              <div className="flexOrder">
+                <p className="left">
+                  Address: 235 Ikorodu road, Anthony-iyanaoworo, Lagos state,
+                  Nigeria
+                </p>
+              </div>
             </div>
           </div>
-          <div className="eachOrder">
-            <p className="orderTopic">Order Summary</p>
-            <div className="flexOrder">
-              <p className="left">Date</p>
-              <p className="right">
-                {transaction &&
-                  moment(transaction.transaction.createdAt).format(
-                    "MM/DD/YYYY"
-                  )}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Product price:</p>
-              <p className="right">
-                ₦{transaction && formatCurrency(transaction.transaction.amount)}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Surge:</p>
-              <p className="right">₦ 0.00</p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Sub-Total</p>
-              <p className="right green">10 Nov, 2021</p>
-            </div>
-          </div>
-          <div className="line"></div>
-          <div className="eachOrder">
-            <p className="orderTopic">Customer Details</p>
-            <div className="flexOrder">
-              <p className="left">Customer name:</p>
-              <p className="right">
-                {`${transaction && transaction.transaction.user.firstName} ${
-                  transaction && transaction.transaction.user.lastName
-                }`}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Email:</p>
-              <p className="right">
-                {transaction && transaction.transaction.user.email}
-              </p>
-            </div>
-            <div className="flexOrder">
-              <p className="left">Phone:</p>
-              <p className="right">
-                {transaction && transaction.transaction.user.phone}
-              </p>
-            </div>
-          </div>
-          <div className="line"></div>
-          <div className="eachOrder">
-            <p className="orderTopic">Shipping Address</p>
-            <div className="flexOrder">
-              <p className="left">
-                Address: 235 Ikorodu road, Anthony-iyanaoworo, Lagos state,
-                Nigeria
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+      )}
     </AdminDashboardLayout>
   );
 };
