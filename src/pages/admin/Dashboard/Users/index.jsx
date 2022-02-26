@@ -30,7 +30,7 @@ import {
   getComparator,
   stableSort,
 } from "../../../../utils/utils";
-import { Avatar, Checkbox } from "@mui/material";
+import { Avatar, Checkbox, Pagination } from "@mui/material";
 import moment from "moment";
 import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -64,8 +64,6 @@ const headCells = [
 ];
 
 const Users = () => {
-  const list = [1, 2, 3, 4];
-
   // const { register, formState, handleSubmit } = useForm();
   // const [isLoadng, setIsLoading] = useState(false);
   let navigate = useNavigate();
@@ -84,12 +82,20 @@ const Users = () => {
   //     value: "none2",
   //   },
   // ];
+
+  // pagination
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const handlePage = (e, value) => {
+    setPage(value);
+  };
+
   const {
     data: users = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetUsersQuery();
+  } = useGetUsersQuery({ page: page, search: search });
   console.log(users, "users");
   const viewUser = (id) => {
     navigate(`user_detail/${id}`);
@@ -208,7 +214,14 @@ const Users = () => {
         <div className="whiteContainer">
           <div className="tableHead">
             <p className="tableTitle">All Users</p>
-            <input type="text" placeholder="Search" className="search" />
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              className="search"
+            />
           </div>
 
           <div className="downloadTable" style={{ display: "none" }}>
@@ -225,21 +238,20 @@ const Users = () => {
               </thead>
               <tbody>
                 {users &&
-                  users.message !== "no user available!" &&
-                  users.users &&
-                  users.users.map((item) => {
+                  users.data.length &&
+                  users.data.map((item) => {
                     return (
-                      <tr>
+                      <tr key={item._id}>
                         <td>
                           {" "}
                           <p className="name">{`${item.firstName} ${item.lastName}`}</p>
                         </td>
-                        <td align="left">{item.phone}</td>
+                        <td align="left">{item.mobile}</td>
                         <td>{500}</td>
                         <td align="left">
                           {moment(item.updatedAt).format("L")}
                         </td>
-                        <td> {item.active ? "Active" : "Inactive"}</td>
+                        <td> {item.actice ? "Active" : "Inactive"}</td>
                       </tr>
                     );
                   })}
@@ -254,7 +266,7 @@ const Users = () => {
               </NoProduct>
             ) : loading ? (
               <LoadingTable />
-            ) : users.users ? (
+            ) : users.data.length ? (
               <motion.div
                 variants={moveIn}
                 animate="visible"
@@ -270,16 +282,16 @@ const Users = () => {
                       orderBy={orderBy}
                       onSelectAllClick={handleSelectAllClick}
                       onRequestSort={handleRequestSort}
-                      rowCount={users.users.length}
+                      rowCount={users.data.length}
                       align="left"
                       isCheck={true}
                     />
                     <TableBody>
                       {stableSort(
-                        users.users,
+                        users.data,
                         getComparator(order, orderBy)
                       ).map((row, index) => {
-                        const isItemSelected = isSelected(row.id);
+                        const isItemSelected = isSelected(row._id);
                         const labelId = `enhanced-table-checkbox-${index}`;
 
                         return (
@@ -288,7 +300,7 @@ const Users = () => {
                             role="checkbox"
                             aria-checked={isItemSelected}
                             tabIndex={-1}
-                            key={row.id}
+                            key={row._id}
                             selected={isItemSelected}
                           >
                             <TableCell padding="checkbox">
@@ -298,7 +310,9 @@ const Users = () => {
                                 inputProps={{
                                   "aria-labelledby": labelId,
                                 }}
-                                onChange={(event) => handleClick(event, row.id)}
+                                onChange={(event) =>
+                                  handleClick(event, row._id)
+                                }
                               />
                             </TableCell>
 
@@ -324,7 +338,7 @@ const Users = () => {
                                 </div>
                               </div>
                             </TableCell>
-                            <TableCell align="left">{row.phone}</TableCell>
+                            <TableCell align="left">{row.mobile}</TableCell>
                             <TableCell align="left">
                               {formatCurrency(540000)}
                             </TableCell>
@@ -335,7 +349,7 @@ const Users = () => {
                             <TableCell align="left">
                               <p
                                 className={`status ${
-                                  !row.active ? "red" : "active"
+                                  row.active ? "active" : "red"
                                 }`}
                               >
                                 {row.active ? "Active" : "Inactive"}
@@ -346,7 +360,7 @@ const Users = () => {
                               {" "}
                               <button
                                 onClick={() => {
-                                  viewUser(row.id);
+                                  viewUser(row._id);
                                 }}
                                 className="view"
                               >
@@ -365,79 +379,17 @@ const Users = () => {
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             )}
-            {/* <table className="unset">
-              <thead>
-                <tr>
-                  <th>
-                    <input
-                      onChange={(e) => {
-                        addAll(e.target.checked);
-                      }}
-                      type="checkbox"
-                      name=""
-                      id=""
-                    />
-                  </th>
-                  <th>Name</th>
-                  <th>Mobile No</th>
-                  <th className="extraTh">
-                    Wallet Balance <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th className="extraTh">
-                    Joining Date <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th className="extraTh">
-                    Status <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th>View</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((item) => {
-                  return (
-                    <tr className={`${selected.includes(item) && "bgDark"}`}>
-                      <td>
-                        <input
-                          onChange={(e) => {
-                            handleCheckList(e.target.checked, item);
-                          }}
-                          checked={selected.includes(item)}
-                          type="checkbox"
-                          name=""
-                          id=""
-                        />
-                      </td>
-                      <td className="nameTd">
-                        <div className="nameDiv">
-                          <img className="userImg" src={userImg} alt="user" />
-                          <div className="nameBox">
-                            <p className="name">Emeka Phillips</p>
-                            <p className="email">emeka.phillips@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="phone">08087427344</td>
-                      <td className="role">₦ 54,000</td>
-                      <td className="role">10 Nov, 2021</td>
-                      <td className="statusTd">
-                        <p className="status active">Active</p>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            viewUser(1);
-                          }}
-                          className="view"
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-                <tr></tr>
-              </tbody>
-            </table> */}
+          </div>
+          <div className="pagination-wrap">
+            <Pagination
+              color="primary"
+              onChange={handlePage}
+              count={
+                users &&
+                Math.ceil(parseInt(users._meta.pagination.total_count) / 10)
+              }
+              shape="rounded"
+            />
           </div>
         </div>
       </div>

@@ -43,9 +43,10 @@ import uploadImg from "../../../../hook/UploadImg";
 import { Avatar, Pagination } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
+import SelectField from "../../../../component/input/select";
+import RajiFile from "../../../../component/input/RajiFile";
+import RajiFile2 from "../../../../component/input/RajiFile2";
 const PrivateVendor = () => {
-  const list = [1, 2, 3];
-
   const [toggleBtn, setToggleBtn] = useState("individual");
   const [modal, setModal] = useState(false);
   const { register, formState, handleSubmit } = useForm();
@@ -80,7 +81,7 @@ const PrivateVendor = () => {
 
   // get vendor
   const {
-    data: vendor = [],
+    data: vendor = null,
     isLoading: loading,
     isError,
     error,
@@ -95,10 +96,6 @@ const PrivateVendor = () => {
     {
       id: "phone",
       label: "Mobile No",
-    },
-    {
-      id: "deal_value",
-      label: "Deal Value",
     },
     {
       id: "deal_posted",
@@ -116,16 +113,14 @@ const PrivateVendor = () => {
   };
   const [addVendor, { isLoading: loader }] = useAddVendorMutation();
 
-  const [img, setImg] = useState("");
-  const uploader = async (file) => {
-    let url = await uploadImg(file, "n3mtymsx");
-    setImg(url.secure_url);
-  };
   const onSubmit = async (vals) => {
+    console.log(vals.avatar[0]);
+    let url = await uploadImg(vals.avatar[0], "n3mtymsx");
     const payload = {
       ...vals,
-      phonenumber: phone,
-      photo: img,
+      mobileInformation: phone,
+      avatar: url.secure_url,
+      isPrivate: true,
     };
     console.log(payload);
 
@@ -160,6 +155,23 @@ const PrivateVendor = () => {
                 errors={formState.errors}
                 errMsg="invalid input"
               />
+              <Select
+                label="Type"
+                id="role"
+                name="type"
+                register={register}
+                errors={formState.errors}
+                selectOption={[
+                  {
+                    label: "Individual",
+                    value: "INDIVIDUAL",
+                  },
+                  {
+                    label: "Corporate",
+                    value: "CORPORATE",
+                  },
+                ]}
+              />
               <Input
                 type="email"
                 name="email"
@@ -172,36 +184,43 @@ const PrivateVendor = () => {
               />
 
               <Phone label={"Mobile no"} telVal={phone} setTelVal={setPhone} />
-              <div className="companyLogoDiv2">
+              <RajiFile2
+                name="avatar"
+                placeholder="Company Image"
+                label="Company Image"
+                id="image"
+                register={register}
+                errors={formState.errors}
+                errMsg="invalid  input"
+              />
+              <br />
+              {/* <div className="companyLogoDiv2">
                 <p className="label">Company Logo (Optional)</p>
 
                 <div className="logoCover">
                   <label htmlFor="company">
                     <img src={companyImg ? companyImg : saveImg} alt="save" />
                     <p>
-                      Each picture must not exceed 5 Mb Supported formats are
-                      *.jpg, *.gif and *.png
+                      Picture not exceed 5 Mb Supported formats are *.jpg, *.gif
+                      and *.png
                     </p>
                   </label>
                   <input
-                    type="file"
-                    ref={ref}
+                    type="image"
+                    name="file"
+                    {...register("image", {
+                      required: true,
+                    })}
                     onChange={(e) => {
                       FileChangeHandler(e);
-                      uploader(e.target.files[0]);
                     }}
                     hidden
-                    name="company"
                     id="company"
                   />
                 </div>
-              </div>
+              </div> */}
 
-              <SubmitBtn
-                isLoading={loader}
-                disable={img ? false : true}
-                btnText="Submit"
-              />
+              <SubmitBtn isLoading={loader} btnText="Submit" />
               <button onClick={closeModal} className="cancel">
                 Cancel
               </button>
@@ -221,25 +240,6 @@ const PrivateVendor = () => {
             </button>
           </div>
         </div>
-
-        {/* <div className="transactionNav">
-          <button
-            onClick={() => {
-              handleToggle("individual");
-            }}
-            className={`auction ${toggleBtn === "individual" ? "active" : ""}`}
-          >
-            Individual
-          </button>
-          <button
-            onClick={() => {
-              handleToggle("corporate");
-            }}
-            className={`payment ${toggleBtn === "corporate" ? "active" : ""}`}
-          >
-            Corporate
-          </button>
-        </div> */}
         {toggleBtn === "individual" && (
           <div className="whiteContainer" style={{ marginTop: "20px" }}>
             <div className="tableHead">
@@ -251,7 +251,7 @@ const PrivateVendor = () => {
               {!isError ? (
                 loading ? (
                   <LoadingTable />
-                ) : vendor.rows.length ? (
+                ) : vendor.data.length ? (
                   <motion.div
                     variants={moveIn}
                     animate="visible"
@@ -270,12 +270,12 @@ const PrivateVendor = () => {
                           orderBy={orderBy}
                           // onSelectAllClick={handleSelectAllClick}
                           onRequestSort={handleRequestSort}
-                          rowCount={vendor.rows.length}
+                          rowCount={vendor.data.length}
                           align="left"
                         />
                         <TableBody>
                           {stableSort(
-                            vendor.rows,
+                            vendor.data,
                             getComparator(order, orderBy)
                           ).map((item) => {
                             // const isItemSelected = isSelected(row.id);
@@ -303,9 +303,9 @@ const PrivateVendor = () => {
                                   </div>
                                 </TableCell>
                                 <TableCell align="left">
-                                  {item.phonenumber}
+                                  +{item.mobileInformation.mobile}
                                 </TableCell>
-                                <TableCell align="left">₦ 54,000</TableCell>
+                                {/* <TableCell align="left">₦ 54,000</TableCell> */}
 
                                 <TableCell align="left">5</TableCell>
                               </TableRow>
@@ -325,14 +325,17 @@ const PrivateVendor = () => {
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
-              <div className="pagination-wrap">
-                <Pagination
-                  color="primary"
-                  onChange={handlePage}
-                  count={vendor && vendor.total_pages}
-                  shape="rounded"
-                />
-              </div>
+            </div>
+            <div className="pagination-wrap">
+              <Pagination
+                color="primary"
+                onChange={handlePage}
+                count={
+                  vendor &&
+                  Math.ceil(parseInt(vendor._meta.pagination.total_count) / 10)
+                }
+                shape="rounded"
+              />
             </div>
           </div>
         )}

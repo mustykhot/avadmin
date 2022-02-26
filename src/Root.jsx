@@ -23,7 +23,6 @@ import Users from "./pages/admin/Dashboard/Users";
 import UsersProfile from "./pages/admin/Dashboard/UsersProfile";
 import Login from "./pages/admin/Login";
 import LoginNormal from "./pages/admin/Login/login";
-import Signup from "./pages/admin/Login/signup";
 import Reset from "./pages/admin/ResetPassword/reset";
 import SetPassword from "./pages/admin/ResetPassword/setPassword";
 const Root = () => {
@@ -62,7 +61,6 @@ const Root = () => {
             <Route path="/shipping/:id" element={<ShippingDetail />} />
             <Route path="/" element={<Login />} />
             <Route path="/login" element={<LoginNormal />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/forget" element={<Reset />} />
             <Route path="/set_password" element={<SetPassword />} />
           </Routes>

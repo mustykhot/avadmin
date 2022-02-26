@@ -127,29 +127,6 @@ export const truncateString = (str, num) => {
   }
 };
 
-export const toaster = (type, msg) => {
-  switch (type) {
-    case "success":
-      toastr.success("", msg, {
-        icon: <CheckIcon color="white" />,
-      });
-      break;
-    case "error":
-      toastr.error("", msg, {
-        icon: <ErrorIcon color="white" />,
-      });
-      break;
-    case "warn":
-      toastr.warning("", msg, {
-        icon: <WarningIcon color="white" />,
-      });
-      break;
-
-    default:
-      break;
-  }
-};
-
 export function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -179,3 +156,27 @@ export function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
+
+// custom toaster
+export const toaster = (type, msg) => {
+  switch (type) {
+    case "success":
+      toastr.success("", msg, {
+        icon: <CheckIcon color="white" />,
+      });
+      break;
+    case "error":
+      toastr.error("", msg, {
+        icon: <ErrorIcon color="white" />,
+      });
+      break;
+    case "warn":
+      toastr.warning("Warning", msg, {
+        icon: <WarningIcon color="white" />,
+      });
+      break;
+
+    default:
+      break;
+  }
+};

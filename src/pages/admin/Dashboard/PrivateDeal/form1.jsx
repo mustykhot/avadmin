@@ -33,7 +33,7 @@ const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
   const [formStep, setFormStep] = useState(0);
-  console.log(formStep);
+
   const [imageList, setImageList] = useState([]);
   // states
 

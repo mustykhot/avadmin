@@ -28,18 +28,20 @@ const LoginNormal = () => {
     try {
       // call login trigger from rtk query
       const response = await login(vals).unwrap();
-
+      console.log(response.data.data, "hhhhhhhhh");
       // set user details and token in the state
-      dispatch(setUserDetails(response));
-      dispatch(setUserToken(response));
+      dispatch(setUserDetails(response.data.data));
+      dispatch(setUserToken(response._meta.token));
 
-      toastr.success("Success", "Login Successful");
+      toastr.success("", "Login Successful");
       setTimeout(() => {
-        navigate("/dashboard", { replace: true });
+        navigate("/category", { replace: true });
       }, 1000);
     } catch (err) {
-      // console.log(err.response.data, "err");
-      if (err) toastr.error("Error", err.message);
+      console.log(err.data._meta.error.message, "err");
+
+      if (err && err.data.status !== 401)
+        toastr.error("", err.data._meta.error.message);
       else toastr.error("Error", "Something went wrong, please try again...");
     }
   };

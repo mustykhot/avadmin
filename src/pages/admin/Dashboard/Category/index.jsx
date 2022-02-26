@@ -36,12 +36,13 @@ import {
   stableSort,
   truncateString,
 } from "../../../../utils/utils";
-import { IconButton } from "@mui/material";
+import { IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 import RajiFile from "../../../../component/input/RajiFile";
 import { moveIn } from "../../../../utils/variants";
 import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
+import uploadImg from "../../../../hook/UploadImg";
 // dropdown
 export const SubscribeDropDown = ({
   id,
@@ -116,20 +117,29 @@ const Category = () => {
   const [editModal, setEditModal] = useState(false);
   const [editId, setEditId] = useState("");
   const [imgupload, setImgUpload] = useState("");
+
+  // pagination
+
+  const [page, setPage] = useState(1);
+  const handlePage = (e, value) => {
+    setPage(value);
+  };
+
   // get category
   const {
-    data: category = [],
+    data: category = null,
     isLoading: loading,
     isError,
-    error,
-  } = useGetAllCategoryQuery();
+  } = useGetAllCategoryQuery(page);
 
   // add category
   const [addResponse, { isLoading }] = useAddCategoryMutation();
   const onSubmit = async (vals) => {
+    let url = await uploadImg(vals.image[0], "n3mtymsx");
+
     const payload = {
       ...vals,
-      image: imgupload,
+      image: url.secure_url,
     };
     console.log(payload);
     try {
@@ -158,10 +168,11 @@ const Category = () => {
   };
   const editCategory = async (vals) => {
     console.log(vals);
+    let url = await uploadImg(vals.image[0], "n3mtymsx");
 
     const payload = {
       ...vals,
-      image: imgupload,
+      image: url.secure_url,
     };
     try {
       const response = await editResponse({
@@ -181,8 +192,14 @@ const Category = () => {
   const [activateResponse, { isLoading: activateLoading }] =
     useActivateCategoryMutation();
   const activateCategory = async (id) => {
+    const payload = {
+      active: true,
+    };
     try {
-      const response = await activateResponse({ id: id }).unwrap();
+      const response = await activateResponse({
+        credentials: payload,
+        id: id,
+      }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -195,8 +212,14 @@ const Category = () => {
   const [disableResponse, { isLoading: disableLoading }] =
     useDisableCategoryMutation();
   const disableCategory = async (id) => {
+    const payload = {
+      active: false,
+    };
     try {
-      const response = await disableResponse({ id: id }).unwrap();
+      const response = await disableResponse({
+        credentials: payload,
+        id: id,
+      }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -282,11 +305,11 @@ const Category = () => {
                     placeholder="Categoy Image"
                     label="Category Image"
                     id="image"
-                    setFiler={setImgUpload}
+                    // setFiler={setImgUpload}
                   />
                   <InputField
                     type="text"
-                    name="categoryName"
+                    name="name"
                     placeholder="Category Name"
                     label="Name"
                     id="category_name"
@@ -316,7 +339,7 @@ const Category = () => {
                   <SubmitBtn
                     isLoading={isLoading}
                     // disable={imgupload ? false : true}
-                    disable={imgupload ? false : true}
+                    // disable={imgupload ? false : true}
                     btnText="Add Category"
                   />
                   <button onClick={closeModal} className="cancel">
@@ -404,7 +427,11 @@ const Category = () => {
           <div className="overflowTable">
             {loading ? (
               <LoadingTable />
-            ) : category.length ? (
+            ) : isError ? (
+              <NoProduct msg="Something went wrong...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            ) : category.data.length ? (
               <motion.div
                 variants={moveIn}
                 animate="visible"
@@ -415,134 +442,78 @@ const Category = () => {
                   <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                     <EnhancedTableHead
                       headCells={headCells}
-                      // numSelected={selected.length}
                       order={order}
                       orderBy={orderBy}
-                      // onSelectAllClick={handleSelectAllClick}
                       onRequestSort={handleRequestSort}
-                      rowCount={category.length}
+                      rowCount={category.data.length}
                       align="left"
                     />
                     <TableBody>
-                      {stableSort(category, getComparator(order, orderBy)).map(
-                        (item) => {
-                          // const isItemSelected = isSelected(row.id);
-                          // const labelId = `enhanced-table-checkbox-${index}`
-                          return (
-                            <TableRow
-                              // hover
-                              // role="checkbox"
-                              // aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={item._id}
-                              // selected={isItemSelected}
-                            >
-                              <TableCell align="left">
-                                {truncateString(item._id, 10)}
-                                {/* {item.id} */}
-                              </TableCell>
-                              <TableCell align="left">
-                                {item.categoryName}
-                              </TableCell>
-                              <TableCell align="left">
-                                {truncateString(item.description, 20)}
-                              </TableCell>
-                              <TableCell align="left">
-                                {item.productsAssigned}
-                              </TableCell>
-                              <TableCell align="left">
-                                <p
-                                  className={`status ${
-                                    item.status === "active" ? "active" : "red"
-                                  }`}
-                                >
-                                  {item.status}
-                                </p>
-                              </TableCell>
-                              <TableCell className="action" align="left">
-                                <SubscribeDropDown
-                                  id={item._id}
-                                  activate={activateCategory}
-                                  disable={disableCategory}
-                                  closeModal={closeEditModal}
-                                  setEditId={setEditId}
-                                  deleteCat={deleteCat}
-                                  onEdit={onEdit}
-                                  values={{
-                                    categoryName: item.categoryName,
-                                    description: item.description,
-                                    percentageIncrease: item.percentageIncrease,
-                                    charge: item.charge,
-                                  }}
-                                />
-                              </TableCell>
-                            </TableRow>
-                          );
-                        }
-                      )}
+                      {stableSort(
+                        category.data,
+                        getComparator(order, orderBy)
+                      ).map((item) => {
+                        return (
+                          <TableRow tabIndex={-1} key={item._id}>
+                            <TableCell align="left">
+                              {truncateString(item._id, 10)}
+                            </TableCell>
+                            <TableCell align="left">{item.name}</TableCell>
+                            <TableCell align="left">
+                              {truncateString(item.description, 20)}
+                            </TableCell>
+                            <TableCell align="left">
+                              {item.productsAssigned}
+                            </TableCell>
+                            <TableCell align="left">
+                              <p
+                                className={`status ${
+                                  item.active ? "active" : "red"
+                                }`}
+                              >
+                                {item.active ? "Active" : "Inactive"}
+                              </p>
+                            </TableCell>
+                            <TableCell className="action" align="left">
+                              <SubscribeDropDown
+                                id={item._id}
+                                activate={activateCategory}
+                                disable={disableCategory}
+                                closeModal={closeEditModal}
+                                setEditId={setEditId}
+                                deleteCat={deleteCat}
+                                onEdit={onEdit}
+                                values={{
+                                  categoryName: item.categoryName,
+                                  description: item.description,
+                                  percentageIncrease: item.percentageIncrease,
+                                  charge: item.charge,
+                                }}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </TableContainer>
               </motion.div>
             ) : (
-              // <table className="unset">
-              //   <thead>
-              //     <tr>
-              //       <th>ID</th>
-              //       <th>Name</th>
-              //       <th className="extraTh">Description</th>
-              //       <th className="extraTh">
-              //         Products Assigned <img src={shape} alt="shape" />{" "}
-              //       </th>
-              //       <th className="extraTh">
-              //         Status <img src={shape} alt="shape" />{" "}
-              //       </th>
-              //       <th></th>
-              //     </tr>
-              //   </thead>
-              //   <tbody>
-              //     {category.map((item, i) => {
-              //       return (
-              //         <tr>
-              //           <td className="">{i + 1}</td>
-              //           <td className="phone">{item.categoryName}</td>
-              //           <td className="collect">{item.description}</td>
-              //           <td className="phone">{item.productsAssigned}</td>
-              //           <td className="statusTd">
-              //             <p
-              //               className={`status ${
-              //                 item.status === "active" ? "active" : "red"
-              //               }`}
-              //             >
-              //               {item.status}
-              //             </p>
-              //           </td>
-              //           <td className="action">
-              //             <TableDrop
-              //               fbutton={"Actvate"}
-              //               sbutton={"Disable"}
-              //               tbutton={"Edit"}
-              //               fhandle={() => {
-              //                 activateCategory(item._id);
-              //               }}
-              //               shandle={() => {
-              //                 disableCategory(item._id);
-              //               }}
-              //               thandle={() => {
-              //                 setEditId(item._id);
-              //                 closeEditModal();
-              //               }}
-              //             />
-              //           </td>
-              //         </tr>
-              //       );
-              //     })}
-              //   </tbody>
-              // </table>
               <NoProduct msg="No Data Yet...">
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             )}
+          </div>
+          <div className="pagination-wrap">
+            <Pagination
+              color="primary"
+              onChange={handlePage}
+              count={
+                category &&
+                Math.ceil(parseInt(category._meta.pagination.total_count) / 10)
+              }
+              shape="rounded"
+            />
           </div>
         </div>
       </div>

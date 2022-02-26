@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
 import { ReactComponent as Fill } from "../../../../assets/icons/Fill.svg";
@@ -35,7 +36,7 @@ import Table from "@mui/material/Table";
 import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import { getComparator, stableSort } from "../../../../utils/utils";
 import DropDownWrapper from "../../../../component/DropDownWrapper";
-import { IconButton } from "@mui/material";
+import { IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Link } from "react-router-dom";
 import NoProduct from "../../../../component/NoProduct";
@@ -112,12 +113,19 @@ const Administrator = () => {
     setModal(!modal);
   };
 
+  // pagination
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const handlePage = (e, value) => {
+    setPage(value);
+  };
+
   const {
     data: admins = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetAdminsQuery();
+  } = useGetAdminsQuery({ search, page });
   console.log(admins, error);
 
   // table magic
@@ -132,7 +140,7 @@ const Administrator = () => {
 
   const [update, { isLoading }] = useUpdateMutation();
   const [id, setId] = useState(null);
-  console.log(id, "idddddd");
+  console.log(id, "");
   const [active, setActive] = useState(null);
   useEffect(() => {
     if (id) {
@@ -201,7 +209,14 @@ const Administrator = () => {
         <div className="whiteContainer">
           <div className="tableHead">
             <p className="tableTitle">Admin Users</p>
-            <input type="text" placeholder="Search" className="search" />
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              className="search"
+            />
           </div>
 
           <div className="downloadTable" style={{ display: "none" }}>
@@ -217,17 +232,16 @@ const Administrator = () => {
               </thead>
               <tbody>
                 {admins &&
-                  admins.message !== "no admin available!" &&
-                  admins.admins.length &&
-                  admins.admins.map((item) => {
+                  admins.data.length &&
+                  admins.data.map((item) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={item._id}>
                         <td>
                           {" "}
                           <p className="name">{`${item.firstName} ${item.lastName}`}</p>
                         </td>
-                        <td align="left">{item.phone}</td>
-                        <td align="left">{item.role}</td>
+                        <td align="left">{item.mobile}</td>
+                        <td align="left">{item.userType}</td>
                         <td> {item.active ? "Active" : "Inactive"}</td>
                       </tr>
                     );
@@ -243,7 +257,7 @@ const Administrator = () => {
               </NoProduct>
             ) : loading ? (
               <LoadingTable />
-            ) : admins.admins ? (
+            ) : admins.data.length ? (
               <motion.div
                 variants={moveIn}
                 animate="visible"
@@ -257,12 +271,12 @@ const Administrator = () => {
                       order={order}
                       orderBy={orderBy}
                       onRequestSort={handleRequestSort}
-                      rowCount={admins.admins.length}
+                      rowCount={admins.data.length}
                       align="left"
                     />
                     <TableBody>
                       {stableSort(
-                        admins.admins,
+                        admins.data,
                         getComparator(order, orderBy)
                       ).map((row, index) => {
                         return (
@@ -270,7 +284,7 @@ const Administrator = () => {
                             hover
                             role="checkbox"
                             tabIndex={-1}
-                            key={row.id}
+                            key={row._id}
                           >
                             <TableCell align="left">
                               {" "}
@@ -286,8 +300,8 @@ const Administrator = () => {
                                 </div>
                               </div>
                             </TableCell>
-                            <TableCell align="left">{row.phone}</TableCell>
-                            <TableCell align="left">{row.role}</TableCell>
+                            <TableCell align="left">{row.mobile}</TableCell>
+                            <TableCell align="left">{row.userType}</TableCell>
 
                             {/* <TableCell align="left">
                             <p
@@ -319,7 +333,7 @@ const Administrator = () => {
                                 setActive={setActive}
                                 setId={setId}
                                 submit={onSubmit}
-                                id={row.id}
+                                id={row._id}
                               />
                             </TableCell>
                           </TableRow>
@@ -334,51 +348,17 @@ const Administrator = () => {
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             )}
-            {/* <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Mobile No</th>
-                  <th className="extraTh">
-                    Admin Role <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th className="extraTh">
-                    Status <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((item) => {
-                  return (
-                    <tr>
-                      <td className="nameTd">
-                        <div className="nameDiv">
-                          <img className="userImg" src={userImg} alt="user" />
-                          <div className="nameBox">
-                            <p className="name">Emeka Phillips</p>
-                            <p className="email">emeka.phillips@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="phone">08087427344</td>
-                      <td className="role">Super Admin</td>
-                      <td className="statusTd">
-                        <p className="status active">Active</p>
-                      </td>
-                      <td className="action">
-                        <TableDrop
-                          fbutton={"Activate"}
-                          sbutton={"Deactivate"}
-                          tbutton={"Edit"}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-      
-              </tbody>
-            </table> */}
+          </div>
+          <div className="pagination-wrap">
+            <Pagination
+              color="primary"
+              onChange={handlePage}
+              count={
+                admins &&
+                Math.ceil(parseInt(admins._meta.pagination.total_count) / 10)
+              }
+              shape="rounded"
+            />
           </div>
         </div>
       </div>

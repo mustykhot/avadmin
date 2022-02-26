@@ -24,6 +24,7 @@ import {
 } from "../../../../services/api";
 import { toastr } from "react-redux-toastr";
 import { useSelector } from "react-redux";
+import uploadImg from "../../../../hook/UploadImg";
 const Account = () => {
   const list = [1, 2, 3];
   const [modal, setModal] = useState(false);
@@ -45,10 +46,12 @@ const Account = () => {
   const [updatePassword, { isLoading: passLoading }] =
     useUpdatePasswordMutation();
   const onSubmit = async (vals) => {
+    let url = await uploadImg(vals.image[0], "n3mtymsx");
+
     const payload = {
       ...vals,
-      phone: phone,
-      image: imgupload,
+      mobile: phone,
+      image: url.secure_url,
     };
     console.log(payload);
     setIsLoading(false);
@@ -70,10 +73,14 @@ const Account = () => {
   const onSubmit2 = async (vals) => {
     console.log(vals);
     setIsLoading(false);
+    const payload = {
+      currentPassword: vals.password,
+      password: vals.newPassword,
+    };
 
     try {
       // call login trigger from rtk query
-      const response = await updatePassword(vals).unwrap();
+      const response = await updatePassword(payload).unwrap();
       console.log(response);
       toastr.success("Success", "Successful");
     } catch (err) {
@@ -174,11 +181,7 @@ const Account = () => {
                       setTelVal={setPhone}
                     />
 
-                    <SubmitBtn
-                      isLoading={isLoading}
-                      btnText="Update"
-                      disable={imgupload ? false : true}
-                    />
+                    <SubmitBtn isLoading={isLoading} btnText="Update" />
                   </form>
                 </FormProvider>
               </div>
@@ -206,14 +209,14 @@ const Account = () => {
                       errMsg="invalid password"
                     />
 
-                    <InputField
+                    {/* <InputField
                       type="password"
                       name="confirmPassword"
                       label="Confirm Password"
                       placeholder="Confirm Password"
                       id="password"
                       errMsg="invalid password"
-                    />
+                    /> */}
 
                     <SubmitBtn isLoading={passLoading} btnText="Update" />
                   </form>

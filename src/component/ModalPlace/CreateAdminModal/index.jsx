@@ -21,7 +21,10 @@ const CreateAdminModal = ({ closeModal }) => {
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      phone,
+      mobile: phone,
+      isAdmin: true,
+      invitationRedirectUrl: "www.google.com",
+      userType: "admin",
     };
     try {
       // call login trigger from rtk query

@@ -156,14 +156,14 @@ const UsersProfile = () => {
 
           <div className="profileFlex">
             <ProfileBox
-              name={user && `${user.firstName} ${user.lastName}`}
-              email={user && user.email}
+              name={user && `${user.data.firstName} ${user.data.lastName}`}
+              email={user && user.data.email}
               account={id}
-              tel={user && user.phone}
+              tel={user && user.data.mobile}
               billing={
                 " 235 Ikorodu road, Anthony-iyanaoworo, Lagos state, Nigeria"
               }
-              img={user && user.image}
+              img={user && user.data.image}
             />
 
             <div className="activityBox">

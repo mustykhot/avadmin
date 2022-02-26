@@ -3,12 +3,6 @@ import InputErrorMsg from "./InputErrorMsg";
 import "react-phone-input-2/lib/style.css";
 import "./style.scss";
 
-const trapSpacesForRequiredFields = (value, notRequired) => {
-  if (notRequired !== true) {
-    return !!value.trim();
-  }
-};
-
 const Phone = ({
   id,
   name,
@@ -32,6 +26,7 @@ const Phone = ({
           country={"us"}
           value={telVal}
           onChange={(phone) => {
+            console.log(phone);
             setTelVal(phone);
           }}
         />

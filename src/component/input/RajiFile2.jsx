@@ -4,19 +4,16 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import "./upload.scss";
 import uploadImg from "../../hook/UploadImg";
 
-const RajiFile = ({
+const RajiFile2 = ({
   id,
   name,
   required = true,
   label,
   setFiler,
+  register,
+  errors,
   placeholder = "Choose file to upload",
 }) => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
-
   const [fileName, setFileName] = useState("");
 
   const FileChangeHandler = (e) => {
@@ -63,4 +60,4 @@ const RajiFile = ({
     </div>
   );
 };
-export default RajiFile;
+export default RajiFile2;

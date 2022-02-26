@@ -14,17 +14,17 @@ const authSlice = createSlice({
     setUserDetails: (state, { payload }) => {
       console.log(payload, "loll");
       state.user = {
-        fname: payload.firstName,
-        lname: payload.lastName,
-        isAdmin: payload.isAdmin,
-        phone: payload.phone,
-        role: payload.role,
-        email: payload.email,
-        id: payload._id,
+        fname: payload.data.firstName,
+        lname: payload.data.lastName,
+        isAdmin: payload.data.isAdmin,
+        phone: payload.data.mobile,
+        location: payload.data.location,
+        email: payload.data.email,
+        id: payload.data._id,
       };
     },
     setUserToken: (state, { payload }) => {
-      state.userToken = payload.token;
+      state.userToken = payload._meta.token;
     },
     loggingOut: (state) => {
       state.userToken = "";
@@ -39,7 +39,7 @@ export const { setUserDetails, loggingOut, setUserToken } = actions;
 export const logout = () => (dispatch) => {
   dispatch(loggingOut());
   window.localStorage.clear();
-  window.location = "/login";
+  window.location = "/";
 };
 
 // selector to select user details from the store
