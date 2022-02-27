@@ -150,8 +150,11 @@ const Dashboard = () => {
   // if (isLoading) {
   //   return <Loader />;
   // }
+  // if (isError) {
+  //   return <ErrorMsg error={error} />;
+  // }
   if (isError) {
-    return <ErrorMsg error={error} />;
+    return <p>errror</p>;
   }
 
   const getPercent = (calc, total) => {
