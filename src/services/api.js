@@ -175,14 +175,16 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getAllPrivateDeal: builder.query({
-      query: ({ page }) => `private?page=${page}&limit=10`,
+      query: ({ page, search }) =>
+        `deals?population=[{"path" : "user" , "select" : "firstName lastName"},"product"]&page=${page}&search=${search}&isPrivate=true&type=AUCTION`,
       providesTags: ["privatedeal"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => response,
     }),
     getAllPrivateBuyDeal: builder.query({
-      query: ({ page }) => `private/buy-now?page=${page}&limit=10`,
+      query: ({ page, search }) =>
+        `deals?population=[{"path" : "user" , "select" : "firstName lastName"},"product"]&page=${page}&search=${search}&isPrivate=true&type=BUY_NOW`,
       providesTags: ["privatedeal"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => response,
     }),
     addPrivateDeal: builder.mutation({
       query: (credentials) => ({
@@ -193,16 +195,10 @@ export const authApi = createApi({
       invalidatesTags: ["privatedeal"],
     }),
     activatePrivateDeal: builder.mutation({
-      query: ({ id }) => ({
-        url: `private/deals-activate/${id}`,
+      query: ({ credentials, id }) => ({
+        url: `deals/${id}`,
         method: "PUT",
-      }),
-      invalidatesTags: ["privatedeal"],
-    }),
-    deactivatePrivateDeal: builder.mutation({
-      query: ({ id }) => ({
-        url: `private/deals/deactivate/${id}`,
-        method: "PUT",
+        body: credentials,
       }),
       invalidatesTags: ["privatedeal"],
     }),
@@ -377,7 +373,7 @@ export const {
   useGetAllDealQuery,
   useApproveDealMutation,
   // useRejectDealMutation,
-  useDeactivatePrivateDealMutation,
+
   useGetTransactionQuery,
   useGetEachTransactionQuery,
   useGetAllPrivateBuyDealQuery,

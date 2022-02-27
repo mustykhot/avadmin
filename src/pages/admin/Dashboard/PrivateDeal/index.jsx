@@ -20,7 +20,6 @@ import { useNavigate } from "react-router";
 import {
   useActivatePrivateDealMutation,
   // useActivateDealMutation,
-  useDeactivatePrivateDealMutation,
   useGetAllPrivateBuyDealQuery,
   useGetAllPrivateDealQuery,
 } from "../../../../services/api";
@@ -46,7 +45,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 // dropdown
-export const SubscribeDropDown = ({ id, disable, activateDeal }) => (
+export const SubscribeDropDown = ({ id, activateDeal }) => (
   <DropDownWrapper
     className="more-actions"
     action={
@@ -66,7 +65,7 @@ export const SubscribeDropDown = ({ id, disable, activateDeal }) => (
 
     <button
       onClick={() => {
-        disable(id);
+        activateDeal({ type: false, id: id });
       }}
       className="btn-noBg"
     >
@@ -75,7 +74,7 @@ export const SubscribeDropDown = ({ id, disable, activateDeal }) => (
 
     <button
       onClick={() => {
-        activateDeal(id);
+        activateDeal({ type: true, id: id });
       }}
       className="btn-noBg"
     >
@@ -104,16 +103,6 @@ const PrivateDeal = () => {
   const closeModal = () => {
     setModal(!modal);
   };
-  const roleOption = [
-    {
-      label: "None Financial",
-      value: "none",
-    },
-    {
-      label: "None Financial2",
-      value: "none2",
-    },
-  ];
 
   const [formLevel, setFormLevel] = useState(1);
   const handleFormLevel = (type) => {
@@ -136,13 +125,16 @@ const PrivateDeal = () => {
   const handlePage2 = (e, value) => {
     setPage2(value);
   };
+  const [search, setSearch] = useState("");
+  const [search2, setSearch2] = useState("");
+
   // get deal
   const {
     data: deal = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetAllPrivateDealQuery({ page: page });
+  } = useGetAllPrivateDealQuery({ page: page, search });
   console.log(deal);
   // get buynow
   const {
@@ -150,43 +142,22 @@ const PrivateDeal = () => {
     isLoading: buyloading,
     isError: isBuyError,
     error: buyError,
-  } = useGetAllPrivateBuyDealQuery({ page: page2 });
+  } = useGetAllPrivateBuyDealQuery({ page: page2, search2 });
   console.log(buydeal);
 
-  // activate Deal
-  // const [activateResponse, { isLoading: activateLoading }] =
-  //   useActivateDealMutation();
-  // const activateDeal = async (id) => {
-  //   try {
-  //     const response = await activateResponse({ id: id }).unwrap();
-
-  //     toastr.success("Success", response.message);
-  //   } catch (err) {
-  //     if (err.data) toastr.error("Error", err.data.message);
-  //     else toastr.error("Error", "Something went wrong, please try again...");
-  //   }
-  // };
-
-  // disable category
-  const [disableResponse, { isLoading: disableLoading }] =
-    useDeactivatePrivateDealMutation();
-  const deactivateDeal = async (id) => {
-    try {
-      const response = await disableResponse({ id: id }).unwrap();
-
-      toastr.success("Success", response.message);
-    } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
-    }
-  };
-
-  // reject deal
+  // update deal
   const [activateResponse, { isLoading: rejectoading }] =
     useActivatePrivateDealMutation();
-  const activateDeal = async (id) => {
+  const activateDeal = async ({ type, id }) => {
+    let payload = {
+      actve: type,
+    };
+    console.log(payload);
     try {
-      const response = await activateResponse({ id: id }).unwrap();
+      const response = await activateResponse({
+        credentials: payload,
+        id: id,
+      }).unwrap();
 
       toastr.success("Success", response.message);
     } catch (err) {
@@ -231,6 +202,7 @@ const PrivateDeal = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  console.log(deal, buydeal);
 
   return (
     <AdminDashboardLayout active="deal">
@@ -289,8 +261,8 @@ const PrivateDeal = () => {
               <p className="tableTitle">Auction</p>
               <input
                 type="text"
-                onKeyPress={(e) => {
-                  handleSearch(e.target.value);
+                onChange={(e) => {
+                  setSearch(e.target.value);
                 }}
                 placeholder="Search"
                 className="search"
@@ -312,8 +284,8 @@ const PrivateDeal = () => {
                 </thead>
                 <tbody>
                   {deal &&
-                    deal.rows &&
-                    deal.rows.map((item) => {
+                    deal.data.length &&
+                    deal.data.map((item) => {
                       return (
                         <tr>
                           <td> {item.vendor && `${item.vendor.name}`}</td>
@@ -337,7 +309,7 @@ const PrivateDeal = () => {
               {!isError ? (
                 loading ? (
                   <LoadingTable />
-                ) : deal.rows ? (
+                ) : deal.data.length ? (
                   <motion.div
                     variants={moveIn}
                     animate="visible"
@@ -351,17 +323,15 @@ const PrivateDeal = () => {
                       >
                         <EnhancedTableHead
                           headCells={headCells}
-                          // numSelected={selected.length}
                           order={order}
                           orderBy={orderBy}
-                          // onSelectAllClick={handleSelectAllClick}
                           onRequestSort={handleRequestSort}
-                          rowCount={deal.rows.length}
+                          rowCount={deal.data.length}
                           align="left"
                         />
                         <TableBody>
                           {stableSort(
-                            deal.rows,
+                            deal.data,
                             getComparator(order, orderBy)
                           ).map((item) => {
                             // const isItemSelected = isSelected(row.id);
@@ -379,12 +349,13 @@ const PrivateDeal = () => {
                                   <div className="nameDiv">
                                     <div className="nameBox">
                                       <p className="name">
-                                        {item.vendor && `${item.vendor.name}`}
+                                        {item.user &&
+                                          `${item.user.firstName} ${item.user.lastName}`}
                                       </p>
 
-                                      <p className="email">
-                                        {item.vendor && `${item.vendor.email}`}
-                                      </p>
+                                      {/* <p className="email">
+                                        {item.user && `${item.user.email}`}
+                                      </p> */}
                                     </div>
                                   </div>
                                 </TableCell>
@@ -409,19 +380,15 @@ const PrivateDeal = () => {
                                 <TableCell align="left">
                                   <p
                                     className={`status ${
-                                      item.status === "Active"
-                                        ? "active"
-                                        : "red"
+                                      item.active ? "active" : "red"
                                     }`}
                                   >
-                                    {item.status}
+                                    {item.active ? "Active" : "Inactive"}
                                   </p>
                                 </TableCell>
                                 <TableCell className="action" align="left">
                                   <SubscribeDropDown
                                     id={item._id}
-                                    // activate={activateDeal}
-                                    disable={deactivateDeal}
                                     activateDeal={activateDeal}
                                   />
                                 </TableCell>
@@ -442,14 +409,17 @@ const PrivateDeal = () => {
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
-              <div className="pagination-wrap">
-                <Pagination
-                  color="primary"
-                  onChange={handlePage}
-                  count={deal && deal.total_pages}
-                  shape="rounded"
-                />
-              </div>
+            </div>
+            <div className="pagination-wrap">
+              <Pagination
+                color="primary"
+                onChange={handlePage}
+                count={
+                  deal &&
+                  Math.ceil(parseInt(deal._meta.pagination.total_count) / 10)
+                }
+                shape="rounded"
+              />
             </div>
           </div>
         )}
@@ -457,7 +427,14 @@ const PrivateDeal = () => {
           <div className="whiteContainer">
             <div className="tableHead">
               <p className="tableTitle">Buy Now</p>
-              <input type="text" placeholder="Search" className="search" />
+              <input
+                onChange={(e) => {
+                  setSearch2(e.target.value);
+                }}
+                type="text"
+                placeholder="Search"
+                className="search"
+              />
             </div>
             <div className="downloadTable" style={{ display: "none" }}>
               <table id="table-to-xls2">
@@ -474,8 +451,8 @@ const PrivateDeal = () => {
                 </thead>
                 <tbody>
                   {buydeal &&
-                    buydeal.rows &&
-                    buydeal.rows.map((item) => {
+                    buydeal.data.length &&
+                    buydeal.data.map((item) => {
                       return (
                         <tr>
                           <td> {item.vendor && `${item.vendor.name}`}</td>
@@ -498,7 +475,7 @@ const PrivateDeal = () => {
               {!isBuyError ? (
                 buyloading ? (
                   <LoadingTable />
-                ) : buydeal.rows.length ? (
+                ) : buydeal.data.length ? (
                   <motion.div
                     variants={moveIn}
                     animate="visible"
@@ -512,17 +489,15 @@ const PrivateDeal = () => {
                       >
                         <EnhancedTableHead
                           headCells={headCells}
-                          // numSelected={selected.length}
                           order={order}
                           orderBy={orderBy}
-                          // onSelectAllClick={handleSelectAllClick}
                           onRequestSort={handleRequestSort}
-                          rowCount={buydeal.rows.length}
+                          rowCount={buydeal.data.length}
                           align="left"
                         />
                         <TableBody>
                           {stableSort(
-                            buydeal.rows,
+                            buydeal.data,
                             getComparator(order, orderBy)
                           ).map((item) => {
                             // const isItemSelected = isSelected(row.id);
@@ -581,8 +556,6 @@ const PrivateDeal = () => {
                                 <TableCell className="action" align="left">
                                   <SubscribeDropDown
                                     id={item._id}
-                                    // activate={activateDeal}
-                                    disable={deactivateDeal}
                                     activateDeal={activateDeal}
                                   />
                                 </TableCell>
@@ -603,14 +576,17 @@ const PrivateDeal = () => {
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
               )}
-              <div className="pagination-wrap">
-                <Pagination
-                  color="primary"
-                  onChange={handlePage2}
-                  count={buydeal && buydeal.total_pages}
-                  shape="rounded"
-                />
-              </div>
+            </div>
+            <div className="pagination-wrap">
+              <Pagination
+                color="primary"
+                onChange={handlePage}
+                count={
+                  buydeal &&
+                  Math.ceil(parseInt(buydeal._meta.pagination.total_count) / 10)
+                }
+                shape="rounded"
+              />
             </div>
           </div>
         )}

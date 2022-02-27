@@ -132,8 +132,7 @@ const Auction = () => {
   let navigate = useNavigate();
   const [searching, setSearchIng] = useState("");
   const [search2, setSearch2] = useState("");
-  console.log(searching, "search");
-  console.log(search2, "search2");
+
   const handleToggle = (type) => {
     setToggleBtn(type);
   };

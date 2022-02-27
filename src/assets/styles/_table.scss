@@ -10,6 +10,9 @@
 
   color: #2d4450;
 }
+.css-rorn0c-MuiTableContainer-root {
+  @include webkit;
+}
 @mixin overflowTable {
   width: 100%;
   //   overflow-y: auto;

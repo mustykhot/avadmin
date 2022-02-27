@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import FormHeadFlex from "../../../../component/formHeadFlex";
 import Input from "../../../../component/input";
 import InputAmount from "../../../../component/input/inputAmount";
-
+import MenuItem from "@mui/material/MenuItem";
 import { useRef } from "react";
 import Textarea from "../../../../component/input/textarea";
 import saveImg from "../../../../assets/icons/img.svg";
@@ -28,11 +28,12 @@ import InputField from "../../../../component/input/indexField";
 import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 import uploadImg from "../../../../hook/UploadImg";
 import { moveIn, moveLeft } from "../../../../utils/variants";
+import { Select } from "@mui/material";
 
 const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
-  const [formStep, setFormStep] = useState(3);
+  const [formStep, setFormStep] = useState(2);
 
   const [imageList, setImageList] = useState([]);
   // states
@@ -47,38 +48,13 @@ const PrivateDealForm1 = () => {
     error,
   } = useGetAllCategoryQuery(1);
 
-  const roleOption = [
-    {
-      label: "None Financial",
-      value: "none",
-    },
-    {
-      label: "None Financial2",
-      value: "none2",
-    },
-  ];
-
   // next step
   const completeFormStep = () => {
-    // console.log(methods.formState.error);
-    // console.log(methods.getValues());
-    // if (methods.formState.isValid) {
-    //   setFormStep((cur) => cur + 1);
-    // }
     setFormStep((cur) => cur + 1);
   };
   const prevFormStep = () => {
     setFormStep((cur) => cur - 1);
   };
-
-  // const goNext = (num) => {
-  //   if (methods.formState.isValid) {
-  //     setPresentStep(presentStep + num);
-  //     console.log(methods.getValues());
-  //   } else {
-  //     console.log(methods.formState.errors, "not valid");
-  //   }
-  // };
 
   // file adding
   const ref = useRef();
@@ -96,32 +72,7 @@ const PrivateDealForm1 = () => {
     setImgUpload([...imgupload, url.secure_url]);
   };
 
-  console.log(imgupload, "imgupload");
-
-  // function for image gangan
-
-  // const [isSelected, setIsSelected] = useState(false);
   const [images, setImages] = useState([]);
-
-  function createFileList(files) {
-    var b = new ClipboardEvent("").clipboardData || new DataTransfer();
-    for (var i = 0, len = files.length; i < len; i++) b.items.add(files[i]);
-    return b.files;
-  }
-
-  const FileChangeHandlerGan = (e) => {
-    console.log(e.target.files);
-    if (e.target.files.length === 0) {
-      setImages([]);
-      // setIsSelected(false);
-    } else {
-      setImages(Array.from(e.target.files));
-      // let newFiles = Array.from(e.target.files).map(
-      //   (el) => new File([el], el.name)
-      // );
-      // setIsSelected(true);
-    }
-  };
   // get vendor
   const {
     data: vendor = null,
@@ -129,7 +80,6 @@ const PrivateDealForm1 = () => {
     isError: isVendError,
     error: vendErr,
   } = useGetAllPrivateVendorQuery({ page: 1, limit: 100 });
-  console.log(vendor, "sssssss");
 
   // form 2
 
@@ -166,7 +116,10 @@ const PrivateDealForm1 = () => {
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      photo: imgupload,
+      productInnfo: {
+        ...vals.productInfo,
+        photo: imgupload,
+      },
     };
     console.log(payload);
 
@@ -185,26 +138,27 @@ const PrivateDealForm1 = () => {
   const [vendor_name, setVendorName] = useState("");
   const [vendor_email, setVendorEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [image, setImage] = useState("");
+  const [vendorType, setVendorType] = useState("");
 
-  const createVendor = () => {
+  const createVendor = async () => {
+    let url = await uploadImg(image, "n3mtymsx");
     const payload = {
-      name: vendor_name,
+      fullName: vendor_name,
       email: vendor_email,
-      phonenumber: phone,
-      photo: img,
+      mobiile: phone,
+      avatar: url.secure_url,
+      type: vendorType,
+      isPrivate: true,
     };
     console.log(payload);
     onSubmitVendor(payload);
   };
-  const dealType = [
-    { value: "BUY NOW", label: "Buy Now" },
-    { value: "AUCTION", label: "Auction" },
-  ];
 
   const [addVendor] = useAddVendorMutation();
 
   const [loader, setLoader] = useState(false);
-  console.log(loader, "loader");
+
   const onSubmitVendor = async (payload) => {
     setLoader(true);
     try {
@@ -220,6 +174,22 @@ const PrivateDealForm1 = () => {
       else toastr.error("Error", "Something went wrong, please try again...");
     }
   };
+
+  // options
+  const dealType = [
+    { value: "BUY NOW", label: "Buy Now" },
+    { value: "AUCTION", label: "Auction" },
+  ];
+
+  const offerType = [
+    { value: "NEGOTIABLE", label: "Negotiable" },
+    { value: "NON NEGOTIABLE", label: "Non Negotiable" },
+  ];
+
+  const biddingType = [
+    { value: "ONLINE", label: "Online" },
+    { value: "OFFLINE", label: "Offline" },
+  ];
 
   return (
     <AdminDashboardLayout active="private">
@@ -248,7 +218,7 @@ const PrivateDealForm1 = () => {
                 <SelectField
                   label="Select Category"
                   id="role"
-                  name="categoryName"
+                  name="productInfo.category"
                   selectOption={
                     category
                       ? category.data.map((item) => ({
@@ -259,14 +229,52 @@ const PrivateDealForm1 = () => {
                   }
                 />
 
-                {/* <button
-                  onClick={completeFormStep}
-                  type="button"
-                  className="submit"
-                  disabled={!methods.formState.isValid}
-                >
-                  Continue
-                </button> */}
+                <InputField
+                  type="text"
+                  name="productInfo.name"
+                  placeholder="Item Name"
+                  label="Item Name"
+                  id="item_name"
+                  errMsg="invalid input"
+                />
+                <div className="imageCollect">
+                  <p className="label">Add photo</p>
+                  <p className="subLabel">
+                    First picture - is the title picture. You can change the
+                    order of photos: just grab your photos and drag
+                  </p>
+                  <div className="fileDiv">
+                    <div className="collectFile">
+                      <label htmlFor="productImg">
+                        <img src={saveImg} alt="save" />
+                        <p>
+                          Each picture must not exceed 5 Mb <br /> Supported
+                          formats are *.jpg, *.gif and *.png
+                        </p>
+                      </label>
+                      <input
+                        type="file"
+                        hidden
+                        name="productImg"
+                        id="productImg"
+                        ref={ref}
+                        // value={images}
+                        onChange={(e) => {
+                          FileChangeHandler(e);
+                          // FileChangeHandlerGan(e);
+                          setImages([...images, e.target.files]);
+                          uploader(e.target.files[0]);
+                        }}
+                        accept="image/png, image/gif, image/jpeg"
+                      />
+                    </div>
+                    <div className="displayFile">
+                      {imageList.map((item, i) => {
+                        return <img src={item} key={i} alt="item" />;
+                      })}
+                    </div>
+                  </div>
+                </div>
               </motion.section>
             )}{" "}
             {formStep >= 1 && (
@@ -282,29 +290,11 @@ const PrivateDealForm1 = () => {
                 <SelectField
                   label="Deal Type"
                   id="role"
-                  name="dealType"
+                  name="type"
                   selectOption={dealType.map((item) => ({
                     label: item.label,
                     value: item.value,
                   }))}
-                />
-
-                <InputField
-                  type="text"
-                  name="productName"
-                  placeholder="Item Name"
-                  label="Item Name"
-                  id="item_name"
-                  errMsg="invalid input"
-                />
-
-                <InputField
-                  type="number"
-                  name="quantity"
-                  placeholder=""
-                  label="Quantity"
-                  id="quantity"
-                  errMsg="invalid input"
                 />
 
                 <InputAmount
@@ -314,6 +304,36 @@ const PrivateDealForm1 = () => {
                   label="Base Price"
                   id="base_price"
                   errMsg="invalid  input"
+                />
+
+                <SelectField
+                  label="Deal Type"
+                  id="role"
+                  name="type"
+                  selectOption={dealType.map((item) => ({
+                    label: item.label,
+                    value: item.value,
+                  }))}
+                />
+
+                <SelectField
+                  label="Offer Type"
+                  id="role"
+                  name="offerType"
+                  selectOption={offerType.map((item) => ({
+                    label: item.label,
+                    value: item.value,
+                  }))}
+                />
+
+                <SelectField
+                  label="Bidding Type"
+                  id="role"
+                  name="biddingType"
+                  selectOption={biddingType.map((item) => ({
+                    label: item.label,
+                    value: item.value,
+                  }))}
                 />
 
                 <div className="coverGroup">
@@ -385,18 +405,6 @@ const PrivateDealForm1 = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* <button
-                  onClick={completeFormStep}
-                  type="button"
-                  className="submit"
-                  disabled={!methods.formState.isValid}
-                >
-                  Continue
-                </button>
-                <button onClick={prevFormStep} type="button" className="cancel">
-                  back
-                </button> */}
               </motion.section>
             )}
             {formStep >= 2 && (
@@ -413,106 +421,6 @@ const PrivateDealForm1 = () => {
                   total={"4"}
                 />
 
-                <Textarea
-                  type="text"
-                  name="description"
-                  placeholder="Description"
-                  label="Product Description"
-                  id="description"
-                  errMsg="invalid input"
-                />
-
-                <div className="imageCollect">
-                  <p className="label">Add photo</p>
-                  <p className="subLabel">
-                    First picture - is the title picture. You can change the
-                    order of photos: just grab your photos and drag
-                  </p>
-                  <div className="fileDiv">
-                    <div className="collectFile">
-                      <label htmlFor="productImg">
-                        <img src={saveImg} alt="save" />
-                        <p>
-                          Each picture must not exceed 5 Mb <br /> Supported
-                          formats are *.jpg, *.gif and *.png
-                        </p>
-                      </label>
-                      <input
-                        type="file"
-                        hidden
-                        name="productImg"
-                        id="productImg"
-                        ref={ref}
-                        // value={images}
-                        onChange={(e) => {
-                          FileChangeHandler(e);
-                          // FileChangeHandlerGan(e);
-                          setImages([...images, e.target.files]);
-                          uploader(e.target.files[0]);
-                        }}
-                        accept="image/png, image/gif, image/jpeg"
-                      />
-                    </div>
-                    <div className="displayFile">
-                      {imageList.map((item, i) => {
-                        return <img src={item} key={i} alt="item" />;
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* <button
-                  onClick={completeFormStep}
-                  type="button"
-                  className="submit"
-                  disabled={!methods.formState.isValid}
-                >
-                  Continue
-                </button>
-                <button onClick={prevFormStep} type="button" className="cancel">
-                  back
-                </button> */}
-              </motion.section>
-            )}
-            {formStep >= 3 && (
-              <motion.section
-                variants={moveLeft}
-                animate="visible"
-                initial="hidden"
-                exit="exit"
-                style={{ display: `${formStep === 3 ? "block" : "none"}` }}
-              >
-                {" "}
-                <FormHeadFlex
-                  title={"Create Private Deal"}
-                  active={"4"}
-                  total={"4"}
-                />
-                <SelectField
-                  label="Pickup?"
-                  id="pickup"
-                  name="pickup"
-                  selectOption={[
-                    { label: "Yes", value: "Yes" },
-                    { label: "No", value: "No" },
-                  ]}
-                />
-                <InputField
-                  type="text"
-                  name="deliveryPeriod"
-                  placeholder="5 days"
-                  label="Delivery Period"
-                  id="deliveryPeriod"
-                  errMsg="invalid input"
-                />
-                <InputField
-                  type="text"
-                  name="shippingDescription"
-                  placeholder=""
-                  label="Shipping Description"
-                  id="shippingDescription"
-                  errMsg="invalid input"
-                />
                 <SelectField
                   label="Select Vendor"
                   id="vendor"
@@ -521,7 +429,7 @@ const PrivateDealForm1 = () => {
                     vendor
                       ? vendor.data.map((item) => ({
                           label: item.name,
-                          value: item.id,
+                          value: item.email,
                         }))
                       : []
                   }
@@ -569,6 +477,35 @@ const PrivateDealForm1 = () => {
                         />
                       </div>
                     </div>
+                    <div className="form-group select-group">
+                      <label htmlFor="">Vendor name </label>
+
+                      <Select
+                        className="select-mui"
+                        ref={ref}
+                        value={vendorType}
+                        onChange={(value) => {
+                          console.log(value.target.value);
+                          setVendorType(value.target.value);
+                        }}
+                        displayEmpty
+                      >
+                        {[
+                          { label: "Individual", value: "INDIVDUAL" },
+                          { label: "Corporate", value: "CORPORATE" },
+                        ].map((item, i) => {
+                          return (
+                            <MenuItem
+                              key={`${item.value + i}`}
+                              className="menu-item"
+                              value={item.value}
+                            >
+                              {item.label}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </div>
                     <div className="form-group">
                       <label htmlFor="">Vendor Phone</label>
                       <div className="input-icon-wrap">
@@ -601,7 +538,8 @@ const PrivateDealForm1 = () => {
                           ref={ref2}
                           onChange={(e) => {
                             FileChangeHandler2(e);
-                            uploader2(e.target.files[0]);
+
+                            setImage(e.target.files[0]);
                           }}
                           hidden
                           name="company"
@@ -623,6 +561,88 @@ const PrivateDealForm1 = () => {
                     </div>
                   </>
                 )}
+
+                <InputField
+                  type="text"
+                  name="shippingInformation.deliveryPeriod"
+                  placeholder="5 days"
+                  label="Delivery Period"
+                  id="deliveryPeriod"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="text"
+                  name="shippingInformation.height"
+                  placeholder=""
+                  label="Height (m)"
+                  id="height"
+                  errMsg="invalid input"
+                />
+
+                {/* <PhoneInput
+                  country={"us"}
+                  value={phone}
+                  onChange={(phone) => {
+                    setPhone(phone);
+                  }}
+                /> */}
+              </motion.section>
+            )}
+            {formStep >= 3 && (
+              <motion.section
+                variants={moveLeft}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
+                style={{ display: `${formStep === 3 ? "block" : "none"}` }}
+              >
+                {" "}
+                <FormHeadFlex
+                  title={"Create Private Deal"}
+                  active={"4"}
+                  total={"4"}
+                />
+                <SelectField
+                  label="Pickup?"
+                  id="pickup"
+                  name="shippingInformation.pickUpAvailable"
+                  selectOption={[
+                    { label: "Yes", value: "Yes" },
+                    { label: "No", value: "No" },
+                  ]}
+                />
+                <InputField
+                  type="text"
+                  name="shippingInformation.width"
+                  placeholder="5"
+                  label="Width (m)"
+                  id="width"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="text"
+                  name="shippingInformation.length"
+                  placeholder="5"
+                  label="Length (m)"
+                  id="length"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="text"
+                  name="shippingInformation.weight"
+                  placeholder="5"
+                  label="Weight (kg)"
+                  id="weight"
+                  errMsg="invalid input"
+                />
+                <Textarea
+                  type="text"
+                  name="shippingInformation.description"
+                  placeholder=""
+                  label="Shipping Description"
+                  id="shipping_description"
+                  errMsg="invalid input"
+                />
               </motion.section>
             )}
             <button

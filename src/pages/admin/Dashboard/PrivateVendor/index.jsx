@@ -118,7 +118,7 @@ const PrivateVendor = () => {
     let url = await uploadImg(vals.avatar[0], "n3mtymsx");
     const payload = {
       ...vals,
-      mobileInformation: phone,
+      mobile: phone,
       avatar: url.secure_url,
       isPrivate: true,
     };
@@ -147,7 +147,7 @@ const PrivateVendor = () => {
             >
               <Input
                 type="text"
-                name="name"
+                name="fullName"
                 placeholder="Vendor's Name"
                 label="Vendor's Name"
                 id="vendor_name"
@@ -306,9 +306,7 @@ const PrivateVendor = () => {
                                   </div>
                                 </div>
                               </TableCell>
-                              <TableCell align="left">
-                                +{item.mobileInformation.mobile}
-                              </TableCell>
+                              <TableCell align="left">+{item.mobile}</TableCell>
                               {/* <TableCell align="left">₦ 54,000</TableCell> */}
 
                               <TableCell align="left">5</TableCell>
