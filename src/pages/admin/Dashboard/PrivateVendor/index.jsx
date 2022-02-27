@@ -297,7 +297,7 @@ const PrivateVendor = () => {
                                 <div className="nameDiv">
                                   <Avatar
                                     alt={"user"}
-                                    src={item.photo}
+                                    src={item.logo}
                                     sx={{ width: 35, height: 35 }}
                                   />
                                   <div className="nameBox">
