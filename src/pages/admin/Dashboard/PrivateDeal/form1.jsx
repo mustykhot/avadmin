@@ -33,7 +33,7 @@ import { Select } from "@mui/material";
 const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
-  const [formStep, setFormStep] = useState(2);
+  const [formStep, setFormStep] = useState(0);
 
   const [imageList, setImageList] = useState([]);
   // states
@@ -79,7 +79,8 @@ const PrivateDealForm1 = () => {
     isLoading: isVendLoading,
     isError: isVendError,
     error: vendErr,
-  } = useGetAllPrivateVendorQuery({ page: 1, limit: 100 });
+  } = useGetAllPrivateVendorQuery({ page: 1, limit: 100, search: "" });
+  console.log(vendor);
 
   // form 2
 
@@ -116,7 +117,8 @@ const PrivateDealForm1 = () => {
   const onSubmit = async (vals) => {
     const payload = {
       ...vals,
-      productInnfo: {
+      isPrivate: true,
+      productInfo: {
         ...vals.productInfo,
         photo: imgupload,
       },
@@ -128,9 +130,13 @@ const PrivateDealForm1 = () => {
       //  closeModal();
 
       toastr.success("Success", response.message);
+
+      methods.reset();
+      setFormStep(0);
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
   };
 
@@ -146,7 +152,7 @@ const PrivateDealForm1 = () => {
     const payload = {
       fullName: vendor_name,
       email: vendor_email,
-      mobiile: phone,
+      mobile: phone,
       avatar: url.secure_url,
       type: vendorType,
       isPrivate: true,
@@ -170,14 +176,14 @@ const PrivateDealForm1 = () => {
       setLoader(false);
     } catch (err) {
       setLoader(false);
-      if (err.data) toastr.error("Error", err.data.message);
+      if (err.data) toastr.error("Error", err.data._meta.error.message);
       else toastr.error("Error", "Something went wrong, please try again...");
     }
   };
 
   // options
   const dealType = [
-    { value: "BUY NOW", label: "Buy Now" },
+    { value: "BUY_NOW", label: "Buy Now" },
     { value: "AUCTION", label: "Auction" },
   ];
 
@@ -286,16 +292,6 @@ const PrivateDealForm1 = () => {
                 style={{ display: `${formStep === 1 ? "block" : "none"}` }}
               >
                 <FormHeadFlex title={"Item Details"} active={"2"} total={"4"} />
-
-                <SelectField
-                  label="Deal Type"
-                  id="role"
-                  name="type"
-                  selectOption={dealType.map((item) => ({
-                    label: item.label,
-                    value: item.value,
-                  }))}
-                />
 
                 <InputAmount
                   type="number"
@@ -428,8 +424,8 @@ const PrivateDealForm1 = () => {
                   selectOption={
                     vendor
                       ? vendor.data.map((item) => ({
-                          label: item.name,
-                          value: item.email,
+                          label: item.fullName,
+                          value: item.id,
                         }))
                       : []
                   }

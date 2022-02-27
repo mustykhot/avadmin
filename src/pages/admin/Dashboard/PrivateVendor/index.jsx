@@ -114,12 +114,11 @@ const PrivateVendor = () => {
   const [addVendor, { isLoading: loader }] = useAddVendorMutation();
 
   const onSubmit = async (vals) => {
-    console.log(vals.avatar[0]);
-    let url = await uploadImg(vals.avatar[0], "n3mtymsx");
+    let url = await uploadImg(vals.logo[0], "n3mtymsx");
     const payload = {
       ...vals,
       mobile: phone,
-      avatar: url.secure_url,
+      logo: url.secure_url,
       isPrivate: true,
     };
     console.log(payload);
@@ -130,8 +129,9 @@ const PrivateVendor = () => {
 
       toastr.success("Success", response.message);
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
   };
 
@@ -185,7 +185,7 @@ const PrivateVendor = () => {
 
               <Phone label={"Mobile no"} telVal={phone} setTelVal={setPhone} />
               <RajiFile2
-                name="avatar"
+                name="logo"
                 placeholder="Company Image"
                 label="Company Image"
                 id="image"

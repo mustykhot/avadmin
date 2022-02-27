@@ -19,14 +19,13 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
-  if (result.data._meta.statusCode === 401) {
+  if (
+    result?.error &&
+    result?.error.data._meta.error.code === 401 &&
+    result?.error.data._meta.error.message.includes("logged in")
+  ) {
     // logout
-
-    toastr.error(
-      "",
-      "Looks like your session has expired, please login again."
-    );
+    toastr("error", "Please login again.");
     setTimeout(() => {
       api.dispatch(logout());
     }, 1000);
@@ -188,7 +187,7 @@ export const authApi = createApi({
     }),
     addPrivateDeal: builder.mutation({
       query: (credentials) => ({
-        url: "private/new-deal",
+        url: "deals",
         method: "POST",
         body: credentials,
       }),
@@ -272,8 +271,9 @@ export const authApi = createApi({
     }),
     // private vendor
     getAllPrivateVendor: builder.query({
-      query: ({ page, search }) =>
-        `vendors?isPrivate=true&search=${search}&page=${page}&limit=10
+      query: ({ page, search, limit }) =>
+        `vendors?isPrivate=true&search=${search}&page=${page}&limit=${
+          limit ? limit : 10
         }`,
       providesTags: ["vendor"],
       transformResponse: (response) => response,

@@ -63,8 +63,9 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
 
       // toastr.success("Success", response.message);
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
   };
   // // sockett join-conversation
@@ -120,8 +121,9 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
 
       toastr.success("Success", response.message);
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
     reset({ message: "" });
   };

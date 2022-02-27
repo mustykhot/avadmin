@@ -161,8 +161,9 @@ const PrivateDeal = () => {
 
       toastr.success("Success", response.message);
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
   };
 
@@ -360,7 +361,7 @@ const PrivateDeal = () => {
                                   </div>
                                 </TableCell>
                                 <TableCell align="left">
-                                  {item.product.productName}
+                                  {item.product ? item.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
                                   {formatCurrency(item.basePrice)}
@@ -456,7 +457,7 @@ const PrivateDeal = () => {
                       return (
                         <tr>
                           <td> {item.vendor && `${item.vendor.name}`}</td>
-                          <td>{item.product && item.product.productName}</td>
+                          <td>{item.product && item.product.name}</td>
                           <td> {formatCurrency(item.basePrice)}</td>
                           <td align="left">
                             {moment(item.product.createdAt).format(
@@ -525,7 +526,7 @@ const PrivateDeal = () => {
                                   </div>
                                 </TableCell>
                                 <TableCell align="left">
-                                  {item.product.productName}
+                                  {item.product ? item.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
                                   {formatCurrency(item.basePrice)}

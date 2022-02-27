@@ -65,8 +65,9 @@ const Account = () => {
       console.log(response);
       toastr.success("Success", "Successful");
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
   };
 
@@ -84,8 +85,9 @@ const Account = () => {
       console.log(response);
       toastr.success("Success", "Successful");
     } catch (err) {
-      if (err.data) toastr.error("Error", err.data.message);
-      else toastr.error("Error", "Something went wrong, please try again...");
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
     }
   };
 
