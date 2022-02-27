@@ -73,7 +73,7 @@ const PrivateVendor = () => {
   };
 
   const navigate = useNavigate();
-
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const handlePage = (e, value) => {
     setPage(value);
@@ -85,7 +85,7 @@ const PrivateVendor = () => {
     isLoading: loading,
     isError,
     error,
-  } = useGetAllPrivateVendorQuery({ page: page });
+  } = useGetAllPrivateVendorQuery({ page: page, search });
   console.log(vendor);
   // table head
   const headCells = [
@@ -240,105 +240,108 @@ const PrivateVendor = () => {
             </button>
           </div>
         </div>
-        {toggleBtn === "individual" && (
-          <div className="whiteContainer" style={{ marginTop: "20px" }}>
-            <div className="tableHead">
-              <p className="tableTitle">Vendors</p>
-              <input type="text" placeholder="Search" className="search" />
-            </div>
 
-            <div className="overflowTable">
-              {!isError ? (
-                loading ? (
-                  <LoadingTable />
-                ) : vendor.data.length ? (
-                  <motion.div
-                    variants={moveIn}
-                    animate="visible"
-                    initial="hidden"
-                    className="pd-dashboard"
-                  >
-                    <TableContainer>
-                      <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                      >
-                        <EnhancedTableHead
-                          headCells={headCells}
-                          // numSelected={selected.length}
-                          order={order}
-                          orderBy={orderBy}
-                          // onSelectAllClick={handleSelectAllClick}
-                          onRequestSort={handleRequestSort}
-                          rowCount={vendor.data.length}
-                          align="left"
-                        />
-                        <TableBody>
-                          {stableSort(
-                            vendor.data,
-                            getComparator(order, orderBy)
-                          ).map((item) => {
-                            // const isItemSelected = isSelected(row.id);
-                            // const labelId = `enhanced-table-checkbox-${index}`
-                            return (
-                              <TableRow
-                                // hover
-                                // role="checkbox"
-                                // aria-checked={isItemSelected}
-                                tabIndex={-1}
-                                key={item._id}
-                                // selected={isItemSelected}
-                              >
-                                <TableCell align="left">
-                                  <div className="nameDiv">
-                                    <Avatar
-                                      alt={"user"}
-                                      src={item.photo}
-                                      sx={{ width: 35, height: 35 }}
-                                    />
-                                    <div className="nameBox">
-                                      <p className="name">{item.name}</p>
-                                      <p className="email">{item.email}</p>
-                                    </div>
+        <div className="whiteContainer" style={{ marginTop: "20px" }}>
+          <div className="tableHead">
+            <p className="tableTitle">Vendors</p>
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              className="search"
+            />
+          </div>
+
+          <div className="overflowTable">
+            {!isError ? (
+              loading ? (
+                <LoadingTable />
+              ) : vendor.data.length ? (
+                <motion.div
+                  variants={moveIn}
+                  animate="visible"
+                  initial="hidden"
+                  className="pd-dashboard"
+                >
+                  <TableContainer>
+                    <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                      <EnhancedTableHead
+                        headCells={headCells}
+                        // numSelected={selected.length}
+                        order={order}
+                        orderBy={orderBy}
+                        // onSelectAllClick={handleSelectAllClick}
+                        onRequestSort={handleRequestSort}
+                        rowCount={vendor.data.length}
+                        align="left"
+                      />
+                      <TableBody>
+                        {stableSort(
+                          vendor.data,
+                          getComparator(order, orderBy)
+                        ).map((item) => {
+                          // const isItemSelected = isSelected(row.id);
+                          // const labelId = `enhanced-table-checkbox-${index}`
+                          return (
+                            <TableRow
+                              // hover
+                              // role="checkbox"
+                              // aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={item._id}
+                              // selected={isItemSelected}
+                            >
+                              <TableCell align="left">
+                                <div className="nameDiv">
+                                  <Avatar
+                                    alt={"user"}
+                                    src={item.photo}
+                                    sx={{ width: 35, height: 35 }}
+                                  />
+                                  <div className="nameBox">
+                                    <p className="name">{item.name}</p>
+                                    <p className="email">{item.email}</p>
                                   </div>
-                                </TableCell>
-                                <TableCell align="left">
-                                  +{item.mobileInformation.mobile}
-                                </TableCell>
-                                {/* <TableCell align="left">₦ 54,000</TableCell> */}
+                                </div>
+                              </TableCell>
+                              <TableCell align="left">
+                                +{item.mobileInformation.mobile}
+                              </TableCell>
+                              {/* <TableCell align="left">₦ 54,000</TableCell> */}
 
-                                <TableCell align="left">5</TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </motion.div>
-                ) : (
-                  <NoProduct msg="No Data Yet...">
-                    <FontAwesomeIcon icon={faCommentSlash} />
-                  </NoProduct>
-                )
+                              <TableCell align="left">5</TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </motion.div>
               ) : (
-                <NoProduct msg="There is a problem...">
+                <NoProduct msg="No Data Yet...">
                   <FontAwesomeIcon icon={faCommentSlash} />
                 </NoProduct>
-              )}
-            </div>
-            <div className="pagination-wrap">
-              <Pagination
-                color="primary"
-                onChange={handlePage}
-                count={
-                  vendor &&
-                  Math.ceil(parseInt(vendor._meta.pagination.total_count) / 10)
-                }
-                shape="rounded"
-              />
-            </div>
+              )
+            ) : (
+              <NoProduct msg="There is a problem...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            )}
           </div>
-        )}
+          <div className="pagination-wrap">
+            <Pagination
+              color="primary"
+              onChange={handlePage}
+              count={
+                vendor &&
+                Math.ceil(parseInt(vendor._meta.pagination.total_count) / 10)
+              }
+              shape="rounded"
+            />
+          </div>
+        </div>
       </div>
     </AdminDashboardLayout>
   );

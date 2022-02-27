@@ -32,7 +32,7 @@ import { moveIn, moveLeft } from "../../../../utils/variants";
 const PrivateDealForm1 = () => {
   const [isLoadng, setIsLoading] = useState(false);
 
-  const [formStep, setFormStep] = useState(0);
+  const [formStep, setFormStep] = useState(3);
 
   const [imageList, setImageList] = useState([]);
   // states
@@ -41,11 +41,11 @@ const PrivateDealForm1 = () => {
 
   // get category
   const {
-    data: category = [],
+    data: category = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetAllCategoryQuery();
+  } = useGetAllCategoryQuery(1);
 
   const roleOption = [
     {
@@ -185,7 +185,7 @@ const PrivateDealForm1 = () => {
   const [vendor_name, setVendorName] = useState("");
   const [vendor_email, setVendorEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [vendorCategory, setVendorCategory] = useState("");
+
   const createVendor = () => {
     const payload = {
       name: vendor_name,
@@ -249,10 +249,14 @@ const PrivateDealForm1 = () => {
                   label="Select Category"
                   id="role"
                   name="categoryName"
-                  selectOption={category.map((item) => ({
-                    label: item.categoryName,
-                    value: item.categoryName,
-                  }))}
+                  selectOption={
+                    category
+                      ? category.data.map((item) => ({
+                          label: item.name,
+                          value: item.id,
+                        }))
+                      : []
+                  }
                 />
 
                 {/* <button
@@ -515,7 +519,7 @@ const PrivateDealForm1 = () => {
                   name="vendor"
                   selectOption={
                     vendor
-                      ? vendor.rows.map((item) => ({
+                      ? vendor.data.map((item) => ({
                           label: item.name,
                           value: item.id,
                         }))
