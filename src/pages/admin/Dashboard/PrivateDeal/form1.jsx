@@ -2,7 +2,7 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
 import { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 // import Select from "../../../../component/input/selectt";
 import FormHeadFlex from "../../../../component/formHeadFlex";
 import Input from "../../../../component/input";
@@ -20,6 +20,8 @@ import {
   useAddVendorMutation,
   useGetAllCategoryQuery,
   useGetAllPrivateVendorQuery,
+  useGetBrandModalQuery,
+  useGetBrandQuery,
 } from "../../../../services/api";
 import { toastr } from "react-redux-toastr";
 import NaijaStates from "naija-state-local-government";
@@ -31,6 +33,11 @@ import { moveIn, moveLeft } from "../../../../utils/variants";
 import { Select } from "@mui/material";
 
 const PrivateDealForm1 = () => {
+  const methods = useForm({
+    mode: "all",
+  });
+
+  const brandId = methods.watch("productInfo.brandInformation.brand");
   const [isLoadng, setIsLoading] = useState(false);
 
   const [formStep, setFormStep] = useState(0);
@@ -80,7 +87,20 @@ const PrivateDealForm1 = () => {
     isError: isVendError,
     error: vendErr,
   } = useGetAllPrivateVendorQuery({ page: 1, limit: 100, search: "" });
-  console.log(vendor);
+
+  const {
+    data: brand = null,
+    isLoading: brandLoading,
+    isError: isBrandError,
+    error: brandErr,
+  } = useGetBrandQuery();
+
+  const {
+    data: brandModal = null,
+    isLoading: brandModalLoading,
+    isError: isBrandModalError,
+    error: brandModalErr,
+  } = useGetBrandModalQuery(brandId || "");
 
   // form 2
 
@@ -107,9 +127,6 @@ const PrivateDealForm1 = () => {
   const handleToggle = () => {
     setToggle(!toggle);
   };
-  const methods = useForm({
-    mode: "all",
-  });
 
   // create deal
   const [addDeal, { isLoading }] = useAddPrivateDealMutation();
@@ -132,6 +149,7 @@ const PrivateDealForm1 = () => {
       toastr.success("Success", response.message);
 
       methods.reset();
+      setImageList([]);
       setFormStep(0);
     } catch (err) {
       if (err.status === "FETCH_ERROR")
@@ -197,6 +215,13 @@ const PrivateDealForm1 = () => {
     { value: "OFFLINE", label: "Offline" },
   ];
 
+  const conditionType = [
+    { value: "Brand New", label: "Brand New" },
+    { value: "Used", label: "Used" },
+    { value: "Manufacturer Refurbished", label: "Manufacturer Refurbished" },
+    { value: "Seller Refurbished", label: "Seller Refurbished" },
+  ];
+
   return (
     <AdminDashboardLayout active="private">
       <div className="pd-private">
@@ -218,7 +243,7 @@ const PrivateDealForm1 = () => {
                 <FormHeadFlex
                   title={"Create Private Deal"}
                   active={"1"}
-                  total={"4"}
+                  total={"6"}
                 />
 
                 <SelectField
@@ -291,7 +316,7 @@ const PrivateDealForm1 = () => {
                 exit="exit"
                 style={{ display: `${formStep === 1 ? "block" : "none"}` }}
               >
-                <FormHeadFlex title={"Item Details"} active={"2"} total={"4"} />
+                <FormHeadFlex title={"Item Details"} active={"2"} total={"6"} />
 
                 <InputAmount
                   type="number"
@@ -414,7 +439,7 @@ const PrivateDealForm1 = () => {
                 <FormHeadFlex
                   title={"Product Information"}
                   active={"3"}
-                  total={"4"}
+                  total={"6"}
                 />
 
                 <SelectField
@@ -593,11 +618,7 @@ const PrivateDealForm1 = () => {
                 style={{ display: `${formStep === 3 ? "block" : "none"}` }}
               >
                 {" "}
-                <FormHeadFlex
-                  title={"Create Private Deal"}
-                  active={"4"}
-                  total={"4"}
-                />
+                <FormHeadFlex title={"Shipping"} active={"4"} total={"6"} />
                 <SelectField
                   label="Pickup?"
                   id="pickup"
@@ -641,11 +662,151 @@ const PrivateDealForm1 = () => {
                 />
               </motion.section>
             )}
+            {formStep >= 4 && (
+              <motion.section
+                variants={moveLeft}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
+                style={{ display: `${formStep === 4 ? "block" : "none"}` }}
+              >
+                {" "}
+                <FormHeadFlex title={"Product Info"} active={"5"} total={"6"} />
+                <SelectField
+                  label="Brand"
+                  id="pickup"
+                  name="productInfo.brandInformation.brand"
+                  selectOption={
+                    brand
+                      ? brand.data.map((item) => ({
+                          label: item.name,
+                          value: item.id,
+                        }))
+                      : []
+                  }
+                />
+                <SelectField
+                  label="Model"
+                  id="pickup"
+                  name="productInfo.brandInformation.brandModel"
+                  selectOption={
+                    brandModal
+                      ? brandModal.data.map((item) => ({
+                          label: item.name,
+                          value: item.id,
+                        }))
+                      : []
+                  }
+                />
+                <InputField
+                  type="number"
+                  name="productInfo.brandInformation.yearOfManufacturer"
+                  placeholder="2002"
+                  label="Year"
+                  id="year"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="color"
+                  name="productInfo.brandInformation.color"
+                  placeholder="5"
+                  label="Color"
+                  id="color"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="text"
+                  name="productInfo.brandInformation.transmission"
+                  placeholder="5"
+                  label="Transmission"
+                  id="transmission"
+                  errMsg="invalid input"
+                />
+                <SelectField
+                  name="productInfo.brandInformation.condition"
+                  label="Condition"
+                  errMsg="invalid field"
+                  selectOption={conditionType.map((item) => ({
+                    label: item.label,
+                    value: item.value,
+                  }))}
+                />
+                <Textarea
+                  type="text"
+                  name="productInfo.brandInformation.description"
+                  placeholder=""
+                  label="Description"
+                  id="description"
+                  errMsg="invalid input"
+                />
+              </motion.section>
+            )}
+            {formStep >= 5 && (
+              <motion.section
+                variants={moveLeft}
+                animate="visible"
+                initial="hidden"
+                exit="exit"
+                style={{ display: `${formStep === 5 ? "block" : "none"}` }}
+              >
+                {" "}
+                <FormHeadFlex title={"Product Info"} active={"6"} total={"6"} />
+                <InputField
+                  type="number"
+                  name="productInfo.termsInformation.yearOfPurchase"
+                  placeholder="2002"
+                  label="Year"
+                  id="year"
+                  errMsg="invalid input"
+                />
+                <SelectField
+                  label="Repair History?"
+                  id="repair"
+                  name="productInfo.termsInformation.repairHistory"
+                  selectOption={[
+                    { label: "Yes", value: "Yes" },
+                    { label: "No", value: "No" },
+                  ]}
+                />
+                <InputField
+                  type="text"
+                  name="productInfo.termsInformation.warranty"
+                  placeholder="5 months"
+                  label="Warranty"
+                  id="warranty"
+                  errMsg="invalid input"
+                />
+                <InputField
+                  type="text"
+                  name="productInfo.termsInformation.height"
+                  placeholder="5"
+                  label="Height (m)"
+                  id="height"
+                  errMsg="invalid input"
+                />
+                <SelectField
+                  label="Refund Policy"
+                  id="refund_policy"
+                  name="productInfo.termsInformation.refundPolicy"
+                  selectOption={[
+                    { label: "Yes", value: "Yes" },
+                    { label: "No", value: "No" },
+                  ]}
+                />
+                <Textarea
+                  name="productInfo.termsInformation.otherAvailable"
+                  placeholder="5"
+                  label="Other Information"
+                  id="other"
+                  errMsg="invalid input"
+                />
+              </motion.section>
+            )}
             <button
               type="submit"
               className="submit"
               // disabled={!methods.formState.isValid}
-              style={{ display: `${formStep === 3 ? "" : "none"}` }}
+              style={{ display: `${formStep === 5 ? "" : "none"}` }}
               onClick={() => {
                 console.log("ggg");
               }}
@@ -660,7 +821,7 @@ const PrivateDealForm1 = () => {
               onClick={completeFormStep}
               type="button"
               className="submit"
-              style={{ display: `${formStep !== 3 ? "block" : "none"}` }}
+              style={{ display: `${formStep !== 5 ? "block" : "none"}` }}
               disabled={!methods.formState.isValid}
             >
               Continue

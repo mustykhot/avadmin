@@ -51,6 +51,7 @@ export const authApi = createApi({
     "audit",
     "wallet",
     "dash",
+    "brand",
   ],
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -349,10 +350,25 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    getBrand: builder.query({
+      query: () => `resources/brands?limit=1000`,
+      providesTags: ["brand"],
+      transformResponse: (response) => response,
+    }),
+    getBrandModal: builder.query({
+      query: (id) =>
+        `resources/brand-models?population=[{"path" : "brand", "select": "name"}]&${
+          id ? "brand=" + id : ""
+        }`,
+      providesTags: ["brand"],
+      transformResponse: (response) => response,
+    }),
   }),
 });
 export const {
   useLoginMutation,
+  useGetBrandModalQuery,
+  useGetBrandQuery,
   useGetDashQuery,
   useLoginnormalMutation,
   useGetSellingQuery,
