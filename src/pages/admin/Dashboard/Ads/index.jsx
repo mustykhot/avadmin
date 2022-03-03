@@ -1,104 +1,145 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
-import { ReactComponent as Fill } from "../../../../assets/icons/Fill.svg";
+
 import shape from "../../../../assets/icons/shape.svg";
 import userImg from "../../../../assets/images/user-img.png";
 
 import { useState } from "react";
 import TableDrop from "../../../../component/TableDrop";
-import FormHead from "../../../../component/formHead";
-import Input from "../../../../component/input";
-import Modal from "../../../../component/Modal";
-import SubmitBtn from "../../../../component/submitBtn";
-import SuccessModal from "../../../../component/popModal";
-import { FormProvider, useForm } from "react-hook-form";
-import InputField from "../../../../component/input/indexField";
+
+import DropDownWrapper from "../../../../component/DropDownWrapper";
+import { Avatar, IconButton, Pagination } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {
+  useActivateCategoryMutation,
+  useGetAllCategoryQuery,
+} from "../../../../services/api";
+import { toastr } from "react-redux-toastr";
+import LoadingTable from "../../../../component/loadingTable";
+import NoProduct from "../../../../component/NoProduct";
+import {
+  getComparator,
+  stableSort,
+  truncateString,
+} from "../../../../utils/utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import Table from "@mui/material/Table";
+import EnhancedTableHead from "../../../../component/EnhancedTableHead";
+import { moveIn } from "../../../../utils/variants";
+import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
+
+const SubscribeDropDown = ({ id, approve }) => (
+  <DropDownWrapper
+    className="more-actions"
+    action={
+      <IconButton className="more-action-btn" aria-label="actions">
+        <MoreVertIcon />
+      </IconButton>
+    }
+  >
+    <button
+      onClick={() => {
+        approve("APPROVED", id);
+      }}
+      className="btn-noBg"
+    >
+      Activate
+    </button>
+
+    <button
+      onClick={() => {
+        approve("DECLINED", id);
+      }}
+      className="btn-noBg"
+    >
+      Deactivate
+    </button>
+  </DropDownWrapper>
+);
+
+const headCells = [
+  {
+    id: "title",
+    label: "Campaign Title",
+  },
+  {
+    id: "reach",
+    label: "Reach",
+  },
+  {
+    id: "clicks",
+    label: "Clicks",
+  },
+  {
+    id: "start_date",
+    label: " Start Date",
+  },
+  {
+    id: "end_date",
+    label: "End Date",
+  },
+  {
+    id: "status",
+    label: "Status",
+  },
+];
 
 const Ads = () => {
   const list = [1, 2, 3];
-  const [isLoadng, setIsLoading] = useState(false);
-  const [toggleBtn, setToggleBtn] = useState("auction");
-  const methods = useForm();
-  const [modal, setModal] = useState(false);
-  const [modalPop, setModalPop] = useState(false);
-  const handleToggle = (type) => {
-    setToggleBtn(type);
+  // pagination
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const handlePage = (e, value) => {
+    setPage(value);
   };
-  const onSubmit = (vals) => {
-    console.log(vals);
-    setIsLoading(false);
+
+  // get category
+  const {
+    data: category = null,
+    isLoading: loading,
+    isError,
+  } = useGetAllCategoryQuery(page);
+
+  const [activateResponse, { isLoading: activateLoading }] =
+    useActivateCategoryMutation();
+  const activate = async (type, id) => {
+    const payload = {
+      active: type,
+    };
+    try {
+      const response = await activateResponse({
+        credentials: payload,
+        id: id,
+      }).unwrap();
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
+    }
   };
-  const closeModal = () => {
-    setModal(!modal);
+
+  // table magic
+  const [order, setOrder] = useState("");
+  const [orderBy, setOrderBy] = useState("");
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
   };
-  const closeModalPop = () => {
-    setModal(!modal);
-  };
+
   return (
     <AdminDashboardLayout active="ads">
       <div className="pd-ads">
-        {modal && (
-          <Modal>
-            <FormProvider {...methods}>
-              <form
-                onSubmit={methods.handleSubmit(onSubmit)}
-                className="createAdmin"
-                action=""
-              >
-                <FormHead title={"New Campaign"} subTitle={""} />
-
-                <InputField
-                  type="text"
-                  name="campaign_title"
-                  placeholder="Campaign Title"
-                  label="Campaign Title"
-                  id="campaign_title"
-                />
-
-                <InputField
-                  type="text"
-                  name="url"
-                  placeholder="Url"
-                  label="Url"
-                  id="url"
-                />
-
-                <InputField
-                  type="date"
-                  name="start_date"
-                  placeholder="Campaign start date"
-                  label="Campaign start date"
-                  id="start_date"
-                />
-                <InputField
-                  type="date"
-                  name="end_date"
-                  placeholder="Campaign end date"
-                  label="Campaign end date"
-                  id="end_date"
-                />
-
-                <SubmitBtn isLoading={isLoadng} btnText="Add Campaign" />
-                <button onClick={closeModal} className="cancel">
-                  Cancel
-                </button>
-              </form>
-            </FormProvider>
-          </Modal>
-        )}
-        {modalPop && (
-          <SuccessModal
-            closeModal={closeModalPop}
-            text={"Campaign created successfully!"}
-          />
-        )}
         <div className="topicPart">
           <p className="pageTitle">Ads Manager</p>
-          <div className="btnBox">
-            <button onClick={closeModal} className="create">
-              Add Campaign
-            </button>
-          </div>
         </div>
 
         <div className="whiteContainer">
@@ -108,6 +149,73 @@ const Ads = () => {
           </div>
 
           <div className="overflowTable">
+            {loading ? (
+              <LoadingTable />
+            ) : isError ? (
+              <NoProduct msg="Something went wrong...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            ) : category.data.length ? (
+              <motion.div
+                variants={moveIn}
+                animate="visible"
+                initial="hidden"
+                className="pd-dashboard"
+              >
+                <TableContainer>
+                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                    <EnhancedTableHead
+                      headCells={headCells}
+                      order={order}
+                      orderBy={orderBy}
+                      onRequestSort={handleRequestSort}
+                      rowCount={category.data.length}
+                      align="left"
+                    />
+                    <TableBody>
+                      {stableSort(
+                        category.data,
+                        getComparator(order, orderBy)
+                      ).map((item) => {
+                        return (
+                          <TableRow tabIndex={-1} key={item._id}>
+                            <TableCell align="left">
+                              {truncateString(item._id, 10)}
+                            </TableCell>
+                            <TableCell align="left">{item.name}</TableCell>
+                            <TableCell align="left">
+                              {truncateString(item.description, 20)}
+                            </TableCell>
+                            <TableCell align="left">
+                              {item.productsAssigned}
+                            </TableCell>
+                            <TableCell align="left">
+                              <p
+                                className={`status ${
+                                  item.active ? "active" : "red"
+                                }`}
+                              >
+                                {item.active ? "Active" : "Inactive"}
+                              </p>
+                            </TableCell>
+                            <TableCell className="action" align="left">
+                              <SubscribeDropDown
+                                id={item._id}
+                                activate={activate}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </motion.div>
+            ) : (
+              <NoProduct msg="No Data Yet...">
+                <FontAwesomeIcon icon={faCommentSlash} />
+              </NoProduct>
+            )}
             <table>
               <thead>
                 <tr>

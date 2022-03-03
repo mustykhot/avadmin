@@ -327,6 +327,15 @@ const PrivateDealForm1 = () => {
                   errMsg="invalid  input"
                 />
 
+                <InputAmount
+                  type="number"
+                  name="admittanceFee"
+                  placeholder="Enter Admittance Fee"
+                  label="Enter Admittance Fee"
+                  id="admittanceFee"
+                  errMsg="invalid  input"
+                />
+
                 <SelectField
                   label="Deal Type"
                   id="role"

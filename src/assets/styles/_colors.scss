@@ -1,0 +1,57 @@
+:root {
+  --primary: #0052bd;
+  --bg-color: #f3f2f1;
+  --yellowClr: #edb300;
+  --bgYellow: #ffa500;
+  --greenClr: #00ab06;
+  --greenSec: #42be65;
+  --accentBlue: #f0f3fb;
+  --whiteClr: #fff;
+  --placeholder: #dcdff1;
+  --inputBorder: #dcdff1;
+  --greyClr: #989db3;
+  --inputBg: #fff;
+  --accentBlueBorder: #b5d3f9;
+  --redClr: #d50303;
+  --redFaint: #d12020;
+  --textClr: #404040;
+  --textFaint: #6e768c;
+  --blackClr: #000000;
+  --blackLight: #222222;
+}
+
+// scss hash maps to generate helper classes
+$colors: (
+  primary: var(--primary),
+  blackClr: var(--black),
+  bgColor: var(--bg-color),
+  placeholder: var(--placeholder),
+  inputBorder: var(--inputBorder),
+  inputBg: var(--inputBg),
+  greenClr: var(--greenClr),
+  yellowClr: var(--yellowClr),
+  bgYellow: var(--bgYellow),
+  greyClr: var(--greyClr),
+  greenSec: var(--greenSec),
+  accentBlue: var(--accentBlue),
+  whiteClr: var(--whiteClr),
+  redClr: var(--redClr),
+  redFaint: var(--redFaint),
+  textClr: var(--textClr),
+  textFaint: var(--textFaint),
+  accentBlueBorder: var(--accentBlueBorder),
+) !default;
+
+// looping through the scss hash map to generate utility classes...
+// to use assign classname of .clr-{color} to give the text color same for background with .bg-{color} and same for svg with .fill-{color}
+@each $color, $value in $colors {
+  .clr-#{$color} {
+    color: $value;
+  }
+  .bg-#{$color} {
+    background-color: $value;
+  }
+  .fill-#{$color} {
+    fill: $value;
+  }
+}

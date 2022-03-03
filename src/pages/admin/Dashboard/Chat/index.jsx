@@ -91,12 +91,11 @@ const Chat = () => {
   };
 
   const {
-    data: admins,
+    data: admins = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetAdminsQuery();
-  console.log(admins, error);
+  } = useGetAdminsQuery({ search: "", page: 1 });
   // create chat
   const [createResponse, { isLoading: createLoading }] =
     useCreateChatMutation();
@@ -105,6 +104,7 @@ const Chat = () => {
       senderId: user.id,
       receiverId: id,
     };
+    console.log(payload);
     try {
       const response = await createResponse(payload).unwrap();
 
@@ -123,6 +123,7 @@ const Chat = () => {
     isError: convIsError,
     error: convError,
   } = useGetConversationQuery(user.id);
+  console.log(conversation);
   // 61d57dbea7bc65c65b587c32
   // get converstaion between two users
 
@@ -189,8 +190,8 @@ const Chat = () => {
 
   useEffect(() => {
     if (twoconversation) {
-      setMessage(twoconversation.conversations[0].messages);
-      setCurrentId(twoconversation.conversations[0].id);
+      setMessage(twoconversation.data[0].messages);
+      setCurrentId(twoconversation.data[0].id);
     }
   }, [twoconversation]);
 
@@ -216,8 +217,8 @@ const Chat = () => {
             <div className="msgDiv">
               {!isError ? (
                 !convLoading ? (
-                  conversation ? (
-                    conversation.conversations.map((item) => {
+                  !conversation.length ? (
+                    conversation.data.map((item) => {
                       return (
                         <MessageBox
                           image={item.img}
@@ -317,7 +318,7 @@ const Chat = () => {
           </div>
           <div className="chatBoxDiv">
             <ChatBox
-              currentMsg={twoconversation && twoconversation.conversations[0]}
+              currentMsg={twoconversation && twoconversation.data[0]}
               messages={message}
               loading={twoconvLoading}
             />
@@ -367,60 +368,48 @@ const Chat = () => {
                 >
                   <p className="title">Administrative Members</p>
                   <div className="coverMember">
-                    {isError === true ? (
-                      <p>{error.status}</p>
+                    {isError ? (
+                      <NoProduct msg="There is a problem...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
                     ) : loading ? (
                       <p>Loading</p>
-                    ) : admins.message === "no admin available!" ? (
+                    ) : !admins.data.length ? (
                       <NoProduct msg="No Data Yet...">
                         <FontAwesomeIcon icon={faCommentSlash} />
                       </NoProduct>
                     ) : (
-                      admins.admins.map((item) => {
-                        return (
-                          <div
-                            className="eachMember"
-                            onClick={() => {
-                              startChat(item.id);
-                            }}
-                            key={item.id}
-                          >
-                            {/* <img src={item.image} alt="user" /> */}
+                      admins.data
+                        .filter((item) => {
+                          return user.id !== item._id;
+                        })
+                        .map((item) => {
+                          return (
+                            <div
+                              className="eachMember"
+                              onClick={() => {
+                                startChat(item._id);
+                              }}
+                              key={item._id}
+                            >
+                              {/* <img src={item.image} alt="user" /> */}
 
-                            <Avatar alt="Remy Sharp" src="" />
-                            <div className="textPart">
-                              <p className="name">
-                                {`${item.firstName} ${item.lastName}`}{" "}
-                                {
-                                  <span
-                                    className={item.isOnline ? "active" : ""}
-                                  ></span>
-                                }
-                              </p>
-                              <p className="email">{item.email}</p>
+                              <Avatar alt="Remy Sharp" src="" />
+                              <div className="textPart">
+                                <p className="name">
+                                  {`${item.firstName} ${item.lastName}`}{" "}
+                                  {
+                                    <span
+                                      className={item.isOnline ? "active" : ""}
+                                    ></span>
+                                  }
+                                </p>
+                                <p className="email">{item.email}</p>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })
+                          );
+                        })
                     )}
-                    {/* {userList.map((item) => {
-                    return (
-                      <div className="eachMember">
-                        <img src={item.image} alt="user" />
-                        <div className="textPart">
-                          <p className="name">
-                            {item.name}{" "}
-                            {
-                              <span
-                                className={item.isOnline ? "active" : ""}
-                              ></span>
-                            }
-                          </p>
-                          <p className="email">{item.email}</p>
-                        </div>
-                      </div>
-                    );
-                  })} */}
                   </div>
                 </div>
 

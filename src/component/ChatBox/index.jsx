@@ -98,7 +98,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
   const onSubmit = async (values) => {
     let payload = {
       text: values.message,
-      sender: user.id,
+      // sender: user.id,
       // conversation: currentMsg.id,
     };
     // if (img) {
@@ -134,7 +134,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
   useEffect(() => {
     const sendernew = currentMsg
       ? currentMsg.members.filter((item) => {
-          return item.id !== user.id;
+          return item._id !== user.id;
         })
       : "";
 

@@ -1,0 +1,71 @@
+@use "../../assets/styles/index" as *;
+
+.upload-file {
+  width: 72px;
+  max-width: 43vw;
+  height: 72px;
+  position: relative;
+  input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    z-index: 10;
+  }
+  label {
+    width: 100%;
+    height: 100%;
+    @include flex($justify: center);
+    background-color: var(--accentBlue);
+    border: 1px solid var(--inputBorder);
+    color: var(--placeholder);
+    border-radius: 2px;
+    padding: 1rem;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    img {
+      width: 16px;
+      height: 16px;
+    }
+    p {
+      font-size: 0.7rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    img.img-slt {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+      height: 100%;
+    }
+    .edit-icon {
+      position: absolute;
+      bottom: -0.5rem;
+      right: -0.5rem;
+      margin: 0;
+      background-color: var(--inputBorder);
+      min-width: unset;
+      @include flex($justify: center);
+
+      svg {
+        color: var(--primary);
+      }
+    }
+  }
+}
+.images-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  .upload-file {
+    width: 72px;
+    height: 72px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

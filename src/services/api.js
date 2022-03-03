@@ -103,7 +103,7 @@ export const authApi = createApi({
     }),
     sendChat: builder.mutation({
       query: ({ credentials, id }) => ({
-        url: `/chats/conversations/${id}/messages`,
+        url: `/chats/conversations/${id}/send-message`,
         method: "PUT",
         body: credentials,
       }),
@@ -112,7 +112,7 @@ export const authApi = createApi({
 
     getConversationBtwUsers: builder.query({
       query: ({ idFirst, idSecond }) =>
-        `chats/conversations/${idFirst}/${idSecond}`,
+        `chats/conversations/${idFirst}/${idSecond}?population=["members"]`,
       providesTags: ["chatmessage"],
       transformResponse: (response) => response,
     }),
@@ -121,8 +121,9 @@ export const authApi = createApi({
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
+    // chats/conversations/me
     getConversation: builder.query({
-      query: (id) => `chats/conversations/${id}/user`,
+      query: () => `chats/conversations/me?population=["members"]`,
       providesTags: ["chat"],
       transformResponse: (response) => response,
     }),

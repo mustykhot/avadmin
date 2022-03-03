@@ -1,0 +1,232 @@
+@use "../../../../../assets/styles/index" as *;
+.sell-item-pg {
+  padding: 1rem 0;
+  padding-top: 3rem;
+  // background: url("../../../../../assets/paperBg.png") no-repeat;
+  // background-size: 100% 248px;
+
+  .inner {
+    @include flex($justify: flex-start, $direction: column);
+  }
+  .progress {
+    margin: 0.5rem 0;
+    background-color: var(--placeholder);
+    span {
+      background-color: var(--greenClr);
+    }
+  }
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+  .form-wrap {
+    background-color: var(--whiteClr);
+    padding: 3.5rem 1rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px;
+    @include mq(mobile) {
+      padding: 3rem 1.5rem;
+    }
+    .form-inner {
+      max-width: 500px;
+      margin: auto;
+    }
+  }
+  .title-wrap {
+    @include flex($justify: space-between);
+    .btn-small {
+      &:first-child {
+        margin-right: 0.7rem;
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  .pricing-btn-wrap {
+    @include flex($align: stretch);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    .pricing-btn {
+      width: 50%;
+      @include flex($direction: column);
+      font-weight: 500;
+      border: 1px solid var(--inputBorder);
+      height: 80px;
+      cursor: pointer;
+      background-color: var(--whiteClr);
+      svg {
+        max-width: 20px;
+        max-height: 20px;
+      }
+      path {
+        fill: var(--textClr);
+      }
+      &.active {
+        color: var(--primary);
+        background-color: var(--accentBlue);
+        path {
+          fill: var(--primary);
+        }
+      }
+      &:last-child {
+        border-left: none;
+      }
+    }
+  }
+  .form-footer {
+    border-top: 1px solid var(--placeholder);
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+}
+.form-footer {
+  &.btn-wrap {
+    @include mq(mobile) {
+      justify-content: space-between;
+    }
+    // button,
+    // .submitBtn {
+    //   min-width: 180px;
+    //   width: auto;
+    //   @include mq(mobile) {
+    //     min-width: unset;
+    //     width: calc(50% - 1rem);
+    //   }
+    // }
+    button {
+      text-align: center;
+      margin-bottom: 10px;
+      width: 100%;
+      display: unset;
+      padding: 10px 0;
+      border-radius: 5px;
+      background: none;
+      border: none;
+      &.blue {
+        background: #0052bd;
+      }
+    }
+  }
+}
+
+.form-inner {
+  background: #ffffff;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.07);
+  border-radius: 11px;
+  padding: 30px 50px;
+}
+
+.toggleBox {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba($color: #000000, $alpha: 0.1);
+  margin-bottom: 22px;
+  .eachToggle {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #f6f9ff;
+    padding: 13px 0;
+
+    &.active {
+      background: #ffffff;
+      .icon {
+        path {
+          stroke: $primary;
+          fill: $primary;
+        }
+        circle {
+          stroke: $primary;
+          fill: $primary;
+        }
+        rect {
+          stroke: $primary;
+        }
+      }
+      p {
+        color: $primary;
+      }
+    }
+    .icon {
+      margin-bottom: 10px;
+      path {
+        stroke: #6e768c;
+      }
+      circle {
+        stroke: #6e768c;
+      }
+      rect {
+        stroke: #6e768c;
+      }
+    }
+    p {
+      font-size: 14px;
+      line-height: 16px;
+      text-align: right;
+      letter-spacing: 0.583333px;
+      color: #6e768c;
+    }
+  }
+}
+.toggleCover {
+  display: flex;
+  margin: 20px 0;
+  align-items: center;
+  p {
+    margin-left: 14px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+
+    color: #000000;
+  }
+}
+button.add {
+  @include button;
+  color: $primary;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.companyLogoDiv {
+  width: 100%;
+  p.label {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    color: #4a4a4a;
+    margin-bottom: 5px;
+  }
+  .logoCover {
+    width: 100%;
+    label {
+      display: flex;
+
+      padding: 20px;
+      border: 1px dashed #dcdff1;
+      box-sizing: border-box;
+      align-items: center;
+      border-radius: 3px;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+      p {
+        font-size: 10px;
+        line-height: 12px;
+        color: #6e768c;
+      }
+    }
+  }
+}

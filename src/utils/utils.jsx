@@ -180,3 +180,14 @@ export const toaster = (type, msg) => {
       break;
   }
 };
+
+// remove empty objects and array from the obj
+export const removeEmpty = (obj) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => {
+      if (typeof v === "number") return true;
+      else if (typeof v === "object" && Object.keys(v).length > 0) return true;
+      else return v !== "" && v && v?.length > 0;
+    })
+  );
+};

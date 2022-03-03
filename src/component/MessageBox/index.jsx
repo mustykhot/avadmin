@@ -24,25 +24,25 @@ const MessageBox = ({
   // console.log(sender, "sender");
   const { user } = useSelector((state) => state.auth);
   // const userId = "61d57dbea7bc65c65b587c32";
-  // console.log(currentMsg, "currentMsg");
+  console.log(user, "currentMsg");
   useEffect(() => {
     const sendernew = members
       ? members.filter((item) => {
-          return item.id !== user.id;
+          return item._id !== user.id;
         })
       : "";
 
     setSender(sendernew[0]);
   }, [members]);
+  console.log(sender, "senderner");
   return (
     <motion.div
       variants={moveIn}
       animate="visible"
       initial="hidden"
       onClick={() => {
-        console.log(members[1].id, members[0].id, "here");
         setActive(id);
-        setId(members[0].id, members[1].id);
+        setId(members[0]._id, members[1]._id);
         skipper(false);
       }}
       className={`message_box ${active ? "active" : ""}`}

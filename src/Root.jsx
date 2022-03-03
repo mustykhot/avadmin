@@ -11,6 +11,7 @@ import Chat from "./pages/admin/Dashboard/Chat";
 import Dashboard from "./pages/admin/Dashboard/Dashboard";
 import PrivateDeal from "./pages/admin/Dashboard/PrivateDeal";
 import PrivateDealForm1 from "./pages/admin/Dashboard/PrivateDeal/form1";
+import CreatePrivateDeal from "./pages/admin/Dashboard/PrivateDeal/SellItem";
 
 import PrivateVendor from "./pages/admin/Dashboard/PrivateVendor";
 import Shipping from "./pages/admin/Dashboard/Shipping";
@@ -42,7 +43,7 @@ const Root = () => {
             <Route path="/chat" element={<Chat />} />
             <Route path="/private" element={<PrivateDeal />} />
             <Route path="/private-vendor" element={<PrivateVendor />} />
-            <Route path="/private/form1" element={<PrivateDealForm1 />} />
+            <Route path="/private/form1" element={<CreatePrivateDeal />} />
             <Route
               path="/users/user_detail/:id"
               element={<UsersProfile />}
