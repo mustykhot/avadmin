@@ -112,7 +112,7 @@ export const authApi = createApi({
 
     getConversationBtwUsers: builder.query({
       query: ({ idFirst, idSecond }) =>
-        `chats/conversations/${idFirst}/${idSecond}?population=["members"]`,
+        `chats/conversations/${idFirst}/${idSecond}?population=["members","sender"]`,
       providesTags: ["chatmessage"],
       transformResponse: (response) => response,
     }),
@@ -244,6 +244,16 @@ export const authApi = createApi({
     //   }),
     //   invalidatesTags: ["deal"],
     // }),
+
+    // sponsored
+    getSponsoredDeal: builder.query({
+      query: ({ page, status, search }) =>
+        `deals?population=["user","product"]&page=${page}&limit=10${
+          status && `&status=${status}`
+        }&search=${search}&sponsored=true`,
+      providesTags: ["deal"],
+      transformResponse: (response) => response,
+    }),
 
     getOneDeal: builder.query({
       query: (id) => `deals/single-deal/${id}`,
@@ -390,6 +400,7 @@ export const {
   useGetAllDealQuery,
   useApproveDealMutation,
   // useRejectDealMutation,
+  useGetSponsoredDealQuery,
 
   useGetTransactionQuery,
   useGetEachTransactionQuery,

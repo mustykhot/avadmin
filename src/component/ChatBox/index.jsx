@@ -98,7 +98,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
   const onSubmit = async (values) => {
     let payload = {
       text: values.message,
-      // sender: user.id,
+      sender: user.id,
       // conversation: currentMsg.id,
     };
     // if (img) {

@@ -12,7 +12,9 @@ import { Avatar, IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   useActivateCategoryMutation,
+  useApproveDealMutation,
   useGetAllCategoryQuery,
+  useGetSponsoredDealQuery,
 } from "../../../../services/api";
 import { toastr } from "react-redux-toastr";
 import LoadingTable from "../../../../component/loadingTable";
@@ -32,6 +34,7 @@ import Table from "@mui/material/Table";
 import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import { moveIn } from "../../../../utils/variants";
 import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
+import moment from "moment";
 
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
@@ -48,7 +51,7 @@ const SubscribeDropDown = ({ id, approve }) => (
       }}
       className="btn-noBg"
     >
-      Activate
+      Approve
     </button>
 
     <button
@@ -57,7 +60,7 @@ const SubscribeDropDown = ({ id, approve }) => (
       }}
       className="btn-noBg"
     >
-      Deactivate
+      Decline
     </button>
   </DropDownWrapper>
 );
@@ -68,8 +71,8 @@ const headCells = [
     label: "Campaign Title",
   },
   {
-    id: "reach",
-    label: "Reach",
+    id: "base_price",
+    label: "Base Price",
   },
   {
     id: "clicks",
@@ -100,19 +103,20 @@ const Ads = () => {
 
   // get category
   const {
-    data: category = null,
+    data: deal = null,
     isLoading: loading,
     isError,
-  } = useGetAllCategoryQuery(page);
+  } = useGetSponsoredDealQuery({ page, search });
 
-  const [activateResponse, { isLoading: activateLoading }] =
-    useActivateCategoryMutation();
-  const activate = async (type, id) => {
+  //
+  const [approveResponse, { isLoading: approveLoading }] =
+    useApproveDealMutation();
+  const approveDeal = async (status, id) => {
     const payload = {
-      active: type,
+      status,
     };
     try {
-      const response = await activateResponse({
+      const response = await approveResponse({
         credentials: payload,
         id: id,
       }).unwrap();
@@ -142,10 +146,17 @@ const Ads = () => {
           <p className="pageTitle">Ads Manager</p>
         </div>
 
-        <div className="whiteContainer">
+        <div style={{ marginTop: "20px" }} className="whiteContainer">
           <div className="tableHead">
             <p className="tableTitle">Posted Campaign</p>
-            <input type="text" placeholder="Search" className="search" />
+            <input
+              type="text"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              placeholder="Search"
+              className="search"
+            />
           </div>
 
           <div className="overflowTable">
@@ -155,7 +166,7 @@ const Ads = () => {
               <NoProduct msg="Something went wrong...">
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
-            ) : category.data.length ? (
+            ) : deal.data.length ? (
               <motion.div
                 variants={moveIn}
                 animate="visible"
@@ -169,44 +180,61 @@ const Ads = () => {
                       order={order}
                       orderBy={orderBy}
                       onRequestSort={handleRequestSort}
-                      rowCount={category.data.length}
+                      rowCount={deal.data.length}
                       align="left"
                     />
                     <TableBody>
-                      {stableSort(
-                        category.data,
-                        getComparator(order, orderBy)
-                      ).map((item) => {
-                        return (
-                          <TableRow tabIndex={-1} key={item._id}>
-                            <TableCell align="left">
-                              {truncateString(item._id, 10)}
-                            </TableCell>
-                            <TableCell align="left">{item.name}</TableCell>
-                            <TableCell align="left">
-                              {truncateString(item.description, 20)}
-                            </TableCell>
-                            <TableCell align="left">
-                              {item.productsAssigned}
-                            </TableCell>
-                            <TableCell align="left">
-                              <p
-                                className={`status ${
-                                  item.active ? "active" : "red"
-                                }`}
-                              >
-                                {item.active ? "Active" : "Inactive"}
-                              </p>
-                            </TableCell>
-                            <TableCell className="action" align="left">
-                              <SubscribeDropDown
-                                id={item._id}
-                                activate={activate}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                      {stableSort(deal.data, getComparator(order, orderBy)).map(
+                        (item) => {
+                          return (
+                            <TableRow tabIndex={-1} key={item._id}>
+                              <TableCell align="left">
+                                <div className="nameDiv">
+                                  <Avatar
+                                    alt={"user"}
+                                    src={item.user ? item.user.avatar : ""}
+                                    sx={{ width: 35, height: 35 }}
+                                  />
+                                  <div className="nameBox">
+                                    <p className="name">
+                                      {item.user &&
+                                        `${item.user.firstName} ${item.user.lastName}`}
+                                    </p>
+                                    <p className="email">
+                                      {item.user && item.user.email}
+                                    </p>
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.basePrice}
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.basePrice}
+                              </TableCell>
+                              <TableCell align="left">
+                                {moment(item.startDate).format("L")}
+                              </TableCell>
+                              <TableCell align="left">
+                                {moment(item.endDate).format("L")}
+                              </TableCell>
+                              <TableCell align="left">
+                                <p
+                                  className={`status ${item.status.toLowerCase()}`}
+                                >
+                                  {item.status.toLowerCase()}
+                                </p>
+                              </TableCell>
+                              <TableCell className="action" align="left">
+                                <SubscribeDropDown
+                                  id={item._id}
+                                  approve={approveDeal}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -216,58 +244,14 @@ const Ads = () => {
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             )}
-            <table>
-              <thead>
-                <tr>
-                  <th>Campaign Title</th>
-                  <th className="extraTh">
-                    Reach <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th className="extraTh">
-                    Clicks <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th className="extraTh">
-                    Date Posted <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th className="extraTh">
-                    End Date <img src={shape} alt="shape" />{" "}
-                  </th>
-
-                  <th className="extraTh">
-                    Status <img src={shape} alt="shape" />{" "}
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((item) => {
-                  return (
-                    <tr key={item.id}>
-                      <td className="nameTd">
-                        <div className="nameDiv">
-                          <img className="userImg" src={userImg} alt="user" />
-                          <div className="nameBox">
-                            <p className="name">Emeka Phillips</p>
-                            <p className="email">emeka.phillips@gmail.com</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>345</td>
-                      <td className="phone">23</td>
-                      <td className="role">10 Nov, 2021</td>
-                      <td className="role">10 Nov, 2021</td>
-                      <td className="statusTd">
-                        <p className="status active">Active</p>
-                      </td>
-                      <td className="action">
-                        <TableDrop extra={true} />
-                      </td>
-                    </tr>
-                  );
-                })}
-                <tr></tr>
-              </tbody>
-            </table>
+          </div>
+          <div className="pagination-wrap">
+            <Pagination
+              color="primary"
+              onChange={handlePage}
+              count={deal && deal.total_pages}
+              shape="rounded"
+            />
           </div>
         </div>
       </div>
