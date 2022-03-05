@@ -29,6 +29,7 @@ const Audit = () => {
   const { register, formState, handleSubmit } = useForm();
   const [modal, setModal] = useState(false);
   const [modalPop, setModalPop] = useState(false);
+  const [search, setSearch] = useState("");
   const handleToggle = (type) => {
     setToggleBtn(type);
   };
@@ -43,7 +44,7 @@ const Audit = () => {
     isLoading: loading,
     isError,
     error,
-  } = useGetAuditQuery({ page: page });
+  } = useGetAuditQuery({ page: page, search });
   console.log(audit, "audit");
 
   const handlePage = (e, value) => {
@@ -61,7 +62,14 @@ const Audit = () => {
           <div className="tableHead">
             <p className="tableTitle">Audit logs</p>
             <div className="otherBox">
-              <input type="text" placeholder="Search" className="search" />
+              <input
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                type="text"
+                placeholder="Search"
+                className="search"
+              />
             </div>
           </div>
 
@@ -72,7 +80,7 @@ const Audit = () => {
               </NoProduct>
             ) : loading ? (
               <LoadingTable />
-            ) : !audit.rows ? (
+            ) : !audit.data.length ? (
               <NoProduct msg="No Audit Yet">
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
@@ -87,7 +95,7 @@ const Audit = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {audit.rows.map((item) => {
+                  {audit.data.map((item) => {
                     return (
                       <motion.tr
                         variants={moveIn}

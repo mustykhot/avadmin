@@ -261,7 +261,8 @@ export const authApi = createApi({
       transformResponse: (response) => response.data,
     }),
     getAudit: builder.query({
-      query: ({ page }) => `user/audits/all?page=${page}&limit=10`,
+      query: ({ page, search }) =>
+        `/audits?page=${page}&limit=10&search=${search}`,
       providesTags: ["audit"],
       transformResponse: (response) => response,
     }),
