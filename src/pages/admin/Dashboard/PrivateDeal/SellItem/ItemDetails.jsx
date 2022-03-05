@@ -1,4 +1,4 @@
-import { useFormContext } from "react-hook-form";
+import {useFormContext} from "react-hook-form";
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
 import Textarea from "../../../../../component/input/textarea";
@@ -7,10 +7,10 @@ import {
   useGetBrandQuery,
 } from "../../../../../services/api";
 
-const ItemDetails = ({ display }) => {
-  const { watch } = useFormContext();
+const ItemDetails = ({display}) => {
+  const {watch} = useFormContext();
 
-  const { data: brands = null, isLoading, isError } = useGetBrandQuery();
+  const {data: brands = null, isLoading, isError} = useGetBrandQuery();
 
   const brand = watch("productInfo.brandInformation.brand");
   const {
@@ -23,7 +23,7 @@ const ItemDetails = ({ display }) => {
   console.log(brands, models, "saka");
 
   return (
-    <div style={{ display: display ? "block" : "none" }}>
+    <div style={{display: display ? "block" : "none"}}>
       <div className="form-group-wrap">
         <SelectField
           name="productInfo.brandInformation.brand"
@@ -34,7 +34,7 @@ const ItemDetails = ({ display }) => {
           placeholder="Select Brand"
           selectOption={
             brands
-              ? brands.data.map((el) => ({
+              ? brands.data.map(el => ({
                   label: el.name,
                   value: el._id,
                 }))
@@ -47,11 +47,10 @@ const ItemDetails = ({ display }) => {
           errMsg="invalid field"
           isLoading={isModelLoading}
           fetchErr={isModelError}
-          required={false}
           placeholder="Select Model"
           selectOption={
             models
-              ? models.data.map((el) => ({
+              ? models.data.map(el => ({
                   label: el.name,
                   value: el._id,
                 }))

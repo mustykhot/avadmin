@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import {useState} from "react";
+import {useForm, FormProvider} from "react-hook-form";
 
 import "./style.scss";
 
@@ -9,10 +9,10 @@ import Pricing from "./Pricing";
 import ShippingDetails from "./ShippingDetails";
 import TnC from "./TnC";
 
-import { useAddPrivateDealMutation } from "../../../../../services/api";
-import { removeEmpty } from "../../../../../utils/utils";
+import {useAddPrivateDealMutation} from "../../../../../services/api";
+import {removeEmpty} from "../../../../../utils/utils";
 import SubmitBtn from "../../../../../component/submitBtn";
-import { toastr } from "react-redux-toastr";
+import {toastr} from "react-redux-toastr";
 import AdminDashboardLayout from "../../../../../component/adminDashboardLayout";
 
 const TOTAL_STEPS = 5;
@@ -21,36 +21,35 @@ const CreatePrivateDeal = () => {
   const methods = useForm({
     mode: "all",
     defaultValues: {
-      state: "Lagos",
-      lga: "Ikeja",
+      productInfo: {
+        state: "Lagos",
+        lga: "Ikeja",
+      },
+      type: "BUY_NOW",
     },
   });
-  const [createDeal, { isLoading }] = useAddPrivateDealMutation();
+  const [createDeal, {isLoading}] = useAddPrivateDealMutation();
 
   const [presentStep, setPresentStep] = useState(1);
   const [image, setImage] = useState([]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     let cred = {
       ...removeEmpty(data),
-
-      // deal: {
-      //   ...removeEmpty(data.deal),
-      //   basePrice: parseInt(data.deal.basePrice),
-      // },
       isPrivate: true,
-      // productInfo: {
-      //   termsInformation: {
-      //     ...removeEmpty(data.termsInformation),
-      //   },
-      //   brandInformation: {
-      //     ...removeEmpty(data.brandInformation),
-      //   },
-      //   photos: [...image],
-      // },
-      // shippingInformation: {
-      //   ...removeEmpty(data.shippingInformation),
-      // },
+      productInfo: {
+        ...removeEmpty(data.productInfo),
+        termsInformation: {
+          ...removeEmpty(data.productInfo.termsInformation),
+        },
+        brandInformation: {
+          ...removeEmpty(data.productInfo.brandInformation),
+        },
+        photos: [...image],
+        shippingInformation: {
+          ...removeEmpty(data.productInfo.shippingInformation),
+        },
+      },
     };
 
     try {
@@ -76,7 +75,7 @@ const CreatePrivateDeal = () => {
     "Terms & Conditions",
   ];
 
-  const goNext = (num) => {
+  const goNext = num => {
     setPresentStep(presentStep + num);
     console.log(methods.getValues(), image);
     if (methods.formState.isValid && image.length > 0) {
@@ -158,7 +157,7 @@ const CreatePrivateDeal = () => {
                     </button>
                     <SubmitBtn
                       btnText="Submit"
-                      // disabled={!methods.formState.isValid}
+                      disabled={!methods.formState.isValid}
                       isLoading={isLoading}
                       style={{
                         display: presentStep === TOTAL_STEPS ? "unset" : "none",
@@ -169,7 +168,7 @@ const CreatePrivateDeal = () => {
                         display: presentStep < TOTAL_STEPS ? "unset" : "none",
                       }}
                       type="button"
-                      // disabled={!methods.formState.isValid || image.length <= 0}
+                      disabled={!methods.formState.isValid || image.length <= 0}
                       onClick={() => goNext(1)}
                       className="btn-primary blue"
                     >

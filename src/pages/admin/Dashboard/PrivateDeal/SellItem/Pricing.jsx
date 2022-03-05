@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import {useState} from "react";
+import {useFormContext} from "react-hook-form";
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
-import { ReactComponent as AuctionIcon } from "../../../../../assets/icons/card.svg";
-import { ReactComponent as BuyNowIcon } from "../../../../../assets/icons/ham.svg";
-// import { ReactComponent as BuyNowIcon } from "../../../../../assets/icons/buyNowIcon.svg";
+import {ReactComponent as AuctionIcon} from "../../../../../assets/icons/card.svg";
+import {ReactComponent as BuyNowIcon} from "../../../../../assets/icons/ham.svg";
 const onlineBidFields = ["startDate", "endDate", "startTime", "endTime"];
 const offlineBidFields = ["auctionDate", "auctionTime", "auctionAddress"];
 
@@ -17,25 +16,21 @@ const buyNowFields = [
 ];
 const auctionFields = ["basePrice", "quantity", "offerType"];
 
-const Pricing = ({ display }) => {
-  const { register, unregister, watch } = useFormContext();
+const Pricing = ({display}) => {
+  const {register, unregister, watch} = useFormContext();
 
   // show and unregister fields for auction and buy now fields
   const [pricingType, setPricingType] = useState("BUY_NOW");
-  const handlePricingTypeChange = (type) => {
+  const handlePricingTypeChange = type => {
     setPricingType(type);
     if (type === "BUY_NOW") unregister([...auctionFields]);
     else if (type === "AUCTION") unregister([...buyNowFields]);
   };
 
   // show and unregister fields for online and offline bids
-
-  const bidType = watch("biddingType");
-  console.log(bidType);
-
   const [biddingType, setBiddingType] = useState("");
-  const handleBiddingType = (e) => {
-    const { value } = e.target;
+  const handleBiddingType = e => {
+    const {value} = e.target;
     setBiddingType(value);
     if (value === "OFFLINE") {
       unregister(onlineBidFields);
@@ -43,46 +38,43 @@ const Pricing = ({ display }) => {
       unregister(offlineBidFields);
     }
   };
-
-  useEffect(() => {
-    if (bidType) {
-      setBiddingType(bidType);
-      if (bidType === "OFFLINE") {
-        unregister(onlineBidFields);
-      } else if (bidType === "ONLINE") {
-        unregister(offlineBidFields);
-      }
-    }
-  }, [bidType]);
-
+  const startDate = watch("startDate");
+  const registerBiddingType = register("type", {required: true});
   let today = new Date().toISOString().split(".")[0];
   return (
-    <div style={{ display: display ? "block" : "none" }}>
+    <div style={{display: display ? "block" : "none"}}>
       <div className="pricing-btn-wrap">
         <label
           className={`pricing-btn ${pricingType === "AUCTION" ? "active" : ""}`}
-          onClick={() => handlePricingTypeChange("AUCTION")}
         >
           <input
-            {...register("type", { required: true })}
+            {...registerBiddingType}
             type="radio"
             name="type"
             hidden
             value="AUCTION"
+            onChange={e => {
+              registerBiddingType.onChange(e);
+              handlePricingTypeChange(e.target.value);
+            }}
           />
           <AuctionIcon />
           Auctions
         </label>
         <label
           className={`pricing-btn ${pricingType === "BUY_NOW" ? "active" : ""}`}
-          onClick={() => handlePricingTypeChange("BUY_NOW")}
         >
           <input
-            {...register("type", { required: true })}
+            {...registerBiddingType}
             type="radio"
             name="type"
             hidden
             value="BUY_NOW"
+            checked
+            onChange={e => {
+              registerBiddingType.onChange(e);
+              handlePricingTypeChange(e.target.value);
+            }}
           />
           <BuyNowIcon />
           Buy Now
@@ -100,11 +92,8 @@ const Pricing = ({ display }) => {
         name="quantity"
         label="Quantity"
         errMsg="invalid field"
+        placeholder={"Select Quantity"}
         selectOption={[
-          {
-            label: "Select Quantity",
-            value: "",
-          },
           {
             label: "Single Item",
             value: "SINGLE_ITEM",
@@ -121,12 +110,9 @@ const Pricing = ({ display }) => {
           <SelectField
             name="biddingType"
             label="Type"
-            // handleCustomChange={handleBiddingType}
+            handleCustomChange={handleBiddingType}
+            placeholder="Select Bidding Type"
             selectOption={[
-              {
-                label: `Select Bidding Type`,
-                value: "",
-              },
               {
                 label: "Online",
                 value: "ONLINE",
@@ -137,7 +123,7 @@ const Pricing = ({ display }) => {
               },
             ]}
           />
-          {bidType === "ONLINE" && (
+          {biddingType === "ONLINE" && (
             <>
               <div className="form-group-wrap">
                 <InputField
@@ -145,21 +131,21 @@ const Pricing = ({ display }) => {
                   name="startDate"
                   label="Start Date"
                   errMsg="invalid date"
-                  // min={new Date().toISOString().split(".")[0]}
+                  min={new Date().toISOString().split(".")[0]}
                 />
 
                 <InputField
                   type="datetime-local"
                   name="endDate"
                   label="End Date"
-                  // min={new Date(startDate || today).toISOString().split(".")[0]}
+                  min={new Date(startDate || today).toISOString().split(".")[0]}
                   errMsg="invalid date"
                 />
               </div>
             </>
           )}
 
-          {bidType === "OFFLINE" && (
+          {biddingType === "OFFLINE" && (
             <>
               <div className="form-group-wrap">
                 <InputField
@@ -196,19 +182,10 @@ const Pricing = ({ display }) => {
             name="offerType"
             label="Offer Type"
             errMsg="invalid field"
+            placeholder={"Select Offer Type"}
             selectOption={[
-              {
-                label: "Select Offer Type",
-                value: "",
-              },
-              {
-                label: "Negotiable",
-                value: "Negotiable",
-              },
-              {
-                label: "Non-negotiable",
-                value: "Non-negotiable",
-              },
+              {label: "Negotiable", value: "NEGOTIABLE"},
+              {label: "Non-Negotiable", value: "NON_NEGOTIABLE"},
             ]}
           />
         </div>

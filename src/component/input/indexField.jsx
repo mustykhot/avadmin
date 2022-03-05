@@ -1,7 +1,7 @@
-import { useState } from "react";
+import {useState} from "react";
 import "./style.scss";
 import InputErrorMsg from "./InputErrorMsg";
-import { useFormContext } from "react-hook-form";
+import {useFormContext} from "react-hook-form";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 export const trapSpacesForRequiredFields = (value, required) => {
@@ -42,12 +42,17 @@ const InputField = ({
   const [showPassword, setShowPassword] = useState(true);
   const {
     register,
-    formState: { errors },
+    formState: {errors},
   } = useFormContext();
 
   return (
     <div className={`form-group ${className}`}>
-      {label && <label htmlFor={id || name}>{label}</label>}
+      {label && (
+        <label htmlFor={id || name}>
+          {label}
+          {required && <span className="clr-redClr">*</span>}
+        </label>
+      )}
       <div
         className={`input-icon-wrap ${
           iconPlaceholder ? "icon-placeholder" : ""
@@ -68,7 +73,7 @@ const InputField = ({
               id={id}
               {...register(name, {
                 required: required ? "You must specify a password" : false,
-                validate: (value) =>
+                validate: value =>
                   validatePassword ? validatePassword(value) : null,
                 minLength: {
                   value: 8,
@@ -80,7 +85,7 @@ const InputField = ({
             />
             <button
               disabled={isDisabled}
-              onClick={() => setShowPassword((prev) => !prev)}
+              onClick={() => setShowPassword(prev => !prev)}
               type="button"
               className="icon icon-right"
             >
@@ -97,7 +102,7 @@ const InputField = ({
               id={id || name}
               {...register(name, {
                 required: required ? "This Field is required" : false,
-                validate: (value) => {
+                validate: value => {
                   trapSpacesForRequiredFields(value, required);
                   extraValidation && extraValidation(value);
                 },
