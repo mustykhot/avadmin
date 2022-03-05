@@ -24,6 +24,9 @@ const CreatePrivateDeal = () => {
       productInfo: {
         state: "Lagos",
         lga: "Ikeja",
+        brandInformation: {
+          color: "",
+        },
       },
       type: "BUY_NOW",
     },
