@@ -123,6 +123,14 @@ const SideBar = ({ active }) => {
         </Link>
 
         <Link
+          className={`item ${active === "plan" ? "active" : ""}`}
+          to="/plan"
+        >
+          <Credit className="iconSide" />
+          <p>Plan</p>
+        </Link>
+
+        <Link
           className={`item ${active === "chat" ? "active" : ""} chatcount`}
           to="/chat"
         >

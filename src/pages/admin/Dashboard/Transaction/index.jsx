@@ -37,12 +37,13 @@ const Transaction = () => {
     setToggleBtn(type);
   };
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
   const {
     data: transaction = null,
     isLoading: loading,
     isError,
     error,
-  } = useGetTransactionQuery({ page: page });
+  } = useGetTransactionQuery({ page, search });
   console.log(transaction);
   const view = (id) => {
     navigate(`/transaction/details/${id}`);
@@ -61,10 +62,6 @@ const Transaction = () => {
     {
       id: "customer",
       label: "Customer",
-    },
-    {
-      id: "product",
-      label: "Products Name",
     },
     {
       id: "amount",
@@ -116,13 +113,24 @@ const Transaction = () => {
         </div>
 
         <div style={{ marginTop: "30px" }} className="whiteContainer">
+          <div className="tableHead">
+            <p className="tableTitle">All Transactions</p>
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              className="search"
+            />
+          </div>
+
           <div className="downloadTable" style={{ display: "none" }}>
             <table id="table-to-xls">
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Customer</th>
-                  <th>Product Name</th>
 
                   <th className="extraTh">Amount</th>
 
@@ -133,8 +141,8 @@ const Transaction = () => {
               </thead>
               <tbody>
                 {transaction &&
-                  transaction.rows &&
-                  transaction.rows.map((item) => {
+                  transaction.data.length &&
+                  transaction.data.map((item) => {
                     return (
                       <tr>
                         <td>{truncateString(item._id, 7)}</td>
@@ -142,7 +150,7 @@ const Transaction = () => {
                           {item.user.firstName}
                           {item.user.lastName}
                         </td>
-                        <td>{item.item}</td>
+
                         <td>₦ {formatCurrency(item.amount)}</td>
                         <td>{moment(item.createdAt).format("MM/DD/YYYY")}</td>
 
@@ -158,7 +166,7 @@ const Transaction = () => {
             {!isError ? (
               loading ? (
                 <LoadingTable />
-              ) : transaction.rows ? (
+              ) : transaction.data.length ? (
                 <motion.div
                   variants={moveIn}
                   animate="visible"
@@ -174,12 +182,12 @@ const Transaction = () => {
                         orderBy={orderBy}
                         // onSelectAllClick={handleSelectAllClick}
                         onRequestSort={handleRequestSort}
-                        rowCount={transaction.rows.length}
+                        rowCount={transaction.data.length}
                         align="left"
                       />
                       <TableBody>
                         {stableSort(
-                          transaction.rows,
+                          transaction.data,
                           getComparator(order, orderBy)
                         ).map((item) => {
                           return (
@@ -212,7 +220,7 @@ const Transaction = () => {
                                   </div>
                                 </div>
                               </TableCell>
-                              <TableCell align="left">{item.item}</TableCell>
+
                               <TableCell align="left">
                                 ₦ {moneyFormatter(item.amount)}
                               </TableCell>
@@ -230,15 +238,6 @@ const Transaction = () => {
                         })}
                       </TableBody>
                     </Table>
-                    <div className="pagination-wrap">
-                      <Pagination
-                        color="primary"
-                        onChange={handlePage}
-                        count={transaction && transaction.total_pages}
-                        defaultPage={1}
-                        shape="rounded"
-                      />
-                    </div>
                   </TableContainer>
                 </motion.div>
               ) : (
@@ -251,6 +250,20 @@ const Transaction = () => {
                 <FontAwesomeIcon icon={faCommentSlash} />
               </NoProduct>
             )}
+          </div>
+          <div className="pagination-wrap">
+            <Pagination
+              color="primary"
+              onChange={handlePage}
+              count={
+                transaction &&
+                Math.ceil(
+                  parseInt(transaction._meta.pagination.total_count) / 10
+                )
+              }
+              defaultPage={1}
+              shape="rounded"
+            />
           </div>
         </div>
       </div>

@@ -63,15 +63,20 @@ const TransactionDownload = () => {
           </div>
           <div ref={ref} className="downloadBox">
             <div className="aboutProduct">
-              <img src={product} alt="product" />
+              {/* <img src={product} alt="product" /> */}
               <div className="productText">
                 <p className="order">
-                  Order ID: {transaction && transaction.transaction._id}
+                  Transaction ID: {transaction && transaction.data._id}
                 </p>
-                <p className="productName">
-                  {transaction && transaction.transaction.item}
+                <br />
+                <p className="order">
+                  Transaction Type:{" "}
+                  {transaction && transaction.data.Transactiontype}
                 </p>
-                <p className="auctionName">Automobile Auctions</p>
+                {/* <p className="productName">
+                  {transaction && transaction.data.item}
+                </p> */}
+                {/* <p className="auctionName">Automobile Auctions</p> */}
               </div>
             </div>
             <div className="eachOrder">
@@ -80,17 +85,13 @@ const TransactionDownload = () => {
                 <p className="left">Date</p>
                 <p className="right">
                   {transaction &&
-                    moment(transaction.transaction.createdAt).format(
-                      "MM/DD/YYYY"
-                    )}
+                    moment(transaction.data.createdAt).format("MM/DD/YYYY")}
                 </p>
               </div>
               <div className="flexOrder">
                 <p className="left">Product price:</p>
                 <p className="right">
-                  ₦
-                  {transaction &&
-                    formatCurrency(transaction.transaction.amount)}
+                  ₦{transaction && formatCurrency(transaction.data.amount)}
                 </p>
               </div>
               <div className="flexOrder">
@@ -108,25 +109,25 @@ const TransactionDownload = () => {
               <div className="flexOrder">
                 <p className="left">Customer name:</p>
                 <p className="right">
-                  {`${transaction && transaction.transaction.user.firstName} ${
-                    transaction && transaction.transaction.user.lastName
+                  {`${transaction && transaction.data.user.firstName} ${
+                    transaction && transaction.data.user.lastName
                   }`}
                 </p>
               </div>
               <div className="flexOrder">
                 <p className="left">Email:</p>
                 <p className="right">
-                  {transaction && transaction.transaction.user.email}
+                  {transaction && transaction.data.user.email}
                 </p>
               </div>
               <div className="flexOrder">
                 <p className="left">Phone:</p>
                 <p className="right">
-                  {transaction && transaction.transaction.user.phone}
+                  {transaction && transaction.data.user.mobile}
                 </p>
               </div>
             </div>
-            <div className="line"></div>
+            {/* <div className="line"></div>
             <div className="eachOrder">
               <p className="orderTopic">Shipping Address</p>
               <div className="flexOrder">
@@ -135,7 +136,7 @@ const TransactionDownload = () => {
                   Nigeria
                 </p>
               </div>
-            </div>
+            </div> */}
           </div>
         </motion.div>
       )}

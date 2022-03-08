@@ -43,38 +43,11 @@ const Dashboard = () => {
     ]);
   };
   const labels = ["January", "February", "March", "April", "May"];
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {},
-      title: {
-        display: true,
-        text: "Chart.js Line Chart",
-      },
-    },
-  };
 
   // get category
   const { data: dash = null, isLoading, isError, error } = useGetDashQuery();
   console.log(dash, "dash");
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: "Dataset 1",
-
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Dataset 2",
-
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
-  };
   ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -113,15 +86,15 @@ const Dashboard = () => {
         label: "",
         weight: 1,
         backgroundColor: ["#F98B2D", "#285ED3"],
-        data: dash ? [dash.data.stats.auction, dash.data.stats.buyNow] : [0, 0],
+        data: dash ? [dash.data.auction, dash.data.buyNow] : [0, 0],
       },
     ],
   };
 
   const donughtData = {
     labels: dash
-      ? dash.data.stats.topSellingCategory.length
-        ? dash.data.stats.topSellingCategory.map((item, el) => {
+      ? dash.data.topSellingCategory.length
+        ? dash.data.topSellingCategory.map((item, el) => {
             if (el < 3) {
               return item.categoryName;
             }
@@ -135,8 +108,8 @@ const Dashboard = () => {
         borderWidth: 1,
         backgroundColor: ["#F98B2D", "#285ED3", "#FBCC40"],
         data: dash
-          ? dash.data.stats.topSellingCategory.length
-            ? dash.data.stats.topSellingCategory.map((item, el) => {
+          ? dash.data.topSellingCategory.length
+            ? dash.data.topSellingCategory.map((item, el) => {
                 if (el < 3) {
                   return item.totalCount;
                 }
@@ -158,9 +131,13 @@ const Dashboard = () => {
   }
 
   const getPercent = (calc, total) => {
-    let perc = (calc / total) * 100;
+    if (total !== 0) {
+      let perc = (calc / total) * 100;
 
-    return perc;
+      return perc;
+    } else {
+      return 0;
+    }
   };
 
   return (
@@ -191,33 +168,27 @@ const Dashboard = () => {
           <div className="summaryFlex">
             <SummaryCard
               icon={userImg}
-              midText={dash ? (dash.data ? dash.data.stats.totalUsers : 0) : 0}
+              midText={dash ? (dash.data ? dash.data.totalUsers : 0) : 0}
               btmText={"Total No Users"}
               increase={"none"}
               isFour={true}
             />
             <SummaryCard
               icon={monitor}
-              midText={
-                dash ? (dash.data ? dash.data.stats.totalProducts : 0) : 0
-              }
+              midText={dash ? (dash.data ? dash.data.totalProducts : 0) : 0}
               btmText={"Total Products"}
               increase={"none"}
               isFour={true}
             />
             <SummaryCard
               icon={cart}
-              midText={
-                dash ? (dash.data ? dash.data.stats.totalTransactions : 0) : 0
-              }
+              midText={dash ? (dash.data ? dash.data.totalTransactions : 0) : 0}
               increase={"none"}
               btmText={"Total Transactions"}
               isFour={true}
             />
             <SummaryCard
-              midText={
-                dash ? (dash.data ? dash.data.stats.totalRevenue : 0) : 0
-              }
+              midText={dash ? (dash.data ? dash.data.totalRevenue : 0) : 0}
               currency={"₦"}
               btmText={"Total Revenue"}
               isAmount={true}
@@ -298,13 +269,13 @@ const Dashboard = () => {
                   <div className="eachInfo">
                     <p className="info-detail">
                       <span className="red"></span>Auctions{" "}
-                      {dash ? dash.data.stats.auction : 0}
+                      {dash ? dash.data.auction : 0}
                     </p>
                     <p className="percent">
                       {dash
                         ? getPercent(
-                            dash.data.stats.auction,
-                            dash.data.stats.auction + dash.data.stats.buyNow
+                            dash.data.auction,
+                            dash.data.auction + dash.data.buyNow
                           )
                         : 0}
                       %
@@ -313,14 +284,14 @@ const Dashboard = () => {
                   <div className="eachInfo">
                     <p className="info-detail">
                       <span className="blue"></span>Buy Now{" "}
-                      {dash ? dash.data.stats.auction : 0}
+                      {dash ? dash.data.auction : 0}
                     </p>
                     <p className="percent">
                       {" "}
                       {dash
                         ? getPercent(
-                            dash.data.stats.buyNow,
-                            dash.data.stats.auction + dash.data.stats.buyNow
+                            dash.data.buyNow,
+                            dash.data.auction + dash.data.buyNow
                           )
                         : 0}
                       %
@@ -338,7 +309,7 @@ const Dashboard = () => {
               </div>
               <div className="top-wrap">
                 {dash &&
-                  dash.data.stats.topSellers.map((item) => {
+                  dash.data.topSellers.map((item) => {
                     return (
                       <TopSeller
                         key={item}
@@ -359,7 +330,7 @@ const Dashboard = () => {
               </div>
               <div className="recent-table">
                 {dash ? (
-                  dash.data.stats.recentTransaction.length ? (
+                  dash.data.recentTransaction.length ? (
                     <table>
                       <thead>
                         <tr>
@@ -372,7 +343,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {dash.data.stats.recentTransaction.map((item, el) => {
+                        {dash.data.recentTransaction.map((item, el) => {
                           if (el < 5) {
                             return (
                               <tr key={item.id}>
@@ -418,8 +389,8 @@ const Dashboard = () => {
                 />
                 <div className="chatInfo">
                   {dash
-                    ? dash.data.stats.topSellingCategory.length
-                      ? dash.data.stats.topSellingCategory.map((item, el) => {
+                    ? dash.data.topSellingCategory.length
+                      ? dash.data.topSellingCategory.map((item, el) => {
                           if (el < 3) {
                             return (
                               <div key={el} className="eachInfo">
@@ -468,12 +439,12 @@ const Dashboard = () => {
               </select> */}
               </div>
               <div className="top-wrap">
-                {dash && !dash.data.stats.adminActivities.length ? (
+                {/* {dash && !dash.data.adminActivities.length ? (
                   <NoProduct msg="No Data Yet...">
                     <FontAwesomeIcon icon={faCommentSlash} />
                   </NoProduct>
                 ) : (
-                  dash.data.stats.adminActivities.map((item, el) => {
+                  dash.data.adminActivities.map((item, el) => {
                     if (el < 5) {
                       return (
                         <TopSeller
@@ -485,7 +456,7 @@ const Dashboard = () => {
                       );
                     }
                   })
-                )}
+                )} */}
               </div>
             </div>
           </div>

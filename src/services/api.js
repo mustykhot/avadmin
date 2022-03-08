@@ -117,7 +117,8 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getUserDeal: builder.query({
-      query: (id) => `deals/user/${id}`,
+      query: ({ id, page }) =>
+        `data/deals-histories/${id}/user/stats?page=${page}`,
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
@@ -133,7 +134,8 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getUserTrans: builder.query({
-      query: (id) => `transaction/all/${id}`,
+      query: ({ id, page }) =>
+        `data/transactions/${id}/user/stats?page=${page}`,
       providesTags: ["transaction"],
       transformResponse: (response) => response,
     }),
@@ -161,12 +163,13 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getTransaction: builder.query({
-      query: ({ page }) => `transaction?page=${page}&limit=10`,
+      query: ({ page, search }) =>
+        `transactions/me?page=${page}&limit=10&search=${search}&population=["user"]`,
       providesTags: ["transaction"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => response,
     }),
     getEachTransaction: builder.query({
-      query: (id) => `transaction/user/${id}`,
+      query: (id) => `transaction/single/${id}?population=["user"]`,
       providesTags: ["transaction"],
       transformResponse: (response) => response,
     }),
@@ -266,22 +269,14 @@ export const authApi = createApi({
       providesTags: ["audit"],
       transformResponse: (response) => response,
     }),
-    // user sellings
-    getSelling: builder.query({
-      query: (id) => `product/get-products?user=${id}`,
-      providesTags: ["selling"],
-      transformResponse: (response) => response,
-    }),
-    getSellingStat: builder.query({
-      query: (id) => `product/stats?user=${id}`,
-      providesTags: ["selling"],
-      transformResponse: (response) => response,
-    }),
-    getAuctionStat: builder.query({
-      query: (id) => `bids/stats?user=${id}`,
+    // user auction
+
+    getUserAuction: builder.query({
+      query: ({ id, page }) => `/data/deals/${id}/user/stats?page=${page}`,
       providesTags: ["auction"],
       transformResponse: (response) => response,
     }),
+
     // private vendor
     getAllPrivateVendor: builder.query({
       query: ({ page, search, limit }) =>
@@ -383,10 +378,9 @@ export const {
   useGetBrandQuery,
   useGetDashQuery,
   useLoginnormalMutation,
-  useGetSellingQuery,
+  useGetUserAuctionQuery,
   useApproveDealBatchMutation,
-  useGetSellingStatQuery,
-  useGetAuctionStatQuery,
+
   useDeleteCategoryMutation,
   useUpdateBatchMutation,
   useAddAdminMutation,

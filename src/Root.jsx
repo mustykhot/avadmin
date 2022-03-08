@@ -9,6 +9,7 @@ import Audit from "./pages/admin/Dashboard/Audit";
 import Category from "./pages/admin/Dashboard/Category";
 import Chat from "./pages/admin/Dashboard/Chat";
 import Dashboard from "./pages/admin/Dashboard/Dashboard";
+import Plan from "./pages/admin/Dashboard/plan";
 import PrivateDeal from "./pages/admin/Dashboard/PrivateDeal";
 import PrivateDealForm1 from "./pages/admin/Dashboard/PrivateDeal/form1";
 import CreatePrivateDeal from "./pages/admin/Dashboard/PrivateDeal/SellItem";
@@ -41,6 +42,7 @@ const Root = () => {
             <Route path="/audit" element={<Audit />} />
             <Route path="/account" element={<Account />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/plan" element={<Plan />} />
             <Route path="/private" element={<PrivateDeal />} />
             <Route path="/private-vendor" element={<PrivateVendor />} />
             <Route path="/private/form1" element={<CreatePrivateDeal />} />
