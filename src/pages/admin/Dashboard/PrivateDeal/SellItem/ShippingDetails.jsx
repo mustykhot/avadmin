@@ -44,7 +44,6 @@ const ShippingDetails = ({ display }) => {
       <div className="form-group-wrap">
         <SelectField
           name="productInfo.shippingInformation.deliveryPeriod"
-          required={false}
           label="Delivery Period"
           errMsg="invalid field"
           selectOption={[
@@ -65,7 +64,6 @@ const ShippingDetails = ({ display }) => {
         <SelectField
           name="productInfo.shippingInformation.pickUpAvailable"
           label="Pickup Available"
-          required={false}
           errMsg="invalid field"
           selectOption={[
             {

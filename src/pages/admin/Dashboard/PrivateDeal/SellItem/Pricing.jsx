@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {useFormContext} from "react-hook-form";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
-import {ReactComponent as AuctionIcon} from "../../../../../assets/icons/card.svg";
-import {ReactComponent as BuyNowIcon} from "../../../../../assets/icons/ham.svg";
+import { ReactComponent as AuctionIcon } from "../../../../../assets/icons/card.svg";
+import { ReactComponent as BuyNowIcon } from "../../../../../assets/icons/ham.svg";
 const onlineBidFields = ["startDate", "endDate", "startTime", "endTime"];
 const offlineBidFields = ["auctionDate", "auctionTime", "auctionAddress"];
 
@@ -16,12 +16,12 @@ const buyNowFields = [
 ];
 const auctionFields = ["basePrice", "quantity", "offerType"];
 
-const Pricing = ({display}) => {
-  const {register, unregister, watch} = useFormContext();
+const Pricing = ({ display }) => {
+  const { register, unregister, watch } = useFormContext();
 
   // show and unregister fields for auction and buy now fields
   const [pricingType, setPricingType] = useState("BUY_NOW");
-  const handlePricingTypeChange = type => {
+  const handlePricingTypeChange = (type) => {
     setPricingType(type);
     if (type === "BUY_NOW") unregister([...auctionFields]);
     else if (type === "AUCTION") unregister([...buyNowFields]);
@@ -29,8 +29,8 @@ const Pricing = ({display}) => {
 
   // show and unregister fields for online and offline bids
   const [biddingType, setBiddingType] = useState("");
-  const handleBiddingType = e => {
-    const {value} = e.target;
+  const handleBiddingType = (e) => {
+    const { value } = e.target;
     setBiddingType(value);
     if (value === "OFFLINE") {
       unregister(onlineBidFields);
@@ -39,10 +39,10 @@ const Pricing = ({display}) => {
     }
   };
   const startDate = watch("startDate");
-  const registerBiddingType = register("type", {required: true});
+  const registerBiddingType = register("type", { required: true });
   let today = new Date().toISOString().split(".")[0];
   return (
-    <div style={{display: display ? "block" : "none"}}>
+    <div style={{ display: display ? "block" : "none" }}>
       <div className="pricing-btn-wrap">
         <label
           className={`pricing-btn ${pricingType === "AUCTION" ? "active" : ""}`}
@@ -53,7 +53,7 @@ const Pricing = ({display}) => {
             name="type"
             hidden
             value="AUCTION"
-            onChange={e => {
+            onChange={(e) => {
               registerBiddingType.onChange(e);
               handlePricingTypeChange(e.target.value);
             }}
@@ -71,7 +71,7 @@ const Pricing = ({display}) => {
             hidden
             value="BUY_NOW"
             checked
-            onChange={e => {
+            onChange={(e) => {
               registerBiddingType.onChange(e);
               handlePricingTypeChange(e.target.value);
             }}
@@ -86,7 +86,6 @@ const Pricing = ({display}) => {
         placeholder="Enter Amount"
         iconPlaceholder={"₦"}
         label="Base Price"
-        required={false}
       />
       <SelectField
         name="quantity"
@@ -153,13 +152,11 @@ const Pricing = ({display}) => {
                   name="auctionDate"
                   label="Auction Date"
                   errMsg="invalid date"
-                  required={false}
                   min={new Date().toISOString().split("T")[0]}
                 />
                 <InputField
                   type="time"
                   name="auctionTime"
-                  required={false}
                   label="Auction Time"
                   errMsg="invalid field"
                 />
@@ -184,8 +181,8 @@ const Pricing = ({display}) => {
             errMsg="invalid field"
             placeholder={"Select Offer Type"}
             selectOption={[
-              {label: "Negotiable", value: "NEGOTIABLE"},
-              {label: "Non-Negotiable", value: "NON_NEGOTIABLE"},
+              { label: "Negotiable", value: "NEGOTIABLE" },
+              { label: "Non-Negotiable", value: "NON_NEGOTIABLE" },
             ]}
           />
         </div>

@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {useForm, FormProvider} from "react-hook-form";
+import { useState } from "react";
+import { useForm, FormProvider } from "react-hook-form";
 
 import "./style.scss";
 
@@ -9,10 +9,10 @@ import Pricing from "./Pricing";
 import ShippingDetails from "./ShippingDetails";
 import TnC from "./TnC";
 
-import {useAddPrivateDealMutation} from "../../../../../services/api";
-import {removeEmpty} from "../../../../../utils/utils";
+import { useAddPrivateDealMutation } from "../../../../../services/api";
+import { removeEmpty } from "../../../../../utils/utils";
 import SubmitBtn from "../../../../../component/submitBtn";
-import {toastr} from "react-redux-toastr";
+import { toastr } from "react-redux-toastr";
 import AdminDashboardLayout from "../../../../../component/adminDashboardLayout";
 
 const TOTAL_STEPS = 5;
@@ -31,12 +31,12 @@ const CreatePrivateDeal = () => {
       type: "BUY_NOW",
     },
   });
-  const [createDeal, {isLoading}] = useAddPrivateDealMutation();
+  const [createDeal, { isLoading }] = useAddPrivateDealMutation();
 
   const [presentStep, setPresentStep] = useState(1);
   const [image, setImage] = useState([]);
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     let cred = {
       ...removeEmpty(data),
       isPrivate: true,
@@ -59,13 +59,19 @@ const CreatePrivateDeal = () => {
       let response = await createDeal(cred).unwrap();
       console.log(response);
       // show toast
-      toastr("success", "Product creation was successful");
+
+      toastr.success("Success", "Private Deal creation was successful");
+      methods.reset();
+      setImage([]);
+      setTimeout(() => {
+        setPresentStep(1);
+      }, 4000);
     } catch (err) {
       console.log(err);
       if (err.status === "FETCH_ERROR") {
-        toastr("error", "Something went wrong, please try again...");
+        toastr.error("Error", "Something went wrong, please try again...");
       } else {
-        toastr("error", err.data._meta.error.message);
+        toastr.error("Error", err.data._meta.error.message);
       }
     }
     console.log(cred);
@@ -78,7 +84,7 @@ const CreatePrivateDeal = () => {
     "Terms & Conditions",
   ];
 
-  const goNext = num => {
+  const goNext = (num) => {
     setPresentStep(presentStep + num);
     console.log(methods.getValues(), image);
     if (methods.formState.isValid && image.length > 0) {

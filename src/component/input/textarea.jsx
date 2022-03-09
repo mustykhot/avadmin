@@ -1,4 +1,4 @@
-import {useFormContext} from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import InputErrorMsg from "./InputErrorMsg";
 
 import "./style.scss";
@@ -15,6 +15,7 @@ const Textarea = ({
   errMsg,
   className,
   notRequired,
+  required = true,
   extraClass,
   placeholder,
   isDisabled,
@@ -23,7 +24,7 @@ const Textarea = ({
 }) => {
   const {
     register,
-    formState: {errors},
+    formState: { errors },
   } = useFormContext();
 
   return (
@@ -41,8 +42,8 @@ const Textarea = ({
         id={id}
         className={inputExtraClass}
         {...register(name, {
-          required: notRequired ? false : true,
-          validate: value => trapSpacesForRequiredFields(value, notRequired),
+          required: required ? true : false,
+          validate: (value) => trapSpacesForRequiredFields(value, notRequired),
         })}
         name={name}
         placeholder={placeholder}

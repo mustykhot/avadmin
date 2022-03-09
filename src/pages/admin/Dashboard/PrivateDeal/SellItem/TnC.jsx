@@ -13,14 +13,12 @@ const TnC = ({ display }) => {
           step="1"
           name="productInfo.termsInformation.yearOfPurchase"
           label="Year of Purchase"
-          required={false}
           errMsg={`Year should be between 1990 - ${new Date().getFullYear()} `}
         />
 
         <SelectField
           name="productInfo.termsInformation.repairHistory"
           label="Repair History"
-          required={false}
           errMsg="invalid field"
           selectOption={[
             {
@@ -42,7 +40,6 @@ const TnC = ({ display }) => {
         <SelectField
           name="productInfo.termsInformation.warranty"
           label="Warranty"
-          required={false}
           errMsg="invalid field"
           selectOption={[
             {
@@ -73,7 +70,6 @@ const TnC = ({ display }) => {
         />
         <SelectField
           name="productInfo.termsInformation.refundPolicy"
-          required={false}
           label="Refund Policy"
           errMsg="invalid field"
           selectOption={[
