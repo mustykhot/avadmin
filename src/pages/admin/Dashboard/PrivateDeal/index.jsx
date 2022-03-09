@@ -293,9 +293,10 @@ const PrivateDeal = () => {
                           <td>{item.product && item.product.productName}</td>
                           <td> {formatCurrency(item.basePrice)}</td>
                           <td align="left">
-                            {moment(item.product.createdAt).format(
-                              "MMM Do YYYY"
-                            )}{" "}
+                            {item.product &&
+                              moment(item.product.createdAt).format(
+                                "MMM Do YYYY"
+                              )}{" "}
                           </td>
 
                           <td>{item.status}</td>
@@ -367,14 +368,16 @@ const PrivateDeal = () => {
                                   {formatCurrency(item.basePrice)}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {moment(item.product.createdAt).format(
-                                    "MMM Do YYYY"
-                                  )}{" "}
+                                  {item.product &&
+                                    moment(item.product.createdAt).format(
+                                      "MMM Do YYYY"
+                                    )}{" "}
                                   <br />{" "}
                                   <p className="time green">
-                                    {moment(item.product.createdAt).format(
-                                      "LT"
-                                    )}
+                                    {item.product &&
+                                      moment(item.product.createdAt).format(
+                                        "LT"
+                                      )}
                                   </p>{" "}
                                 </TableCell>
 
@@ -460,9 +463,10 @@ const PrivateDeal = () => {
                           <td>{item.product && item.product.name}</td>
                           <td> {formatCurrency(item.basePrice)}</td>
                           <td align="left">
-                            {moment(item.product.createdAt).format(
-                              "MMM Do YYYY"
-                            )}
+                            {item.product &&
+                              moment(item.product.createdAt).format(
+                                "MMM Do YYYY"
+                              )}
                           </td>
 
                           <td>{item.status}</td>
@@ -532,14 +536,16 @@ const PrivateDeal = () => {
                                   {formatCurrency(item.basePrice)}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {moment(item.product.createdAt).format(
-                                    "MMM Do YYYY"
-                                  )}{" "}
+                                  {item.product &&
+                                    moment(item.product.createdAt).format(
+                                      "MMM Do YYYY"
+                                    )}{" "}
                                   <br />{" "}
                                   <p className="time green">
-                                    {moment(item.product.createdAt).format(
-                                      "LT"
-                                    )}
+                                    {item.product &&
+                                      moment(item.product.createdAt).format(
+                                        "LT"
+                                      )}
                                   </p>{" "}
                                 </TableCell>
 

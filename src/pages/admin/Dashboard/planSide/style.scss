@@ -2,6 +2,12 @@
 
 .pd-plan {
   width: 100%;
+  .whiteForm {
+    @include whiteContainer;
+    width: 50%;
+    margin: auto;
+    padding: 35px;
+  }
   .topicPart {
     display: flex;
     align-items: center;
@@ -24,49 +30,46 @@
   }
   .whiteContainer {
     @include whiteContainer;
-    .coverSetting {
-      width: 80%;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .left {
-        width: 47%;
-        .leftHead {
-          font-size: 16px;
-          line-height: 19px;
-          /* identical to box height */
-          font-weight: bold;
-          margin-bottom: 28px;
-          letter-spacing: 0.746667px;
+    .tableHead {
+      @include tableHead;
+      .search {
+        @include search;
+      }
+      .tableTitle {
+        @include tableTitle;
+      }
+    }
 
-          color: #393939;
-        }
-        form {
-          width: 100%;
-          border: 1px solid #dcdff1;
-          border-radius: 11px;
-          padding: 30px;
-          margin-top: 38px;
-        }
+    .overflowTable {
+      @include overflowTable;
+      table {
       }
     }
   }
-  .flexPart {
-    margin-top: 20px;
-    width: 100%;
-
-    .whiteGuy {
-      width: 70%;
-      background: #ffffff;
-      box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.08);
-      border-radius: 9px;
-      padding: 80px;
-      margin: auto;
-      .coverForm {
-        width: 60%;
-        margin: auto;
+  .createAdmin {
+    width: 450px;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.07);
+    border-radius: 11px;
+    padding: 20px;
+    margin: auto;
+    .group {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      .halfInput {
+        width: 45%;
       }
+    }
+    .cancel {
+      @include button;
+      margin-top: 10px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-decoration-line: underline;
+
+      color: #0052bd;
     }
   }
   .listSelected {
@@ -93,4 +96,11 @@
       }
     }
   }
+}
+button.back {
+  width: 100%;
+  margin-top: 10px;
+  background: none;
+  cursor: pointer;
+  border: none;
 }

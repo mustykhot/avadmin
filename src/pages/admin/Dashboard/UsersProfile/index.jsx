@@ -266,7 +266,7 @@ const UsersProfile = () => {
                         <thead>
                           <tr>
                             <th>Transaction ID</th>
-                            <th>Mobile No</th>
+                            <th>Type</th>
                             <th className="extraTh">Amount</th>
                             <th className="extraTh">Status</th>
                             <th className="extraTh">Date</th>
@@ -283,12 +283,15 @@ const UsersProfile = () => {
                                 className="bgDark"
                               >
                                 <td className="phone">{item.id}</td>
-                                <td className={`amount green`}>
-                                  {item.user.phone}
+                                <td className="phone">
+                                  {item.Transactiontype.toLowerCase()}
                                 </td>
+
                                 <td className="role">₦ {item.amount}</td>
                                 <td className="statusTd">
-                                  <p className="status active">Successful</p>
+                                  <p className={`status ${item.status}`}>
+                                    {item.status.toLowerCase()}
+                                  </p>
                                 </td>
                                 <td className="role">
                                   {moment(item.createdAt).format("L")}
@@ -371,15 +374,10 @@ const UsersProfile = () => {
                           <tr>
                             <th>Item ID</th>
 
-                            <th className="extraTh">
-                              Amount <img src={shape} alt="shape" />{" "}
-                            </th>
-                            <th className="extraTh">
-                              Status <img src={shape} alt="shape" />{" "}
-                            </th>
-                            <th className="extraTh">
-                              Date <img src={shape} alt="shape" />{" "}
-                            </th>
+                            <th className="extraTh">Base Price</th>
+                            <th className="extraTh">Bid Status</th>
+                            <th>Status</th>
+                            <th className="extraTh">Date</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -392,12 +390,17 @@ const UsersProfile = () => {
                                 key={item.id}
                                 className="bgDark"
                               >
-                                <td className="phone">8974-8743</td>
-                                <td className="role">₦ 54,000</td>
+                                <td className="phone">{item.id}</td>
+                                <td className="role">₦ {item.basePrice}</td>
+                                <td>{item.bidStatus}</td>
                                 <td className="statusTd">
-                                  <p className="status active">Auction Won</p>
+                                  <p className={`status ${item.status}`}>
+                                    {item.status}
+                                  </p>
                                 </td>
-                                <td className="role">10 Nov, 2021</td>
+                                <td className="role">
+                                  {moment(item.createdAt).format("L")}
+                                </td>
                               </tr>
                             );
                           })}
@@ -475,8 +478,8 @@ const UsersProfile = () => {
                         <thead>
                           <tr>
                             <th>Item ID</th>
-                            <th className="extraTh">Amount</th>
-                            <th className="extraTh">Quantity</th>
+                            <th className="extraTh">Base Price</th>
+                            <th className="extraTh">Type</th>
                             <th className="extraTh">Status</th>
 
                             <th className="extraTh">Date</th>
@@ -487,16 +490,10 @@ const UsersProfile = () => {
                             return (
                               <tr key={item.id}>
                                 <td className="phone">{item._id}</td>
-                                <td className="role">₦ {item.finalPrice}</td>
-                                <td>{item.quantity}</td>
+                                <td className="role">₦ {item.basePrice}</td>
+                                <td>{item.type}</td>
                                 <td className="statusTd">
-                                  <p
-                                    className={`status ${
-                                      item.status === "pending"
-                                        ? "yellow"
-                                        : "active"
-                                    }`}
-                                  >
+                                  <p className={`status ${item.status}`}>
                                     {item.status}
                                   </p>
                                 </td>

@@ -52,6 +52,7 @@ export const authApi = createApi({
     "wallet",
     "dash",
     "brand",
+    "plan",
   ],
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -304,6 +305,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["category"],
     }),
+
     editCategory: builder.mutation({
       query: ({ credentials, id }) => ({
         url: `categories/${id}`,
@@ -334,6 +336,34 @@ export const authApi = createApi({
         method: "DELETE",
       }),
       invalidatesTags: ["category"],
+    }),
+    getPlan: builder.query({
+      query: (page) => `plans?page=${page}`,
+      providesTags: ["plan"],
+      transformResponse: (response) => response,
+    }),
+    addPlan: builder.mutation({
+      query: (credentials) => ({
+        url: "new-plan",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["plan"],
+    }),
+    editPlan: builder.mutation({
+      query: ({ credentials, id }) => ({
+        url: `plan/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["plan"],
+    }),
+    deletePlan: builder.mutation({
+      query: ({ id }) => ({
+        url: `plan/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["plan"],
     }),
     // signd: builder.mutation({
     //   query: (credentials) => ({
@@ -374,6 +404,10 @@ export const authApi = createApi({
 });
 export const {
   useLoginMutation,
+  useAddPlanMutation,
+  useDeletePlanMutation,
+  useEditPlanMutation,
+  useGetPlanQuery,
   useGetBrandModalQuery,
   useGetBrandQuery,
   useGetDashQuery,
