@@ -1,4 +1,4 @@
-import { useFormContext } from "react-hook-form";
+import {useFormContext} from "react-hook-form";
 import InputErrorMsg from "./InputErrorMsg";
 
 import "./style.scss";
@@ -23,12 +23,17 @@ const Textarea = ({
 }) => {
   const {
     register,
-    formState: { errors },
+    formState: {errors},
   } = useFormContext();
 
   return (
     <div className={`form-group  ${extraClass} ${className}`}>
-      {label && <label htmlFor={id}>{label}</label>}
+      {label && (
+        <label htmlFor={id}>
+          {label}
+          {!notRequired && <span className="clr-redClr">*</span>}
+        </label>
+      )}
 
       <textarea
         autoComplete="off"
@@ -37,7 +42,7 @@ const Textarea = ({
         className={inputExtraClass}
         {...register(name, {
           required: notRequired ? false : true,
-          validate: (value) => trapSpacesForRequiredFields(value, notRequired),
+          validate: value => trapSpacesForRequiredFields(value, notRequired),
         })}
         name={name}
         placeholder={placeholder}

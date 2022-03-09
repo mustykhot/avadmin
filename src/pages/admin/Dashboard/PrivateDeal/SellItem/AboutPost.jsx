@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import {useState} from "react";
+import {useEffect} from "react";
 import NaijaStates from "naija-state-local-government";
 import UploadMultipleFile from "../../../../../component/UploadImgField/UploadMultipleFile";
 import {
@@ -9,25 +9,19 @@ import {
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
 import CreateVendor from "./createVendor";
-const AboutPost = ({ display, imgUrl, setImgUrl }) => {
+const AboutPost = ({display, imgUrl, setImgUrl}) => {
   // const { categories = [] } = useGetCt();
   const [create, setCreate] = useState(false);
 
   // get category
-  const {
-    data: category = null,
-    isLoading: loading,
-    isError,
-    error,
-  } = useGetAllCategoryQuery(1);
+  const {data: category = null} = useGetAllCategoryQuery(1);
 
   // get vendor
-  const {
-    data: vendor = null,
-    isLoading: isVendLoading,
-    isError: isVendError,
-    error: vendErr,
-  } = useGetAllPrivateVendorQuery({ page: 1, limit: 100, search: "" });
+  const {data: vendor = null} = useGetAllPrivateVendorQuery({
+    page: 1,
+    limit: 100,
+    search: "",
+  });
 
   const [categoryOptions, setCategoryOptions] = useState([]);
 
@@ -35,7 +29,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
     () =>
       category
         ? setCategoryOptions(
-            category.data.map((el) => ({
+            category.data.map(el => ({
               label: el.name,
               value: el._id,
             }))
@@ -46,10 +40,10 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
 
   const [activeState, setActiveState] = useState("Lagos");
   return (
-    <div style={{ display: display ? "block" : "none" }}>
+    <div style={{display: display ? "block" : "none"}}>
       <InputField
         type="text"
-        name="name"
+        name="productInfo.name"
         placeholder="Enter Item Name"
         label="Item Name"
       />
@@ -60,7 +54,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
         label="Admittance Fee"
       />
       <SelectField
-        name="category"
+        name="productInfo.category"
         label="Item Category"
         errMsg="invalid field"
         // required={false}
@@ -74,7 +68,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
         isLoading={categoryOptions.length <= 0}
       />
       <SelectField
-        name="subCategory"
+        name="productInfo.subCategory"
         label="Sub Category"
         required={false}
         errMsg="invalid field"
@@ -88,10 +82,10 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
         isLoading={categoryOptions.length <= 0}
       />
       <SelectField
-        name="state"
+        name="productInfo.state"
         label="State"
         errMsg="invalid field"
-        handleCustomChange={(e) => setActiveState(e.target.value)}
+        handleCustomChange={e => setActiveState(e.target.value)}
         // selectOption={[
         //   {
         //     label: "Select State",
@@ -99,13 +93,13 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
         //   },
         //   ...NaijaStates.states(),
         // ]}
-        selectOption={NaijaStates.states().map((item) => ({
+        selectOption={NaijaStates.states().map(item => ({
           label: item,
           value: item,
         }))}
       />
       <SelectField
-        name="lga"
+        name="productInfo.lga"
         label="Town"
         errMsg="invalid field"
         // selectOption={[
@@ -115,7 +109,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
         //   },
         //   ...(NaijaStates.lgas(`${activeState}`)?.lgas || ""),
         // ]}
-        selectOption={NaijaStates.lgas(`${activeState}`)?.lgas.map((item) => ({
+        selectOption={NaijaStates.lgas(`${activeState}`)?.lgas.map(item => ({
           label: item,
           value: item,
         }))}
@@ -124,7 +118,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
 
       <UploadMultipleFile
         text="Upload Multiple Pictures"
-        name="photos"
+        name="productInfo.photos"
         id="multi"
         labelText="Upload Pictures"
         imgUrl={imgUrl}
@@ -139,7 +133,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
 
         selectOption={
           vendor
-            ? vendor.data.map((item) => ({
+            ? vendor.data.map(item => ({
                 label: item.fullName,
                 value: item.id,
               }))

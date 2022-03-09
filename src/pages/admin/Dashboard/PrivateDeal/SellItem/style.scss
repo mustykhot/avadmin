@@ -18,6 +18,9 @@
   h1 {
     margin-bottom: 1.5rem;
   }
+  button:disabled {
+    opacity: 0.6;
+  }
   .form-wrap {
     background-color: var(--whiteClr);
     padding: 3.5rem 1rem;
