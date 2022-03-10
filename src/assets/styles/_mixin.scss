@@ -35,7 +35,7 @@ html {
 @mixin webkit {
   &::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background: #f0f2f3;
+    background: #0052bd;
   }
 
   &::-webkit-scrollbar {
@@ -47,7 +47,7 @@ html {
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background: $primary;
+    background: #0052bd;
   }
 }
 
@@ -70,8 +70,8 @@ html {
 @mixin webkit2 {
   &::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background: #f0f2f3;
-    background: #c4c4c4;
+    background: #0052bd;
+
     border-radius: 30px;
   }
 

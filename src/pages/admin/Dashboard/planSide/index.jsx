@@ -243,7 +243,7 @@ const PlanSide = () => {
         <AnimatePresence>
           {modal && (
             <Modal>
-              <div className="whiteForm">
+              <div className="whiteForm over">
                 <FormProvider {...methods}>
                   <form
                     onSubmit={methods.handleSubmit(onSubmit)}

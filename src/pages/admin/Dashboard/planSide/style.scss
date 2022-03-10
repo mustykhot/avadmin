@@ -6,7 +6,15 @@
     @include whiteContainer;
     width: 50%;
     margin: auto;
-    padding: 35px;
+    padding: 15px;
+    &.over {
+      form {
+        height: 600px;
+        padding: 20px;
+        overflow-y: auto;
+        @include webkit2;
+      }
+    }
   }
   .topicPart {
     display: flex;
