@@ -114,15 +114,15 @@ const AuctionDetail = () => {
             <div className="aboutProduct">
               <img src={product} alt="product" />
               <div className="productText">
-                <p className="order">Order ID: ${deal && deal.id} </p>
+                <p className="order">Order ID: ${deal && deal.data.id} </p>
                 <p className="productName">
                   {deal
-                    ? deal.product
-                      ? deal.product.productName
+                    ? deal.data.product
+                      ? deal.data.product.productName
                       : "N/A"
                     : "N/A"}
                 </p>
-                <p className="auctionName">{deal && deal.dealType}</p>
+                <p className="auctionName">{deal && deal.data.dealType}</p>
               </div>
             </div>
             <div className="line"></div>
@@ -135,9 +135,9 @@ const AuctionDetail = () => {
                     onClick={() => {
                       setShow(!show);
                     }}
-                    className={`status ${deal && deal.status}`}
+                    className={`status ${deal && deal.data.status}`}
                   >
-                    {deal && deal.status}
+                    {deal && deal.data.status}
                     <img src={arrow} alt="arrow" />
                   </p>
                   <div className={`actionPop moreLeft ${show ? "show" : ""}`}>
@@ -163,13 +163,13 @@ const AuctionDetail = () => {
               <div className="flexOrder">
                 <p className="left">Date Posted:</p>
                 <p className="right">
-                  {deal && moment(deal.datePosted).format("L")}
+                  {deal && moment(deal.data.datePosted).format("L")}
                 </p>
               </div>
               <div className="flexOrder">
                 <p className="left">End Date:</p>
                 <p className="right">
-                  {deal && moment(deal.endDate).format("L")}
+                  {deal && moment(deal.data.endDate).format("L")}
                 </p>
               </div>
             </div>
@@ -181,8 +181,8 @@ const AuctionDetail = () => {
                 <p className="right">
                   <b>
                     {deal
-                      ? deal.user
-                        ? `${deal.user.firstName} ${deal.user.lastName}`
+                      ? deal.data.user
+                        ? `${deal.data.user.firstName} ${deal.data.user.lastName}`
                         : "N/A"
                       : "N/A"}
                     c
@@ -194,7 +194,11 @@ const AuctionDetail = () => {
                 <p className="right">
                   {" "}
                   <b>
-                    {deal ? (deal.user ? deal.user.email : "N/A") : "N/A"}
+                    {deal
+                      ? deal.data.user
+                        ? deal.data.user.email
+                        : "N/A"
+                      : "N/A"}
                   </b>{" "}
                 </p>
               </div>
@@ -203,7 +207,11 @@ const AuctionDetail = () => {
                 <p className="right">
                   {" "}
                   <b>
-                    {deal ? (deal.user ? deal.user.phone : "N/A") : "N/A"}
+                    {deal
+                      ? deal.data.user
+                        ? deal.data.user.phone
+                        : "N/A"
+                      : "N/A"}
                   </b>{" "}
                 </p>
               </div>
@@ -214,27 +222,34 @@ const AuctionDetail = () => {
               <div className="flexOrder">
                 <p className="left">Based Price:</p>
                 <p className="right">
-                  ₦{" "}
-                  {deal && deal.product
-                    ? formatCurrency(deal.product.price)
-                    : "0,00"}
+                  ₦ {deal ? formatCurrency(deal.data.basePrice) : "0,00"}
                 </p>
               </div>
               <div className="flexOrder">
                 <p className="left">Max Increment:</p>
                 <p className="right">
-                  ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
+                  ₦{" "}
+                  {deal
+                    ? deal.data.product
+                      ? deal.data.product.price
+                      : "N/A"
+                    : "N/A"}
                 </p>
               </div>
               <div className="flexOrder">
                 <p className="left">Highest Bid:</p>
                 <p className="right green">
-                  ₦ {deal ? (deal.product ? deal.product.price : "N/A") : "N/A"}
+                  ₦{" "}
+                  {deal
+                    ? deal.data.product
+                      ? deal.data.product.price
+                      : "N/A"
+                    : "N/A"}
                 </p>
               </div>
             </div>
             <div className="line"></div>
-            <div className="eachOrder">
+            {/* <div className="eachOrder">
               <p className="orderTopic">Recent Bidding</p>
               <div className="flexOrder">
                 <div className="cover">
@@ -266,7 +281,7 @@ const AuctionDetail = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </motion.div>
       )}

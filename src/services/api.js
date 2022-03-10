@@ -260,9 +260,9 @@ export const authApi = createApi({
     }),
 
     getOneDeal: builder.query({
-      query: (id) => `deals/single-deal/${id}`,
+      query: (id) => `deals/${id}?population=["user","product"]`,
       providesTags: ["deal"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => response,
     }),
     getAudit: builder.query({
       query: ({ page, search }) =>
