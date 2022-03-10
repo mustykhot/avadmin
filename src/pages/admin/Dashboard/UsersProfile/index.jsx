@@ -289,7 +289,9 @@ const UsersProfile = () => {
 
                                 <td className="role">₦ {item.amount}</td>
                                 <td className="statusTd">
-                                  <p className={`status ${item.status}`}>
+                                  <p
+                                    className={`status ${item.status.toLowerCase()}`}
+                                  >
                                     {item.status.toLowerCase()}
                                   </p>
                                 </td>
@@ -394,8 +396,10 @@ const UsersProfile = () => {
                                 <td className="role">₦ {item.basePrice}</td>
                                 <td>{item.bidStatus}</td>
                                 <td className="statusTd">
-                                  <p className={`status ${item.status}`}>
-                                    {item.status}
+                                  <p
+                                    className={`status ${item.status.toLowerCase()}`}
+                                  >
+                                    {item.status.toLowerCase()}
                                   </p>
                                 </td>
                                 <td className="role">
@@ -493,8 +497,10 @@ const UsersProfile = () => {
                                 <td className="role">₦ {item.basePrice}</td>
                                 <td>{item.type}</td>
                                 <td className="statusTd">
-                                  <p className={`status ${item.status}`}>
-                                    {item.status}
+                                  <p
+                                    className={`status ${item.status.toLowerCase()}`}
+                                  >
+                                    {item.status.toLowerCase()}
                                   </p>
                                 </td>
                                 <td className="role">

@@ -250,6 +250,7 @@ const Dashboard = () => {
               <div className="section-head">
                 <p className="title">Top Selling</p>
               </div>
+
               <div className="pieDisplay pie">
                 <Pie
                   data={pieData}
@@ -309,16 +310,18 @@ const Dashboard = () => {
               </div>
               <div className="top-wrap">
                 {dash &&
-                  dash.data.topSellers.map((item) => {
-                    return (
-                      <TopSeller
-                        key={item}
-                        name={"Carrie Thompson Balogun"}
-                        email={"emeka.phillips@gmail.com"}
-                        sales={1343}
-                        image={top}
-                      />
-                    );
+                  dash.data.topSellers.map((item, i) => {
+                    if (i < 4) {
+                      return (
+                        <TopSeller
+                          key={i}
+                          name={item.user.firstName + "" + item.user.lastName}
+                          email={item.user.email}
+                          sales={item.totalCount}
+                          image={item.user.avatar}
+                        />
+                      );
+                    }
                   })}
               </div>
             </div>
