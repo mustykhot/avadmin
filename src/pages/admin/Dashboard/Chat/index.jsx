@@ -19,6 +19,8 @@ import {
   useGetAdminsQuery,
   useGetConversationBtwUsersQuery,
   useGetConversationQuery,
+  useGetUsersInChatQuery,
+  useGetUsersQuery,
 } from "../../../../services/api";
 import { Avatar, CardHeader } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -30,6 +32,8 @@ import { AnimatePresence } from "framer-motion/dist/framer-motion";
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
   const { user } = useSelector((state) => state.auth);
+  const [search, setSearch] = useState("");
+  const [adminSearch, setAdminSearch] = useState("");
   console.log(user);
   const userList = [
     {
@@ -95,7 +99,13 @@ const Chat = () => {
     isLoading: loading,
     isError,
     error,
-  } = useGetAdminsQuery({ search: "", page: 1 });
+  } = useGetAdminsQuery({ search: adminSearch, page: 1 });
+  const {
+    data: users = null,
+    isLoading: loadingUsers,
+    isError: isErrorUsers,
+    error: errorUsers,
+  } = useGetUsersInChatQuery({ search, page: 1 });
   // create chat
   const [createResponse, { isLoading: createLoading }] =
     useCreateChatMutation();
@@ -359,7 +369,18 @@ const Chat = () => {
                   <p>Customers</p>
                 </div>
               </div>
-              {/* <input type="text" placeholder="Search" className="search" /> */}
+              <input
+                type="text"
+                placeholder="Search"
+                onChange={(e) => {
+                  if (toggleChat === "customers") {
+                    setSearch(e.target.value);
+                  } else {
+                    setAdminSearch(e.target.value);
+                  }
+                }}
+                className="search"
+              />
               <div className="coverMemberAll">
                 <div
                   className={`memberList  ${
@@ -420,30 +441,48 @@ const Chat = () => {
                 >
                   <p className="title">Customers</p>
                   <div className="coverMember">
-                    {userList.map((item) => {
-                      return (
-                        <div
-                          onClick={() => {
-                            startChat(item.id);
-                          }}
-                          key={item.id}
-                          className="eachMember"
-                        >
-                          <img src={item.image} alt="user" />
-                          <div className="textPart">
-                            <p className="name">
-                              {item.name}{" "}
-                              {
-                                <span
-                                  className={item.isOnline ? "active" : ""}
-                                ></span>
-                              }
-                            </p>
-                            <p className="email">{item.email}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {isErrorUsers ? (
+                      <NoProduct msg="There is a problem...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : loadingUsers ? (
+                      <p>Loading</p>
+                    ) : !users.data.length ? (
+                      <NoProduct msg="No Data Yet...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : (
+                      users.data
+                        .filter((item) => {
+                          return user.id !== item._id;
+                        })
+                        .map((item) => {
+                          return (
+                            <div
+                              className="eachMember"
+                              onClick={() => {
+                                startChat(item._id);
+                              }}
+                              key={item._id}
+                            >
+                              {/* <img src={item.image} alt="user" /> */}
+
+                              <Avatar alt="Remy Sharp" src="" />
+                              <div className="textPart">
+                                <p className="name">
+                                  {`${item.firstName} ${item.lastName}`}{" "}
+                                  {
+                                    <span
+                                      className={item.isOnline ? "active" : ""}
+                                    ></span>
+                                  }
+                                </p>
+                                <p className="email">{item.email}</p>
+                              </div>
+                            </div>
+                          );
+                        })
+                    )}
                   </div>
                 </div>
               </div>

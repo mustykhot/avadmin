@@ -23,6 +23,7 @@ import moment from "moment";
 import { toastr } from "react-redux-toastr";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
+import { Avatar } from "@mui/material";
 const AuctionDetail = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
@@ -112,7 +113,11 @@ const AuctionDetail = () => {
         >
           <div className="downloadBox">
             <div className="aboutProduct">
-              <img src={product} alt="product" />
+              <Avatar
+                alt={"user"}
+                src={deal && deal.data.product.photos[0]}
+                sx={{ width: 45, height: 45 }}
+              />
               <div className="productText">
                 <p className="order">Order ID: ${deal && deal.data.id} </p>
                 <p className="productName">
@@ -249,7 +254,7 @@ const AuctionDetail = () => {
               </div>
             </div>
             <div className="line"></div>
-            {/* <div className="eachOrder">
+            <div className="eachOrder">
               <p className="orderTopic">Recent Bidding</p>
               <div className="flexOrder">
                 <div className="cover">
@@ -281,7 +286,7 @@ const AuctionDetail = () => {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </motion.div>
       )}

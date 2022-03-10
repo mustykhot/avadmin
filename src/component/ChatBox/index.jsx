@@ -197,7 +197,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
                       animate="visible"
                       initial="hidden"
                       className={`eachMsg ${
-                        item.sender.id === user.id ? "left" : ""
+                        item.sender._id === user.id ? "left" : ""
                       }`}
                       key={item.id}
                     >

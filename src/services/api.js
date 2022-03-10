@@ -147,8 +147,17 @@ export const authApi = createApi({
       transformResponse: (response) => response,
     }),
     getUsers: builder.query({
+      query: ({ search, page, limit }) =>
+        `users?page=${page}&search=${search}&userType=user&limit=${
+          limit ? limit : 10
+        }`,
+      providesTags: ["users"],
+      transformResponse: (response) => response,
+    }),
+
+    getUsersInChat: builder.query({
       query: ({ search, page }) =>
-        `users?page=${page}&search=${search}&userType=user`,
+        `users?page=${page}&search=${search}&all=true&userType=user`,
       providesTags: ["users"],
       transformResponse: (response) => response,
     }),
@@ -414,6 +423,7 @@ export const {
   useLoginnormalMutation,
   useGetUserAuctionQuery,
   useApproveDealBatchMutation,
+  useGetUsersInChatQuery,
 
   useDeleteCategoryMutation,
   useUpdateBatchMutation,
