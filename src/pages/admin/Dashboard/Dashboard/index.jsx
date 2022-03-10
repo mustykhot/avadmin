@@ -442,7 +442,7 @@ const Dashboard = () => {
               </select> */}
               </div>
               <div className="top-wrap">
-                {/* {dash && !dash.data.adminActivities.length ? (
+                {dash && !dash.data.adminActivities.length ? (
                   <NoProduct msg="No Data Yet...">
                     <FontAwesomeIcon icon={faCommentSlash} />
                   </NoProduct>
@@ -452,14 +452,14 @@ const Dashboard = () => {
                       return (
                         <TopSeller
                           key={item._id}
-                          name={"Carrie Thompson Balogun"}
+                          name={item.user.firstName + "" + item.user.lastName}
                           email={"Has joined the team"}
-                          image={top}
+                          image={item.user.avatar}
                         />
                       );
                     }
                   })
-                )} */}
+                )}
               </div>
             </div>
           </div>
