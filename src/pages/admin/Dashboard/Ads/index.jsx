@@ -209,9 +209,7 @@ const Ads = () => {
                               <TableCell align="left">
                                 {item.basePrice}
                               </TableCell>
-                              <TableCell align="left">
-                                {item.basePrice}
-                              </TableCell>
+                              <TableCell align="left">{item.clicks}</TableCell>
                               <TableCell align="left">
                                 {moment(item.startDate).format("L")}
                               </TableCell>

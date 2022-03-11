@@ -453,7 +453,7 @@ const Dashboard = () => {
                         <TopSeller
                           key={item._id}
                           name={item.user.firstName + "" + item.user.lastName}
-                          email={"Has joined the team"}
+                          email={item.auditLog}
                           image={item.user.avatar}
                         />
                       );
