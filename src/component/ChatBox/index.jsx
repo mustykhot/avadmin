@@ -144,7 +144,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    currentMsg && messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    // currentMsg && messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {

@@ -184,7 +184,7 @@ const UsersProfile = () => {
                       activeAction === "selling" ? "active" : ""
                     }`}
                   >
-                    My Auction
+                    My Sales
                   </p>
                 </div>
                 <div className="action">

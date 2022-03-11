@@ -14,6 +14,7 @@ import "./style.scss";
 import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import LoadingHead from "../../../../component/LoaderHead/loaderhead";
 import {
   useCreateChatMutation,
   useGetAdminsQuery,
@@ -33,6 +34,7 @@ const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
   const { user } = useSelector((state) => state.auth);
   const [search, setSearch] = useState("");
+  const [search2, setSearch2] = useState("");
   const [adminSearch, setAdminSearch] = useState("");
   console.log(user);
   const userList = [
@@ -132,7 +134,7 @@ const Chat = () => {
     isLoading: convLoading,
     isError: convIsError,
     error: convError,
-  } = useGetConversationQuery(user.id);
+  } = useGetConversationQuery({ id: user.id, search: search2 });
   console.log(conversation);
   // 61d57dbea7bc65c65b587c32
   // get converstaion between two users
@@ -208,6 +210,7 @@ const Chat = () => {
   return (
     <AdminDashboardLayout active={"chat"}>
       <div className="pd-chat">
+        <LoadingHead status={createLoading || twoconvLoading ? true : false} />
         <div className="topicPart">
           <p className="pageTitle">Chats</p>
         </div>
@@ -221,7 +224,14 @@ const Chat = () => {
                 </button>
               </div>
 
-              <input type="text" placeholder="Search" className="search" />
+              <input
+                type="text"
+                placeholder="Search"
+                onChange={(e) => {
+                  setSearch2(e.target.value);
+                }}
+                className="search"
+              />
               <p className="recent">Recent</p>
             </div>
             <div className="msgDiv">

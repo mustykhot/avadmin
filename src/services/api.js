@@ -125,7 +125,8 @@ export const authApi = createApi({
     }),
     // chats/conversations/me
     getConversation: builder.query({
-      query: () => `chats/conversations/me?population=["members"]`,
+      query: ({ id, search }) =>
+        `chats/conversations/me?population=["members"]&search=${search}`,
       providesTags: ["chat"],
       transformResponse: (response) => response,
     }),
