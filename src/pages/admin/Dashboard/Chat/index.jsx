@@ -17,11 +17,10 @@ import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import LoadingHead from "../../../../component/LoaderHead/loaderhead";
 import {
   useCreateChatMutation,
-  useGetAdminsQuery,
   useGetConversationBtwUsersQuery,
   useGetConversationQuery,
   useGetUsersInChatQuery,
-  useGetUsersQuery,
+  useGetChatAdminsQuery,
 } from "../../../../services/api";
 import { Avatar, CardHeader } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -101,7 +100,7 @@ const Chat = () => {
     isLoading: loading,
     isError,
     error,
-  } = useGetAdminsQuery({ search: adminSearch, page: 1 });
+  } = useGetChatAdminsQuery({ search: adminSearch, page: 1 });
   const {
     data: users = null,
     isLoading: loadingUsers,

@@ -147,6 +147,12 @@ export const authApi = createApi({
       providesTags: ["admins"],
       transformResponse: (response) => response,
     }),
+    getChatAdmins: builder.query({
+      query: ({ search, page }) =>
+        `users?page=${page}&search=${search}&userType=admin&all=true`,
+      providesTags: ["admins"],
+      transformResponse: (response) => response,
+    }),
     getUsers: builder.query({
       query: ({ search, page, limit }) =>
         `users?page=${page}&search=${search}&userType=user&limit=${
@@ -441,7 +447,7 @@ export const {
   useApproveDealMutation,
   // useRejectDealMutation,
   useGetSponsoredDealQuery,
-
+  useGetChatAdminsQuery,
   useGetTransactionQuery,
   useGetEachTransactionQuery,
   useGetAllPrivateBuyDealQuery,
