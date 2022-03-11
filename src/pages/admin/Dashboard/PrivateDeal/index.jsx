@@ -142,7 +142,7 @@ const PrivateDeal = () => {
     isLoading: buyloading,
     isError: isBuyError,
     error: buyError,
-  } = useGetAllPrivateBuyDealQuery({ page: page2, search2 });
+  } = useGetAllPrivateBuyDealQuery({ page: page2, search: search2 });
   console.log(buydeal);
 
   // update deal
