@@ -9,7 +9,7 @@ import { Avatar } from "@mui/material";
 const NavBar = () => {
   const [dnone, setDnone] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  console.log(user, "olollo");
+
   return (
     <nav>
       <div className="navEnd">
