@@ -186,7 +186,7 @@ const Chat = () => {
   const urlParams = new URLSearchParams(location.search);
   const fname = urlParams.get("fname");
   useEffect(() => {
-    if (fname && conversation) {
+    if (fname && conversation?.data) {
       // setSearcher(fname);
       searchConv(fname);
     }
