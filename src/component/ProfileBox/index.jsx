@@ -1,18 +1,17 @@
-import { Avatar } from "@mui/material";
-import { useSelector } from "react-redux";
-import { toastr } from "react-redux-toastr";
-import { Link, useNavigate } from "react-router-dom";
+import {Avatar} from "@mui/material";
+import {useSelector} from "react-redux";
+import {toastr} from "react-redux-toastr";
+import {Link, useNavigate} from "react-router-dom";
 import chat from "../../assets/icons/chat2.svg";
-import { useCreateChatMutation } from "../../services/api";
+import {useCreateChatMutation} from "../../services/api";
 import Loaderhead from "../LoaderHead/loaderhead";
 import "./style.scss";
 
-const ProfileBox = ({ name, email, account, fname, tel, billing, img }) => {
+const ProfileBox = ({name, email, account, fname, id, tel, billing, img}) => {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const {user} = useSelector(state => state.auth);
 
-  const [createResponse, { isLoading: createLoading }] =
-    useCreateChatMutation();
+  const [createResponse, {isLoading: createLoading}] = useCreateChatMutation();
   const startChat = async () => {
     const payload = {
       senderId: user.id,
@@ -24,7 +23,7 @@ const ProfileBox = ({ name, email, account, fname, tel, billing, img }) => {
 
       toastr.success("Success", response.message);
       setTimeout(() => {
-        navigate(`/chat?id=${account}&fname=${fname}`);
+        navigate(`/chat?id=${account}&id=${id}`);
       }, 3000);
     } catch (err) {
       if (err.status === "FETCH_ERROR")
@@ -37,7 +36,7 @@ const ProfileBox = ({ name, email, account, fname, tel, billing, img }) => {
       <Loaderhead status={createLoading} />
 
       {/* <img src={img} className="profileImg" alt="userprofile" /> */}
-      <Avatar alt={"user"} src={img} sx={{ width: 110, height: 110 }} />
+      <Avatar alt={"user"} src={img} sx={{width: 110, height: 110}} />
 
       <p className="username">{name}</p>
       <p className="email">{email}</p>

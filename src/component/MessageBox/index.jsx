@@ -1,12 +1,11 @@
 import moment from "moment";
-import truncateString from "../utils/trunc";
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import "./style.scss";
-import { Avatar } from "@mui/material";
-import { useSelector } from "react-redux";
+import {Avatar} from "@mui/material";
+import {useSelector} from "react-redux";
 
-import { motion } from "framer-motion/dist/framer-motion";
-import { moveIn } from "../../utils/variants";
+import {motion} from "framer-motion/dist/framer-motion";
+import {moveIn} from "../../utils/variants";
 const MessageBox = ({
   image,
   name,
@@ -22,19 +21,17 @@ const MessageBox = ({
 }) => {
   const [sender, setSender] = useState(null);
   // console.log(sender, "sender");
-  const { user } = useSelector((state) => state.auth);
+  const {user} = useSelector(state => state.auth);
   // const userId = "61d57dbea7bc65c65b587c32";
-  console.log(user, "currentMsg");
   useEffect(() => {
     const sendernew = members
-      ? members.filter((item) => {
+      ? members.filter(item => {
           return item._id !== user.id;
         })
       : "";
 
     setSender(sendernew[0]);
-  }, [members]);
-  console.log(sender, "senderner");
+  }, [members, user.id]);
   return (
     <motion.div
       variants={moveIn}
@@ -50,7 +47,7 @@ const MessageBox = ({
       <Avatar
         alt={"user"}
         src={sender && sender.image}
-        sx={{ width: 35, height: 35 }}
+        sx={{width: 35, height: 35}}
       />
       <div className="textBox">
         <div className="nameSide">

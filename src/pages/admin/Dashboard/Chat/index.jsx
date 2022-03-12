@@ -6,7 +6,6 @@ import Modal from "../../../../component/Modal";
 import {ReactComponent as Close} from "../../../../assets/icons/close.svg";
 import {ReactComponent as Users} from "../../../../assets/icons/sidebar/users.svg";
 import {ReactComponent as Chat1} from "../../../../assets/icons/sidebar/chat1.svg";
-import {currentMsg, messageBoxList} from "../../../../component/utils/chatList";
 import "./style.scss";
 import NoProduct from "../../../../component/NoProduct";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -27,65 +26,14 @@ import io from "socket.io-client";
 import {AnimatePresence} from "framer-motion/dist/framer-motion";
 import {useLocation} from "react-router-dom";
 import {useCallback} from "react";
-import {useMemo} from "react";
 
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
   const {user} = useSelector(state => state.auth);
   const [search, setSearch] = useState("");
-  const [search2, setSearch2] = useState("");
+  const [search2] = useState("");
   const [adminSearch, setAdminSearch] = useState("");
 
-  const userList = [
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1626305258/gabriel-benois-qnWPjzewewA-unsplash_vuppvi.jpg",
-      name: "Raji Mustapha",
-      email: "rajimustapha30@gmail.com",
-      isOnline: false,
-    },
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1626305258/gabriel-benois-qnWPjzewewA-unsplash_vuppvi.jpg",
-      name: "Raji Mustapha",
-      email: "rajimustapha30@gmail.com",
-      isOnline: true,
-    },
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1626305258/gabriel-benois-qnWPjzewewA-unsplash_vuppvi.jpg",
-      name: "Raji Mustapha",
-      email: "rajimustapha30@gmail.com",
-      isOnline: false,
-    },
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1626305258/gabriel-benois-qnWPjzewewA-unsplash_vuppvi.jpg",
-      name: "Raji Mustapha",
-      email: "rajimustapha30@gmail.com",
-      isOnline: true,
-    },
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1626305258/gabriel-benois-qnWPjzewewA-unsplash_vuppvi.jpg",
-      name: "Raji Mustapha",
-      email: "rajimustapha30@gmail.com",
-      isOnline: false,
-    },
-    {
-      id: 1,
-      image:
-        "https://res.cloudinary.com/dpiyqfdpk/image/upload/v1626305258/gabriel-benois-qnWPjzewewA-unsplash_vuppvi.jpg",
-      name: "Raji Mustapha",
-      email: "rajimustapha30@gmail.com",
-      isOnline: true,
-    },
-  ];
   const [toggleChat, setToggleChat] = useState("admin");
   const handleToggleChat = type => {
     setToggleChat(type);
@@ -99,13 +47,11 @@ const Chat = () => {
     data: admins = null,
     isLoading: loading,
     isError,
-    error,
   } = useGetChatAdminsQuery({search: adminSearch, page: 1});
   const {
     data: users = null,
     isLoading: loadingUsers,
     isError: isErrorUsers,
-    error: errorUsers,
   } = useGetUsersInChatQuery({search, page: 1});
   // create chat
   const [createResponse, {isLoading: createLoading}] = useCreateChatMutation();
@@ -127,12 +73,10 @@ const Chat = () => {
   };
 
   // get converstion
-  const {
-    data: conversation,
-    isLoading: convLoading,
-    isError: convIsError,
-    error: convError,
-  } = useGetConversationQuery({id: user.id, search: search2});
+  const {data: conversation, isLoading: convLoading} = useGetConversationQuery({
+    id: user.id,
+    search: search2,
+  });
 
   const [realConv, setRealConv] = useState(null);
   useEffect(() => {
@@ -140,32 +84,15 @@ const Chat = () => {
       setRealConv(conversation.data);
     }
   }, [conversation]);
-  const [searcher, setSearcher] = useState("");
-  // const searchConv = (value) => {
-  //   if (value && !value.trim()) {
-  //     const newConv = [...conversation.data].filter((item) => {
-  //       let mem = item.members.find((member) => member._id !== user.id);
 
-  //       return (
-  //         mem.firstName.toLowerCase().includes(value.toLowerCase()) ||
-  //         mem.lastName.toLowerCase().includes(value.toLowerCase())
-  //       );
-  //     });
-  //     console.log(newConv, "newConv");
-  //     setRealConv(newConv);
-  //   } else {
-  //     setRealConv(conversation.data);
-  //   }
-
-  // };
-
-  const searchConv = useMemo(
-    () => value => {
-      if (value && !value.trim()) {
+  const searchConv = useCallback(
+    value => {
+      if (value && !!value.trim() && conversation?.data) {
         const newConv = [...conversation.data].filter(item => {
           let mem = item.members.find(member => member._id !== user.id);
 
           return (
+            mem._id === value ||
             mem.firstName.toLowerCase().includes(value.toLowerCase()) ||
             mem.lastName.toLowerCase().includes(value.toLowerCase())
           );
@@ -176,21 +103,18 @@ const Chat = () => {
         setRealConv(conversation.data);
       }
     },
-    [conversation, setRealConv, user.id]
+    [conversation, user.id]
   );
+
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
-  const fname = urlParams.get("fname");
+  const fname = urlParams.get("id");
+
   useEffect(() => {
     if (fname && conversation) {
-      // setSearcher(fname);
       searchConv(fname);
     }
-  }, [fname, searchConv]);
-  // useEffect(()=>{
-
-  //   setSkip(false)
-  // },[id5])
+  }, [conversation, fname, searchConv, user.id]);
 
   const [firstId, setFirstId] = useState("");
   const [secondId, setSecondId] = useState("");
@@ -203,20 +127,16 @@ const Chat = () => {
     // setSkip()
   };
 
-  const {
-    data: twoconversation,
-    isLoading: twoconvLoading,
-    isError: twoconvIsError,
-    error: twoconvError,
-  } = useGetConversationBtwUsersQuery(
-    {
-      idFirst: firstId,
-      idSecond: secondId,
-    },
-    {
-      skip,
-    }
-  );
+  const {data: twoconversation, isLoading: twoconvLoading} =
+    useGetConversationBtwUsersQuery(
+      {
+        idFirst: firstId,
+        idSecond: secondId,
+      },
+      {
+        skip,
+      }
+    );
 
   // socket
 
@@ -278,10 +198,9 @@ const Chat = () => {
               <input
                 type="text"
                 placeholder="Search"
-                value={searcher}
                 onChange={e => {
-                  setSearcher(e.target.value);
                   searchConv(e.target.value);
+                  console.log(realConv);
                 }}
                 className="search"
               />
