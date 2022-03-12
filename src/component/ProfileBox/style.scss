@@ -44,11 +44,16 @@
     align-items: center;
     margin-top: 25px;
     a.email,
-    a.chat {
+    a.chat,
+    button.chat {
       @include button;
       display: flex;
       text-decoration: none;
       padding: 6px 8px;
+      align-items: center;
+      img {
+        margin-right: 3px;
+      }
     }
     a.email {
       background: #0052bd;

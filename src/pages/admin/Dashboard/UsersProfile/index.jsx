@@ -144,6 +144,7 @@ const UsersProfile = () => {
           <div className="profileFlex">
             <ProfileBox
               name={user && `${user.data.firstName} ${user.data.lastName}`}
+              fname={user.data.firstName}
               email={user && user.data.email}
               account={id}
               tel={user && user.data.mobile}

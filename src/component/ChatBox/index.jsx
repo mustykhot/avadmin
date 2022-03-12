@@ -119,7 +119,7 @@ const ChatBox = ({ currentMsg, messages, loading }) => {
       }).unwrap();
       //  closeModal();
 
-      toastr.success("Success", response.message);
+      // toastr.success("Success", response.message);
     } catch (err) {
       if (err.status === "FETCH_ERROR")
         toastr.error("Error", "Something went wrong, please try again...");

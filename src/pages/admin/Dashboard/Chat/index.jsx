@@ -28,6 +28,9 @@ import { toastr } from "react-redux-toastr";
 import Skeleton from "@mui/material/Skeleton";
 import io from "socket.io-client";
 import { AnimatePresence } from "framer-motion/dist/framer-motion";
+import { useLocation } from "react-router-dom";
+import { useCallback } from "react";
+import { useMemo } from "react";
 
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
@@ -35,7 +38,7 @@ const Chat = () => {
   const [search, setSearch] = useState("");
   const [search2, setSearch2] = useState("");
   const [adminSearch, setAdminSearch] = useState("");
-  console.log(user);
+
   const userList = [
     {
       id: 1,
@@ -115,7 +118,7 @@ const Chat = () => {
       senderId: user.id,
       receiverId: id,
     };
-    console.log(payload);
+
     try {
       const response = await createResponse(payload).unwrap();
 
@@ -134,20 +137,76 @@ const Chat = () => {
     isError: convIsError,
     error: convError,
   } = useGetConversationQuery({ id: user.id, search: search2 });
-  console.log(conversation);
-  // 61d57dbea7bc65c65b587c32
-  // get converstaion between two users
+
+  const [realConv, setRealConv] = useState(null);
+  useEffect(() => {
+    if (conversation) {
+      setRealConv(conversation.data);
+    }
+  }, [conversation]);
+  const [searcher, setSearcher] = useState("");
+  // const searchConv = (value) => {
+  //   if (value && !value.trim()) {
+  //     const newConv = [...conversation.data].filter((item) => {
+  //       let mem = item.members.find((member) => member._id !== user.id);
+
+  //       return (
+  //         mem.firstName.toLowerCase().includes(value.toLowerCase()) ||
+  //         mem.lastName.toLowerCase().includes(value.toLowerCase())
+  //       );
+  //     });
+  //     console.log(newConv, "newConv");
+  //     setRealConv(newConv);
+  //   } else {
+  //     setRealConv(conversation.data);
+  //   }
+
+  // };
+
+  const searchConv = useMemo(
+    () => (value) => {
+      if (value && !value.trim()) {
+        const newConv = [...conversation.data].filter((item) => {
+          let mem = item.members.find((member) => member._id !== user.id);
+
+          return (
+            mem.firstName.toLowerCase().includes(value.toLowerCase()) ||
+            mem.lastName.toLowerCase().includes(value.toLowerCase())
+          );
+        });
+        console.log(newConv, "newConv");
+        setRealConv(newConv);
+      } else {
+        setRealConv(conversation.data);
+      }
+    },
+    [conversation, setRealConv, user.id]
+  );
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const fname = urlParams.get("fname");
+  useEffect(() => {
+    if (fname && conversation) {
+      // setSearcher(fname);
+      searchConv(fname);
+    }
+  }, [fname, searchConv]);
+  // useEffect(()=>{
+
+  //   setSkip(false)
+  // },[id5])
 
   const [firstId, setFirstId] = useState("");
   const [secondId, setSecondId] = useState("");
   const [skip, setSkip] = useState(true);
-  console.log(firstId, secondId, "ggggggg");
+
   const [message, setMessage] = useState([]);
   const setId = (id1, id2) => {
     setFirstId(id1);
     setSecondId(id2);
     // setSkip()
   };
+
   const {
     data: twoconversation,
     isLoading: twoconvLoading,
@@ -162,9 +221,6 @@ const Chat = () => {
       skip,
     }
   );
-  console.log(twoconversation, "twoconversation");
-
-  console.log(conversation, "conversation");
 
   // socket
 
@@ -226,8 +282,10 @@ const Chat = () => {
               <input
                 type="text"
                 placeholder="Search"
+                value={searcher}
                 onChange={(e) => {
-                  setSearch2(e.target.value);
+                  setSearcher(e.target.value);
+                  searchConv(e.target.value);
                 }}
                 className="search"
               />
@@ -236,8 +294,8 @@ const Chat = () => {
             <div className="msgDiv">
               {!isError ? (
                 !convLoading ? (
-                  !conversation.length ? (
-                    conversation.data.map((item) => {
+                  realConv ? (
+                    realConv.map((item) => {
                       return (
                         <MessageBox
                           image={item.img}
