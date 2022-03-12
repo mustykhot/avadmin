@@ -1,6 +1,6 @@
 import ReduxToastr from "react-redux-toastr";
 import Root from "./Root";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import "./index.scss";
 const theme = createTheme({
   palette: {
@@ -22,14 +22,16 @@ function App() {
       <ThemeProvider theme={theme}>
         <Root />
         <ReduxToastr
-          timeOut={40000000}
+          timeOut={40000}
           newestOnTop={false}
           preventDuplicates
           transitionIn="fadeIn"
           transitionOut="fadeOut"
-          position="top-right"
-          getState={(state) => state.toastr} // This is the default
+          position="top-center"
+          removeOnHover={false}
+          getState={state => state.toastr} // This is the default
           className="toastr"
+          closeOnToastrClick={true}
         />
       </ThemeProvider>
     </>

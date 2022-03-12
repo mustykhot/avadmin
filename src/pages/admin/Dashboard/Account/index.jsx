@@ -1,32 +1,23 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
-import { ReactComponent as Fill } from "../../../../assets/icons/Fill.svg";
-import shape from "../../../../assets/icons/shape.svg";
-import userImg from "../../../../assets/images/user-img.png";
-
-import { useState } from "react";
-import Modal from "../../../../component/Modal";
+import {useState} from "react";
 import FormHead from "../../../../component/formHead";
-import Input from "../../../../component/input";
-import { FormProvider, useForm } from "react-hook-form";
+import {FormProvider, useForm} from "react-hook-form";
 import SubmitBtn from "../../../../component/submitBtn";
-import Select from "../../../../component/input/selectt";
 import SuccessModal from "../../../../component/popModal";
-import TableDrop from "../../../../component/TableDrop";
 import Phone from "../../../../component/input/phone";
-import { ReactComponent as Loka } from "../../../../assets/icons/loka.svg";
-import { ReactComponent as Circ } from "../../../../assets/icons/circ.svg";
+import {ReactComponent as Loka} from "../../../../assets/icons/loka.svg";
+import {ReactComponent as Circ} from "../../../../assets/icons/circ.svg";
 import InputField from "../../../../component/input/indexField";
 import RajiFile from "../../../../component/input/RajiFile";
 import {
   useUpdateMutation,
   useUpdatePasswordMutation,
 } from "../../../../services/api";
-import { toastr } from "react-redux-toastr";
-import { useSelector } from "react-redux";
+import {toastr} from "react-redux-toastr";
+import {useSelector} from "react-redux";
 import uploadImg from "../../../../hook/UploadImg";
 const Account = () => {
-  const list = [1, 2, 3];
   const [modal, setModal] = useState(false);
   const [modalPop, setModalPop] = useState(false);
   const methods = useForm();
@@ -34,18 +25,15 @@ const Account = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [phone, setPhone] = useState("");
   const [imgupload, setImgUpload] = useState("");
-  const [update, { isLoading }] = useUpdateMutation();
+  const [update, {isLoading}] = useUpdateMutation();
 
-  const closeModal = () => {
-    setModal(!modal);
-  };
   const closeModalPop = () => {
     setModalPop(!modal);
   };
-  const { user } = useSelector((state) => state.auth);
-  const [updatePassword, { isLoading: passLoading }] =
+  const {user} = useSelector(state => state.auth);
+  const [updatePassword, {isLoading: passLoading}] =
     useUpdatePasswordMutation();
-  const onSubmit = async (vals) => {
+  const onSubmit = async vals => {
     let url = await uploadImg(vals.image[0], "n3mtymsx");
 
     const payload = {
@@ -71,7 +59,7 @@ const Account = () => {
     }
   };
 
-  const onSubmit2 = async (vals) => {
+  const onSubmit2 = async vals => {
     console.log(vals);
     setIsLoading(false);
     const payload = {

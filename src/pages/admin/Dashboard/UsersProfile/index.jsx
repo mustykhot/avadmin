@@ -1,14 +1,14 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
-import { ReactComponent as Fill } from "../../../../assets/icons/Fill.svg";
+import {ReactComponent as Fill} from "../../../../assets/icons/Fill.svg";
 
 import shape from "../../../../assets/icons/shape.svg";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 import TableDrop from "../../../../component/TableDrop";
 import userProfile from "../../../../assets/images/userprofile.png";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import chat from "../../../../assets/icons/chat2.svg";
 import SummaryCard from "../../../../component/SummaryCard";
 import trendingUp from "../../../../assets/icons/trending-up.svg";
@@ -17,9 +17,9 @@ import check from "../../../../assets/icons/check-circle.svg";
 import Bitmap from "../../../../assets/icons/Bitmap.svg";
 import NoProduct from "../../../../component/NoProduct";
 import ProfileBox from "../../../../component/ProfileBox";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { toastr } from "react-redux-toastr";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCommentSlash} from "@fortawesome/free-solid-svg-icons";
+import {toastr} from "react-redux-toastr";
 import {
   useUpdateMutation,
   useGetUserDealQuery,
@@ -29,16 +29,16 @@ import {
 } from "../../../../services/api";
 import LoadingTable from "../../../../component/loadingTable";
 import moment from "moment";
-import { moveIn } from "../../../../utils/variants";
-import { motion } from "framer-motion/dist/framer-motion";
+import {moveIn} from "../../../../utils/variants";
+import {motion} from "framer-motion/dist/framer-motion";
 import Loader from "../../../../component/Loader";
-import { Pagination } from "@mui/material";
+import {Pagination} from "@mui/material";
 const UsersProfile = () => {
   const list = [1, 2, 3];
   const [show, setShow] = useState(false);
   const [activeAction, setActiveAction] = useState("overview");
   const navigate = useNavigate();
-  const handleActiveAction = (type) => {
+  const handleActiveAction = type => {
     setActiveAction(type);
   };
   const [page1, setPage1] = useState(1);
@@ -53,14 +53,9 @@ const UsersProfile = () => {
   const handlePage3 = (e, value) => {
     setPage3(value);
   };
-  const { id } = useParams();
+  const {id} = useParams();
   const [showCard, setShowCard] = useState(false);
-  const {
-    data: user,
-    isLoading: loading,
-    isError,
-    error,
-  } = useGetUserQuery(id);
+  const {data: user, isLoading: loading, isError, error} = useGetUserQuery(id);
   console.log(user);
 
   const {
@@ -68,7 +63,7 @@ const UsersProfile = () => {
     isLoading,
     isError: istransError,
     error: transError,
-  } = useGetUserTransQuery({ id, page: page1 });
+  } = useGetUserTransQuery({id, page: page1});
   console.log(transaction, "trans");
 
   const {
@@ -76,7 +71,7 @@ const UsersProfile = () => {
     isLoading: isDealLoading,
     isError: isdealError,
     error: dealError,
-  } = useGetUserDealQuery({ id, page: page2 });
+  } = useGetUserDealQuery({id, page: page2});
   console.log(deal, "deal");
 
   const {
@@ -84,12 +79,12 @@ const UsersProfile = () => {
     isLoading: isStatAuctionLoading,
     isError: isStatAuctionError,
     error: statErrorAuction,
-  } = useGetUserAuctionQuery({ id, page: page3 });
+  } = useGetUserAuctionQuery({id, page: page3});
   console.log(auction, "statAuction");
 
   // activate
 
-  const [update, { isLoading: activateLoading }] = useUpdateMutation();
+  const [update, {isLoading: activateLoading}] = useUpdateMutation();
 
   // useEffect(() => {
   //   if (id) {
@@ -97,7 +92,7 @@ const UsersProfile = () => {
   //   }
   // }, [id]);
 
-  const onSubmit = async (bool) => {
+  const onSubmit = async bool => {
     const payload = {
       active: bool,
     };
@@ -144,7 +139,7 @@ const UsersProfile = () => {
           <div className="profileFlex">
             <ProfileBox
               name={user && `${user.data.firstName} ${user.data.lastName}`}
-              fname={user.data.firstName}
+              id={user.data._id}
               email={user && user.data.email}
               account={id}
               tel={user && user.data.mobile}
@@ -155,7 +150,7 @@ const UsersProfile = () => {
             />
 
             <div className="activityBox">
-              <div style={{ marginBottom: "10px" }} className="userNav">
+              <div style={{marginBottom: "10px"}} className="userNav">
                 <div className="left">
                   <p
                     onClick={() => {
@@ -274,7 +269,7 @@ const UsersProfile = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {transaction.data.transactions.map((item) => {
+                          {transaction.data.transactions.map(item => {
                             return (
                               <tr
                                 onClick={() => {
@@ -384,7 +379,7 @@ const UsersProfile = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {deal.data.dealHistory.map((item) => {
+                          {deal.data.dealHistory.map(item => {
                             return (
                               <tr
                                 onClick={() => {
@@ -491,7 +486,7 @@ const UsersProfile = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {auction.data.deals.map((item) => {
+                          {auction.data.deals.map(item => {
                             return (
                               <tr key={item.id}>
                                 <td className="phone">{item._id}</td>
