@@ -114,7 +114,7 @@ const Chat = () => {
     if (fname && conversation) {
       searchConv(fname);
     }
-  }, [conversation, fname, searchConv, user.id]);
+  }, [conversation, fname, searchConv]);
 
   const [firstId, setFirstId] = useState("");
   const [secondId, setSecondId] = useState("");
