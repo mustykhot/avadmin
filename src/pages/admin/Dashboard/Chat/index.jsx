@@ -1,19 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import ChatBox from "../../../../component/ChatBox";
 import MessageBox from "../../../../component/MessageBox";
 import Modal from "../../../../component/Modal";
-import { ReactComponent as Close } from "../../../../assets/icons/close.svg";
-import { ReactComponent as Users } from "../../../../assets/icons/sidebar/users.svg";
-import { ReactComponent as Chat1 } from "../../../../assets/icons/sidebar/chat1.svg";
-import {
-  currentMsg,
-  messageBoxList,
-} from "../../../../component/utils/chatList";
+import {ReactComponent as Close} from "../../../../assets/icons/close.svg";
+import {ReactComponent as Users} from "../../../../assets/icons/sidebar/users.svg";
+import {ReactComponent as Chat1} from "../../../../assets/icons/sidebar/chat1.svg";
+import {currentMsg, messageBoxList} from "../../../../component/utils/chatList";
 import "./style.scss";
 import NoProduct from "../../../../component/NoProduct";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCommentSlash} from "@fortawesome/free-solid-svg-icons";
 import LoadingHead from "../../../../component/LoaderHead/loaderhead";
 import {
   useCreateChatMutation,
@@ -22,19 +19,19 @@ import {
   useGetUsersInChatQuery,
   useGetChatAdminsQuery,
 } from "../../../../services/api";
-import { Avatar, CardHeader } from "@mui/material";
-import { useSelector } from "react-redux";
-import { toastr } from "react-redux-toastr";
+import {Avatar, CardHeader} from "@mui/material";
+import {useSelector} from "react-redux";
+import {toastr} from "react-redux-toastr";
 import Skeleton from "@mui/material/Skeleton";
 import io from "socket.io-client";
-import { AnimatePresence } from "framer-motion/dist/framer-motion";
-import { useLocation } from "react-router-dom";
-import { useCallback } from "react";
-import { useMemo } from "react";
+import {AnimatePresence} from "framer-motion/dist/framer-motion";
+import {useLocation} from "react-router-dom";
+import {useCallback} from "react";
+import {useMemo} from "react";
 
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
-  const { user } = useSelector((state) => state.auth);
+  const {user} = useSelector(state => state.auth);
   const [search, setSearch] = useState("");
   const [search2, setSearch2] = useState("");
   const [adminSearch, setAdminSearch] = useState("");
@@ -90,7 +87,7 @@ const Chat = () => {
     },
   ];
   const [toggleChat, setToggleChat] = useState("admin");
-  const handleToggleChat = (type) => {
+  const handleToggleChat = type => {
     setToggleChat(type);
   };
   const [modal, setModal] = useState(false);
@@ -103,17 +100,16 @@ const Chat = () => {
     isLoading: loading,
     isError,
     error,
-  } = useGetChatAdminsQuery({ search: adminSearch, page: 1 });
+  } = useGetChatAdminsQuery({search: adminSearch, page: 1});
   const {
     data: users = null,
     isLoading: loadingUsers,
     isError: isErrorUsers,
     error: errorUsers,
-  } = useGetUsersInChatQuery({ search, page: 1 });
+  } = useGetUsersInChatQuery({search, page: 1});
   // create chat
-  const [createResponse, { isLoading: createLoading }] =
-    useCreateChatMutation();
-  const startChat = async (id) => {
+  const [createResponse, {isLoading: createLoading}] = useCreateChatMutation();
+  const startChat = async id => {
     const payload = {
       senderId: user.id,
       receiverId: id,
@@ -136,7 +132,7 @@ const Chat = () => {
     isLoading: convLoading,
     isError: convIsError,
     error: convError,
-  } = useGetConversationQuery({ id: user.id, search: search2 });
+  } = useGetConversationQuery({id: user.id, search: search2});
 
   const [realConv, setRealConv] = useState(null);
   useEffect(() => {
@@ -164,10 +160,10 @@ const Chat = () => {
   // };
 
   const searchConv = useMemo(
-    () => (value) => {
+    () => value => {
       if (value && !value.trim()) {
-        const newConv = [...conversation.data].filter((item) => {
-          let mem = item.members.find((member) => member._id !== user.id);
+        const newConv = [...conversation.data].filter(item => {
+          let mem = item.members.find(member => member._id !== user.id);
 
           return (
             mem.firstName.toLowerCase().includes(value.toLowerCase()) ||
@@ -231,7 +227,7 @@ const Chat = () => {
   useEffect(() => {
     if (currentId) {
       socketRef.current = io("wss://auction-village-be.herokuapp.com", {
-        query: { conversationId: currentId },
+        query: {conversationId: currentId},
         transports: ["websocket"],
       });
 
@@ -243,9 +239,9 @@ const Chat = () => {
       //   conversationId: currentMsg.id,
       // });
 
-      socketRef.current.on("new-message", (newMsg) => {
+      socketRef.current.on("new-message", newMsg => {
         console.log(newMsg, "newMsg");
-        setMessage((prev) => {
+        setMessage(prev => {
           return [...prev, newMsg.message];
         });
       });
@@ -283,7 +279,7 @@ const Chat = () => {
                 type="text"
                 placeholder="Search"
                 value={searcher}
-                onChange={(e) => {
+                onChange={e => {
                   setSearcher(e.target.value);
                   searchConv(e.target.value);
                 }}
@@ -295,7 +291,7 @@ const Chat = () => {
               {!isError ? (
                 !convLoading ? (
                   realConv ? (
-                    realConv.map((item) => {
+                    realConv.map(item => {
                       return (
                         <MessageBox
                           image={item.img}
@@ -321,69 +317,36 @@ const Chat = () => {
                 ) : (
                   // <p>Loading</p>
                   <>
-                    <CardHeader
-                      avatar={
-                        <Skeleton
-                          animation="wave"
-                          variant="circular"
-                          width={40}
-                          height={40}
+                    {Array(5)
+                      .fill("")
+                      .map((_, i) => (
+                        <CardHeader
+                          key={`skeleton_${i}`}
+                          avatar={
+                            <Skeleton
+                              animation="wave"
+                              variant="circular"
+                              width={40}
+                              height={40}
+                            />
+                          }
+                          title={
+                            <Skeleton
+                              animation="wave"
+                              height={10}
+                              width="80%"
+                              style={{marginBottom: 6}}
+                            />
+                          }
+                          subheader={
+                            <Skeleton
+                              animation="wave"
+                              height={10}
+                              width="40%"
+                            />
+                          }
                         />
-                      }
-                      title={
-                        <Skeleton
-                          animation="wave"
-                          height={10}
-                          width="80%"
-                          style={{ marginBottom: 6 }}
-                        />
-                      }
-                      subheader={
-                        <Skeleton animation="wave" height={10} width="40%" />
-                      }
-                    />
-                    <CardHeader
-                      avatar={
-                        <Skeleton
-                          animation="wave"
-                          variant="circular"
-                          width={40}
-                          height={40}
-                        />
-                      }
-                      title={
-                        <Skeleton
-                          animation="wave"
-                          height={10}
-                          width="80%"
-                          style={{ marginBottom: 6 }}
-                        />
-                      }
-                      subheader={
-                        <Skeleton animation="wave" height={10} width="40%" />
-                      }
-                    />
-                    <CardHeader
-                      avatar={
-                        <Skeleton
-                          animation="wave"
-                          variant="circular"
-                          width={40}
-                          height={40}
-                        />
-                      }
-                      title={
-                        <Skeleton
-                          animation="wave"
-                          height={10}
-                          width="80%"
-                          style={{ marginBottom: 6 }}
-                        />
-                      }
-                      subheader={
-                        <Skeleton animation="wave" height={10} width="40%" />
-                      }
-                    />
+                      ))}
                   </>
                 )
               ) : (
@@ -439,7 +402,7 @@ const Chat = () => {
               <input
                 type="text"
                 placeholder="Search"
-                onChange={(e) => {
+                onChange={e => {
                   if (toggleChat === "customers") {
                     setSearch(e.target.value);
                   } else {
@@ -468,10 +431,10 @@ const Chat = () => {
                       </NoProduct>
                     ) : (
                       admins.data
-                        .filter((item) => {
+                        .filter(item => {
                           return user.id !== item._id;
                         })
-                        .map((item) => {
+                        .map(item => {
                           return (
                             <div
                               className="eachMember"
@@ -520,10 +483,10 @@ const Chat = () => {
                       </NoProduct>
                     ) : (
                       users.data
-                        .filter((item) => {
+                        .filter(item => {
                           return user.id !== item._id;
                         })
-                        .map((item) => {
+                        .map(item => {
                           return (
                             <div
                               className="eachMember"
