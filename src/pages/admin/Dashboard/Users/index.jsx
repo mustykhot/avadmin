@@ -29,6 +29,7 @@ import {
   formatCurrency,
   getComparator,
   stableSort,
+  toCurrency,
 } from "../../../../utils/utils";
 import { Avatar, Checkbox, Pagination } from "@mui/material";
 import moment from "moment";
@@ -39,6 +40,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { toastr } from "react-redux-toastr";
 import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
+import { useGetUser } from "../../../../hook/getUserHook";
 
 const headCells = [
   {
@@ -49,10 +51,10 @@ const headCells = [
     id: "phone",
     label: "Mobile No",
   },
-  {
-    id: "balance",
-    label: "Wallet Ballance",
-  },
+  // {
+  //   id: "balance",
+  //   label: "Wallet Ballance",
+  // },
   {
     id: "date",
     label: "Joining Date",
@@ -67,7 +69,7 @@ const Users = () => {
   // const { register, formState, handleSubmit } = useForm();
   // const [isLoadng, setIsLoading] = useState(false);
   let navigate = useNavigate();
-
+  const { currency } = useGetUser();
   // const onSubmit = (vals) => {
   //   console.log(vals);
   //   setIsLoading(false);
@@ -231,7 +233,7 @@ const Users = () => {
                 <tr>
                   <th>Name</th>
                   <th>Mobile</th>
-                  <th>Wallet</th>
+                  {/* <th>Wallet</th> */}
                   <th>Joining Date</th>
 
                   <th className="extraTh">Status</th>
@@ -248,7 +250,7 @@ const Users = () => {
                           <p className="name">{`${item.firstName} ${item.lastName}`}</p>
                         </td>
                         <td align="left">{item.mobile}</td>
-                        <td>{500}</td>
+                        {/* <td>{500}</td> */}
                         <td align="left">
                           {moment(item.updatedAt).format("L")}
                         </td>
@@ -340,9 +342,10 @@ const Users = () => {
                               </div>
                             </TableCell>
                             <TableCell align="left">{row.mobile}</TableCell>
-                            <TableCell align="left">
+                            {/* <TableCell align="left">
                               {formatCurrency(540000)}
-                            </TableCell>
+                              {toCurrency(currency, row.amount)}
+                            </TableCell>  */}
 
                             <TableCell align="left">
                               {moment(row.updatedAt).format("L")}

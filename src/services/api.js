@@ -70,6 +70,12 @@ export const authApi = createApi({
       }),
     }),
 
+    getUserData: builder.query({
+      query: () => `users/me`,
+      providesTags: ["user"],
+      transformResponse: (response) => response,
+    }),
+
     update: builder.mutation({
       query: ({ credentials, id }) => ({
         url: `users/${id}`,
@@ -469,4 +475,5 @@ export const {
   useUpdateMutation,
   useUpdatePasswordMutation,
   useActivatePrivateDealMutation,
+  useGetUserDataQuery,
 } = authApi;

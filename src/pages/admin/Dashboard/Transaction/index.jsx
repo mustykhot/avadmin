@@ -16,6 +16,7 @@ import {
   stableSort,
   getComparator,
   formatCurrency,
+  toCurrency,
 } from "../../../../utils/utils";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -30,8 +31,10 @@ import { Avatar } from "@mui/material";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
+import { useGetUser } from "../../../../hook/getUserHook";
 const Transaction = () => {
   const [toggleBtn, setToggleBtn] = useState("auction");
+  const { currency } = useGetUser();
   const [page, setPage] = useState(1);
   const handleToggle = (type) => {
     setToggleBtn(type);
@@ -222,7 +225,9 @@ const Transaction = () => {
                               </TableCell>
 
                               <TableCell align="left">
-                                ₦ {moneyFormatter(item.amount)}
+                                {/* ₦ {moneyFormatter(item.amount)} */}
+
+                                {toCurrency(currency, item?.amount)}
                               </TableCell>
                               <TableCell align="left">
                                 {moment(item.createdAt).format("MM/DD/YYYY")}

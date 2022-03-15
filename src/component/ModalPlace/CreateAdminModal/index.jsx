@@ -10,6 +10,7 @@ import Select from "../../input/selectt";
 import Modal from "../../Modal";
 import SubmitBtn from "../../submitBtn";
 import InputField from "../../input/indexField";
+import SelectField from "../../input/select";
 const CreateAdminModal = ({ closeModal }) => {
   const methods = useForm();
   const [phone, setPhone] = useState("");
@@ -85,6 +86,22 @@ const CreateAdminModal = ({ closeModal }) => {
             id="email"
           />
 
+          <SelectField
+            name="country"
+            label="Country"
+            errMsg="invalid field"
+            selectOption={[
+              {
+                label: "NIGERIA",
+                value: "NIGERIA",
+              },
+              {
+                label: "UNITED KINGDOMria",
+                value: "UNITED KINGDOM",
+              },
+            ]}
+          />
+
           <Phone label={"Mobile no"} telVal={phone} setTelVal={setPhone} />
 
           <InputField
@@ -94,13 +111,6 @@ const CreateAdminModal = ({ closeModal }) => {
             label="Password"
             id="Password"
           />
-          {/* <Select
-          label="Assign Role"
-          id="role"
-          name="role"
-          register={register}
-          selectOption={roleOption}
-        /> */}
 
           <SubmitBtn isLoading={isLoading} btnText="Create Admin" />
           <button onClick={closeModal} type="button" className="cancel">

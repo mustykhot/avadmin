@@ -27,7 +27,7 @@ import LoadingTable from "../../../../component/loadingTable";
 import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { formatCurrency } from "../../../../utils/utils";
+import { formatCurrency, toCurrency } from "../../../../utils/utils";
 import moment from "moment";
 import TableDrop from "../../../../component/TableDrop";
 import { toastr } from "react-redux-toastr";
@@ -44,6 +44,7 @@ import DropDownWrapper from "../../../../component/DropDownWrapper/index";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
+import { useGetUser } from "../../../../hook/getUserHook";
 // dropdown
 export const SubscribeDropDown = ({ id, activateDeal }) => (
   <DropDownWrapper
@@ -84,8 +85,7 @@ export const SubscribeDropDown = ({ id, activateDeal }) => (
 );
 
 const PrivateDeal = () => {
-  const list = [1, 2, 3];
-
+  const { currency } = useGetUser();
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
   const [modal, setModal] = useState(false);
@@ -291,7 +291,7 @@ const PrivateDeal = () => {
                         <tr>
                           <td> {item.vendor && `${item.vendor.name}`}</td>
                           <td>{item.product && item.product.productName}</td>
-                          <td> {formatCurrency(item.basePrice)}</td>
+                          <td>{toCurrency(currency, item.basePrice)}</td>
                           <td align="left">
                             {item.product &&
                               moment(item.product.createdAt).format(
@@ -365,7 +365,7 @@ const PrivateDeal = () => {
                                   {item.product ? item.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {formatCurrency(item.basePrice)}
+                                  {toCurrency(currency, item.basePrice)}
                                 </TableCell>
                                 <TableCell align="left">
                                   {item.product &&
@@ -461,7 +461,7 @@ const PrivateDeal = () => {
                         <tr>
                           <td> {item.vendor && `${item.vendor.name}`}</td>
                           <td>{item.product && item.product.name}</td>
-                          <td> {formatCurrency(item.basePrice)}</td>
+                          <td>{toCurrency(currency, item.basePrice)}</td>
                           <td align="left">
                             {item.product &&
                               moment(item.product.createdAt).format(
@@ -533,7 +533,7 @@ const PrivateDeal = () => {
                                   {item.product ? item.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {formatCurrency(item.basePrice)}
+                                  {toCurrency(currency, item.basePrice)}
                                 </TableCell>
                                 <TableCell align="left">
                                   {item.product &&

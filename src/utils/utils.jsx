@@ -4,14 +4,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import WarningIcon from "@mui/icons-material/Warning";
 //Format value with comma and add Naira sign
-export const toCurrency = (number) => {
-  const formatter = new Intl.NumberFormat("en-NG", {
-    style: "currency",
-    currency: "NGN",
-  });
-
-  return formatter.format(number);
-};
 
 // Format number to thousandth(k) or millionth(m)
 export const kFormatter = (num, amount) => {
@@ -190,4 +182,14 @@ export const removeEmpty = (obj) => {
       else return v !== "" && v && v?.length > 0;
     })
   );
+};
+
+//Format value with comma and add Naira sign
+export const toCurrency = (country = "en-NG", number) => {
+  const formatter = new Intl.NumberFormat(country, {
+    style: "currency",
+    currency: country === "en-NG" ? "NGN" : "GBP",
+  });
+
+  return formatter.format(number).split(".00")[0];
 };

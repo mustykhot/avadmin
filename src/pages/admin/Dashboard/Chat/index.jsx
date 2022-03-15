@@ -148,7 +148,7 @@ const Chat = () => {
   const socketRef = useRef(null);
   useEffect(() => {
     if (currentId) {
-      socketRef.current = io("wss://auction-village-be.herokuapp.com", {
+      socketRef.current = io("wss://auction-backend-api.herokuapp.com", {
         query: { conversationId: currentId },
         transports: ["websocket"],
       });
@@ -212,24 +212,30 @@ const Chat = () => {
               {!isError ? (
                 !convLoading ? (
                   realConv ? (
-                    realConv.map((item) => {
-                      return (
-                        <MessageBox
-                          image={item.img}
-                          name={item.name}
-                          key={item._id}
-                          id={item._id}
-                          // latestMessage={item.latestMessage}
-                          numberOfNew={item.numberOfNew}
-                          time={item.createdAt}
-                          setActive={setActiveMsg}
-                          active={item._id === activeMsg}
-                          members={item.members}
-                          setId={setId}
-                          skipper={setSkip}
-                        />
-                      );
-                    })
+                    !realConv.length ? (
+                      <NoProduct msg="No Chats Yet...">
+                        <FontAwesomeIcon icon={faCommentSlash} />
+                      </NoProduct>
+                    ) : (
+                      realConv.map((item) => {
+                        return (
+                          <MessageBox
+                            image={item.img}
+                            name={item.name}
+                            key={item._id}
+                            id={item._id}
+                            // latestMessage={item.latestMessage}
+                            numberOfNew={item.numberOfNew}
+                            time={item.createdAt}
+                            setActive={setActiveMsg}
+                            active={item._id === activeMsg}
+                            members={item.members}
+                            setId={setId}
+                            skipper={setSkip}
+                          />
+                        );
+                      })
+                    )
                   ) : (
                     <NoProduct msg="No Chats Yet...">
                       <FontAwesomeIcon icon={faCommentSlash} />

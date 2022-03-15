@@ -1,14 +1,14 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
-import {ReactComponent as Fill} from "../../../../assets/icons/Fill.svg";
+import { ReactComponent as Fill } from "../../../../assets/icons/Fill.svg";
 
 import shape from "../../../../assets/icons/shape.svg";
 
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 import TableDrop from "../../../../component/TableDrop";
 import userProfile from "../../../../assets/images/userprofile.png";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import chat from "../../../../assets/icons/chat2.svg";
 import SummaryCard from "../../../../component/SummaryCard";
 import trendingUp from "../../../../assets/icons/trending-up.svg";
@@ -17,9 +17,9 @@ import check from "../../../../assets/icons/check-circle.svg";
 import Bitmap from "../../../../assets/icons/Bitmap.svg";
 import NoProduct from "../../../../component/NoProduct";
 import ProfileBox from "../../../../component/ProfileBox";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCommentSlash} from "@fortawesome/free-solid-svg-icons";
-import {toastr} from "react-redux-toastr";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import { toastr } from "react-redux-toastr";
 import {
   useUpdateMutation,
   useGetUserDealQuery,
@@ -29,21 +29,24 @@ import {
 } from "../../../../services/api";
 import LoadingTable from "../../../../component/loadingTable";
 import moment from "moment";
-import {moveIn} from "../../../../utils/variants";
-import {motion} from "framer-motion/dist/framer-motion";
+import { moveIn } from "../../../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
 import Loader from "../../../../component/Loader";
-import {Pagination} from "@mui/material";
+import { Pagination } from "@mui/material";
+import { useGetUser } from "../../../../hook/getUserHook";
+import { toCurrency } from "../../../../utils/utils";
 const UsersProfile = () => {
   const list = [1, 2, 3];
   const [show, setShow] = useState(false);
   const [activeAction, setActiveAction] = useState("overview");
   const navigate = useNavigate();
-  const handleActiveAction = type => {
+  const handleActiveAction = (type) => {
     setActiveAction(type);
   };
   const [page1, setPage1] = useState(1);
   const [page2, setPage2] = useState(1);
   const [page3, setPage3] = useState(1);
+  const { currency } = useGetUser();
   const handlePage1 = (e, value) => {
     setPage1(value);
   };
@@ -53,9 +56,14 @@ const UsersProfile = () => {
   const handlePage3 = (e, value) => {
     setPage3(value);
   };
-  const {id} = useParams();
+  const { id } = useParams();
   const [showCard, setShowCard] = useState(false);
-  const {data: user, isLoading: loading, isError, error} = useGetUserQuery(id);
+  const {
+    data: user,
+    isLoading: loading,
+    isError,
+    error,
+  } = useGetUserQuery(id);
   console.log(user);
 
   const {
@@ -63,7 +71,7 @@ const UsersProfile = () => {
     isLoading,
     isError: istransError,
     error: transError,
-  } = useGetUserTransQuery({id, page: page1});
+  } = useGetUserTransQuery({ id, page: page1 });
   console.log(transaction, "trans");
 
   const {
@@ -71,7 +79,7 @@ const UsersProfile = () => {
     isLoading: isDealLoading,
     isError: isdealError,
     error: dealError,
-  } = useGetUserDealQuery({id, page: page2});
+  } = useGetUserDealQuery({ id, page: page2 });
   console.log(deal, "deal");
 
   const {
@@ -79,12 +87,12 @@ const UsersProfile = () => {
     isLoading: isStatAuctionLoading,
     isError: isStatAuctionError,
     error: statErrorAuction,
-  } = useGetUserAuctionQuery({id, page: page3});
+  } = useGetUserAuctionQuery({ id, page: page3 });
   console.log(auction, "statAuction");
 
   // activate
 
-  const [update, {isLoading: activateLoading}] = useUpdateMutation();
+  const [update, { isLoading: activateLoading }] = useUpdateMutation();
 
   // useEffect(() => {
   //   if (id) {
@@ -92,7 +100,7 @@ const UsersProfile = () => {
   //   }
   // }, [id]);
 
-  const onSubmit = async bool => {
+  const onSubmit = async (bool) => {
     const payload = {
       active: bool,
     };
@@ -150,7 +158,7 @@ const UsersProfile = () => {
             />
 
             <div className="activityBox">
-              <div style={{marginBottom: "10px"}} className="userNav">
+              <div style={{ marginBottom: "10px" }} className="userNav">
                 <div className="left">
                   <p
                     onClick={() => {
@@ -227,7 +235,11 @@ const UsersProfile = () => {
                       icon={trendingUp}
                       currency={"₦"}
                       increase={true}
-                      midText={transaction ? transaction.data.totalRevenue : 0}
+                      midText={
+                        transaction
+                          ? toCurrency(currency, transaction.data.totalRevenue)
+                          : 0
+                      }
                       btmText={"Total Revenue"}
                       percent={"12%"}
                     />
@@ -235,12 +247,20 @@ const UsersProfile = () => {
                       icon={trendingUp}
                       currency={"₦"}
                       increase={false}
-                      midText={transaction ? transaction.data.totalExpense : 0}
+                      midText={
+                        transaction
+                          ? toCurrency(currency, transaction.data.totalExpense)
+                          : 0
+                      }
                       btmText={"Total Expense"}
                       percent={"12%"}
                     />
                     <SummaryCard
-                      midText={transaction ? transaction.data.totalBalance : 0}
+                      midText={
+                        transaction
+                          ? toCurrency(currency, transaction.data.totalBalance)
+                          : 0
+                      }
                       currency={"₦"}
                       btmText={"Wallet Balance"}
                       isAmount={true}
@@ -269,7 +289,7 @@ const UsersProfile = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {transaction.data.transactions.map(item => {
+                          {transaction.data.transactions.map((item) => {
                             return (
                               <tr
                                 onClick={() => {
@@ -283,7 +303,9 @@ const UsersProfile = () => {
                                   {item.Transactiontype.toLowerCase()}
                                 </td>
 
-                                <td className="role">₦ {item.amount}</td>
+                                <td className="role">
+                                  {toCurrency(currency, item.amount)}
+                                </td>
                                 <td className="statusTd">
                                   <p
                                     className={`status ${item.status.toLowerCase()}`}
@@ -344,13 +366,20 @@ const UsersProfile = () => {
                     <SummaryCard
                       icon={check}
                       increase={false}
-                      midText={deal ? deal.data.totalAmountSpent : 0}
+                      midText={
+                        deal
+                          ? toCurrency(currency, deal.data.totalAmountSpent)
+                          : 0
+                      }
                       btmText={"Total Amount Spent"}
                       percent={"12%"}
                     />
                     <SummaryCard
-                      midText={deal ? deal.data.totalWinningBid : 0}
-                      currency={"₦"}
+                      midText={
+                        deal
+                          ? toCurrency(currency, deal.data.totalWinningBid)
+                          : 0
+                      }
                       btmText={"Total Winning Bid"}
                       isAmount={true}
                     />
@@ -379,7 +408,7 @@ const UsersProfile = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {deal.data.dealHistory.map(item => {
+                          {deal.data.dealHistory.map((item) => {
                             return (
                               <tr
                                 onClick={() => {
@@ -389,7 +418,9 @@ const UsersProfile = () => {
                                 className="bgDark"
                               >
                                 <td className="phone">{item.id}</td>
-                                <td className="role">₦ {item.basePrice}</td>
+                                <td className="role">
+                                  {toCurrency(currency, item.basePrice)}
+                                </td>
                                 <td>{item.bidStatus}</td>
                                 <td className="statusTd">
                                   <p
@@ -456,8 +487,9 @@ const UsersProfile = () => {
                       percent={"12%"}
                     />
                     <SummaryCard
-                      midText={auction ? auction.data.revenue : 0}
-                      currency={"₦"}
+                      midText={
+                        auction ? toCurrency(currency, auction.data.revenue) : 0
+                      }
                       btmText={"Total Revenue"}
                       isAmount={true}
                     />
@@ -486,11 +518,14 @@ const UsersProfile = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {auction.data.deals.map(item => {
+                          {auction.data.deals.map((item) => {
                             return (
                               <tr key={item.id}>
                                 <td className="phone">{item._id}</td>
-                                <td className="role">₦ {item.basePrice}</td>
+                                <td className="role">
+                                  {" "}
+                                  {toCurrency(currency, item.basePrice)}
+                                </td>
                                 <td>{item.type}</td>
                                 <td className="statusTd">
                                   <p

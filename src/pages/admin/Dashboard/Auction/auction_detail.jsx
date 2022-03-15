@@ -18,15 +18,17 @@ import {
 import { useParams } from "react-router-dom";
 import Loader from "../../../../component/Loader";
 import ErrorMsg from "../../../../component/ErrorMsg";
-import { formatCurrency } from "../../../../utils/utils";
+import { formatCurrency, toCurrency } from "../../../../utils/utils";
 import moment from "moment";
 import { toastr } from "react-redux-toastr";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { Avatar } from "@mui/material";
+import { useGetUser } from "../../../../hook/getUserHook";
 const AuctionDetail = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
+  const { currency } = useGetUser();
   const [show, setShow] = useState(false);
   const [modal, setModal] = useState(false);
   const { register, formState, handleSubmit } = useForm();
@@ -115,7 +117,7 @@ const AuctionDetail = () => {
             <div className="aboutProduct">
               <Avatar
                 alt={"user"}
-                src={deal && deal.data.product.photos[0]}
+                src={deal && deal.data.product && deal.data.product.photos[0]}
                 sx={{ width: 45, height: 45 }}
               />
               <div className="productText">
@@ -227,10 +229,10 @@ const AuctionDetail = () => {
               <div className="flexOrder">
                 <p className="left">Based Price:</p>
                 <p className="right">
-                  ₦ {deal ? formatCurrency(deal.data.basePrice) : "0,00"}
+                  {deal ? toCurrency(currency, deal.data.basePrice) : "0,00"}
                 </p>
               </div>
-              <div className="flexOrder">
+              {/* <div className="flexOrder">
                 <p className="left">Max Increment:</p>
                 <p className="right">
                   ₦{" "}
@@ -240,14 +242,14 @@ const AuctionDetail = () => {
                       : "N/A"
                     : "N/A"}
                 </p>
-              </div>
+              </div> */}
               <div className="flexOrder">
                 <p className="left">Highest Bid:</p>
                 <p className="right green">
-                  ₦{" "}
+                  {" "}
                   {deal
-                    ? deal.data.product
-                      ? deal.data.product.price
+                    ? deal.data
+                      ? toCurrency(currency, deal.data.lastPriceOffered | 0)
                       : "N/A"
                     : "N/A"}
                 </p>

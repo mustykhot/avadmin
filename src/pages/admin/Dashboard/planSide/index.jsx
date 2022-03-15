@@ -32,6 +32,7 @@ import {
   formatCurrency,
   getComparator,
   stableSort,
+  toCurrency,
 } from "../../../../utils/utils";
 import { Button, IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -41,6 +42,7 @@ import { moveIn } from "../../../../utils/variants";
 import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 
 import moment from "moment";
+import { useGetUser } from "../../../../hook/getUserHook";
 // dropdown
 export const SubscribeDropDown = ({
   id,
@@ -230,7 +232,7 @@ const PlanSide = () => {
   // table magic
   const [order, setOrder] = useState("");
   const [orderBy, setOrderBy] = useState("");
-
+  const { currency } = useGetUser();
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -473,7 +475,7 @@ const PlanSide = () => {
                             <TableRow tabIndex={-1} key={item._id}>
                               <TableCell align="left">{item.name}</TableCell>
                               <TableCell align="left">
-                                {formatCurrency(item.amount)}
+                                {toCurrency(currency, item.amount)}
                               </TableCell>
                               <TableCell align="left">
                                 {item.priority}

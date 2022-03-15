@@ -9,15 +9,21 @@ import product from "../../../../assets/images/product.png";
 import { useParams } from "react-router-dom";
 import { useGetEachTransactionQuery } from "../../../../services/api";
 import moment from "moment";
-import { formatCurrency, moneyFormatter } from "../../../../utils/utils";
+import {
+  formatCurrency,
+  moneyFormatter,
+  toCurrency,
+} from "../../../../utils/utils";
 import Pdf from "react-to-pdf";
 import Loader from "../../../../component/Loader";
 import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
+import { useGetUser } from "../../../../hook/getUserHook";
 const TransactionDownload = () => {
   const list = [1, 2, 3];
   let { id } = useParams();
   const ref = useRef();
+  const { currency } = useGetUser();
 
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
@@ -91,17 +97,19 @@ const TransactionDownload = () => {
               <div className="flexOrder">
                 <p className="left">Product price:</p>
                 <p className="right">
-                  ₦{transaction && formatCurrency(transaction.data.amount)}
+                  {/* ₦{transaction && formatCurrency(transaction.data.amount)} */}
+                  {transaction &&
+                    toCurrency(currency, transaction.data?.amount)}
                 </p>
               </div>
-              <div className="flexOrder">
+              {/* <div className="flexOrder">
                 <p className="left">Surge:</p>
                 <p className="right">₦ 0.00</p>
               </div>
               <div className="flexOrder">
                 <p className="left">Sub-Total</p>
                 <p className="right green">10 Nov, 2021</p>
-              </div>
+              </div> */}
             </div>
             <div className="line"></div>
             <div className="eachOrder">

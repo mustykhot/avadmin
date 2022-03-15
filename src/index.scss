@@ -135,7 +135,8 @@
   &.Active,
   &.SUCCESS,
   &.paid,
-  &.approved {
+  &.approved,
+  &.APPROVED {
     color: #0c9c7a;
     background: #e5f5f4;
   }
@@ -143,12 +144,14 @@
   &.Deactivated,
   &.Declined,
   &.declined,
-  &.failed {
+  &.failed,
+  &.DECLINED {
     background: #f7e5e5;
     color: #a71410;
   }
   &.yellow,
-  &.pending {
+  &.pending,
+  &.PENDING {
     background: #fff2ca;
     color: #f98b2d;
   }

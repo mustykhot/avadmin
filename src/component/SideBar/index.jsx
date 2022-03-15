@@ -34,7 +34,6 @@ const SideBar = ({ active }) => {
   const dispatch = useDispatch();
   const [showDrop, setShowDrop] = useState(false);
   const logOutAction = () => {
-    console.log("log");
     dispatch(logout());
   };
   return (

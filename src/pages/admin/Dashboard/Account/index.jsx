@@ -1,21 +1,21 @@
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
-import {useState} from "react";
+import { useState } from "react";
 import FormHead from "../../../../component/formHead";
-import {FormProvider, useForm} from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import SubmitBtn from "../../../../component/submitBtn";
 import SuccessModal from "../../../../component/popModal";
 import Phone from "../../../../component/input/phone";
-import {ReactComponent as Loka} from "../../../../assets/icons/loka.svg";
-import {ReactComponent as Circ} from "../../../../assets/icons/circ.svg";
+import { ReactComponent as Loka } from "../../../../assets/icons/loka.svg";
+import { ReactComponent as Circ } from "../../../../assets/icons/circ.svg";
 import InputField from "../../../../component/input/indexField";
 import RajiFile from "../../../../component/input/RajiFile";
 import {
   useUpdateMutation,
   useUpdatePasswordMutation,
 } from "../../../../services/api";
-import {toastr} from "react-redux-toastr";
-import {useSelector} from "react-redux";
+import { toastr } from "react-redux-toastr";
+import { useSelector } from "react-redux";
 import uploadImg from "../../../../hook/UploadImg";
 const Account = () => {
   const [modal, setModal] = useState(false);
@@ -25,21 +25,21 @@ const Account = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [phone, setPhone] = useState("");
   const [imgupload, setImgUpload] = useState("");
-  const [update, {isLoading}] = useUpdateMutation();
+  const [update, { isLoading }] = useUpdateMutation();
 
   const closeModalPop = () => {
     setModalPop(!modal);
   };
-  const {user} = useSelector(state => state.auth);
-  const [updatePassword, {isLoading: passLoading}] =
+  const { user } = useSelector((state) => state.auth);
+  const [updatePassword, { isLoading: passLoading }] =
     useUpdatePasswordMutation();
-  const onSubmit = async vals => {
+  const onSubmit = async (vals) => {
     let url = await uploadImg(vals.image[0], "n3mtymsx");
 
     const payload = {
       ...vals,
       mobile: phone,
-      image: url.secure_url,
+      avatar: url.secure_url,
     };
     console.log(payload);
     setIsLoading(false);
@@ -59,7 +59,7 @@ const Account = () => {
     }
   };
 
-  const onSubmit2 = async vals => {
+  const onSubmit2 = async (vals) => {
     console.log(vals);
     setIsLoading(false);
     const payload = {
@@ -130,7 +130,7 @@ const Account = () => {
                       <div className="halfInput">
                         <InputField
                           type="text"
-                          name="firstname"
+                          name="firstName"
                           placeholder="Firstname"
                           label="Firstname"
                           id="firstname"
@@ -140,7 +140,7 @@ const Account = () => {
                       <div className="halfInput">
                         <InputField
                           type="text"
-                          name="lastname"
+                          name="lastName"
                           placeholder="Lastname"
                           label="Lastname"
                           id="lastname"
@@ -150,7 +150,7 @@ const Account = () => {
                     </div>
 
                     <RajiFile
-                      name="image"
+                      name="avatar"
                       placeholder="Profile picture"
                       label="Profile picture"
                       id="image"

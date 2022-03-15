@@ -21,6 +21,7 @@ const authSlice = createSlice({
         location: payload.data.location,
         email: payload.data.email,
         id: payload.data._id,
+        country: payload.data.country,
       };
     },
     setUserToken: (state, { payload }) => {

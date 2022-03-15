@@ -25,6 +25,7 @@ import {
   formatCurrency,
   getComparator,
   stableSort,
+  toCurrency,
 } from "../../../../utils/utils";
 import Checkbox from "@mui/material/Checkbox";
 import moment from "moment";
@@ -38,6 +39,7 @@ import { useDispatch } from "react-redux";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
+import { useGetUser } from "../../../../hook/getUserHook";
 // dropdown
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
@@ -125,6 +127,7 @@ const headCells2 = [
 
 const Auction = () => {
   const dispatch = useDispatch();
+  const { currency } = useGetUser();
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("regular");
   const [show, setShow] = useState(false);
@@ -431,16 +434,16 @@ const Auction = () => {
                             }
                           </td>
                           <td align="left">
-                            {item.product ? item.product.productName : "N/A"}
+                            {item.product ? item.product.name : "N/A"}
                           </td>
                           <td align="left">
                             {item.product
-                              ? formatCurrency(item.product.price)
+                              ? toCurrency(currency, item.basePrice)
                               : "N/A"}
                           </td>
                           <td align="left">
                             {item.product
-                              ? formatCurrency(item.product.finalPrice)
+                              ? toCurrency(currency, item.lastPriceOffered)
                               : "N/A"}
                           </td>
                           <td align="left">
@@ -533,15 +536,13 @@ const Auction = () => {
                                   </div>
                                 </TableCell>
                                 <TableCell align="left">
-                                  {row.product
-                                    ? row.product.productName
-                                    : "N/A"}
+                                  {row.product ? row.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {formatCurrency(row.basePrice)}
+                                  {toCurrency(currency, row.basePrice)}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {formatCurrency(row.basePrice)}
+                                  {toCurrency(currency, row.lastPriceOffered)}
                                 </TableCell>
                                 <TableCell align="left">
                                   {moment(row.created_at).format("L")}
@@ -640,11 +641,11 @@ const Auction = () => {
                             }
                           </td>
                           <td align="left">
-                            {item.product ? item.product.productName : "N/A"}
+                            {item.product ? item.product.name : "N/A"}
                           </td>
                           <td align="left">
                             {item.product
-                              ? formatCurrency(item.product.price)
+                              ? toCurrency(currency, item.basePrice)
                               : "N/A"}
                           </td>
 
@@ -736,10 +737,10 @@ const Auction = () => {
                                 </div>
                               </TableCell>
                               <TableCell align="left">
-                                {row.product ? row.product.productName : "N/A"}
+                                {row.product ? row.product.name : "N/A"}
                               </TableCell>
                               <TableCell align="left">
-                                {formatCurrency(row.basePrice)}
+                                {toCurrency(currency, row.basePrice)}
                               </TableCell>
 
                               <TableCell align="left">
