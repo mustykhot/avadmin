@@ -13,7 +13,7 @@ import DateRange from "../../../../component/DateRange";
 import TopSeller from "../../../../component/TopSeller";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
-import { formatCurrency } from "../../../../utils/utils";
+import { toCurrency } from "../../../../utils/utils";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,7 +26,8 @@ import {
   Legend,
 } from "chart.js";
 import { useGetDashQuery } from "../../../../services/api";
-import ErrorMsg from "../../../../component/ErrorMsg";
+// import ErrorMsg from "../../../../component/ErrorMsg";
+import { useGetUser } from "../../../../hook/getUserHook";
 import Loader from "../../../../component/Loader";
 import NoProduct from "../../../../component/NoProduct";
 import moment from "moment";
@@ -34,6 +35,7 @@ import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
 const Dashboard = () => {
   const [newDate, setNewDate] = useState([{}]);
+  const { currency } = useGetUser();
   const handleSetDate = (dateRange) => {
     setNewDate([
       {
@@ -338,9 +340,7 @@ const Dashboard = () => {
                       <thead>
                         <tr>
                           <th>Transaction ID</th>
-                          <th>
-                            Amount <img src="" alt="" />{" "}
-                          </th>
+                          <th>Amount</th>
                           <th>Status</th>
                           <th>Date</th>
                         </tr>
@@ -351,7 +351,7 @@ const Dashboard = () => {
                             return (
                               <tr key={item.id}>
                                 <td> {item.id} </td>
-                                <td>₦ {formatCurrency(item.amount)}</td>
+                                <td>{toCurrency(currency, item?.amount)}</td>
                                 <td>
                                   <p className={`status ${item.status}`}>
                                     {item.status.toLowerCase()}

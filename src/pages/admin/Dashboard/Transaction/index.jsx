@@ -11,11 +11,9 @@ import NoProduct from "../../../../component/NoProduct";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
 import {
-  moneyFormatter,
   truncateString,
   stableSort,
   getComparator,
-  formatCurrency,
   toCurrency,
 } from "../../../../utils/utils";
 import moment from "moment";
@@ -154,7 +152,7 @@ const Transaction = () => {
                           {item.user.lastName}
                         </td>
 
-                        <td>₦ {formatCurrency(item.amount)}</td>
+                        <td>{toCurrency(currency, item?.amount)}</td>
                         <td>{moment(item.createdAt).format("MM/DD/YYYY")}</td>
 
                         <td>{item.status}</td>

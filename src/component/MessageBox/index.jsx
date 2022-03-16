@@ -1,18 +1,14 @@
 import moment from "moment";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import "./style.scss";
-import {Avatar} from "@mui/material";
-import {useSelector} from "react-redux";
+import { Avatar } from "@mui/material";
+import { useSelector } from "react-redux";
 
-import {motion} from "framer-motion/dist/framer-motion";
-import {moveIn} from "../../utils/variants";
+import { motion } from "framer-motion/dist/framer-motion";
+import { moveIn } from "../../utils/variants";
 const MessageBox = ({
-  image,
-  name,
   id,
-  latestMessage = "alsksl",
   active,
-  numberOfNew,
   time,
   setActive,
   setId,
@@ -20,12 +16,10 @@ const MessageBox = ({
   skipper,
 }) => {
   const [sender, setSender] = useState(null);
-  // console.log(sender, "sender");
-  const {user} = useSelector(state => state.auth);
-  // const userId = "61d57dbea7bc65c65b587c32";
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     const sendernew = members
-      ? members.filter(item => {
+      ? members.filter((item) => {
           return item._id !== user.id;
         })
       : "";
@@ -47,7 +41,7 @@ const MessageBox = ({
       <Avatar
         alt={"user"}
         src={sender && sender.image}
-        sx={{width: 35, height: 35}}
+        sx={{ width: 35, height: 35 }}
       />
       <div className="textBox">
         <div className="nameSide">
