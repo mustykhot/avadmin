@@ -191,7 +191,7 @@ const Ads = () => {
                   className="createAdmin"
                   action=""
                 >
-                  <FormHead title={"Create Category"} subTitle={""} />
+                  <FormHead title={"Create Announcement"} subTitle={""} />
 
                   <InputField
                     type="text"
