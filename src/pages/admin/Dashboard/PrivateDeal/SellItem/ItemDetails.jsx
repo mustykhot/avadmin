@@ -1,4 +1,4 @@
-import {useFormContext} from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
 import Textarea from "../../../../../component/input/textarea";
@@ -7,10 +7,10 @@ import {
   useGetBrandQuery,
 } from "../../../../../services/api";
 
-const ItemDetails = ({display}) => {
-  const {watch} = useFormContext();
+const ItemDetails = ({ display }) => {
+  const { watch } = useFormContext();
 
-  const {data: brands = null, isLoading, isError} = useGetBrandQuery();
+  const { data: brands = null, isLoading, isError } = useGetBrandQuery();
 
   const brand = watch("productInfo.brandInformation.brand");
   const {
@@ -23,9 +23,9 @@ const ItemDetails = ({display}) => {
   console.log(brands, models, "saka");
 
   return (
-    <div style={{display: display ? "block" : "none"}}>
+    <div style={{ display: display ? "block" : "none" }}>
       <div className="form-group-wrap">
-        <SelectField
+        {/* <SelectField
           name="productInfo.brandInformation.brand"
           label="Brand"
           errMsg="invalid field"
@@ -34,14 +34,22 @@ const ItemDetails = ({display}) => {
           placeholder="Select Brand"
           selectOption={
             brands
-              ? brands.data.map(el => ({
+              ? brands.data.map((el) => ({
                   label: el.name,
                   value: el._id,
                 }))
               : []
           }
+        /> */}
+        <InputField
+          type="text"
+          required={true}
+          name="productInfo.brandInformation.brand"
+          label="Brand"
+          placeholder="Select Brand"
+          errMsg={"Invalid input"}
         />
-        <SelectField
+        {/* <SelectField
           name="productInfo.brandInformation.brandModel"
           label="Model"
           errMsg="invalid field"
@@ -50,12 +58,21 @@ const ItemDetails = ({display}) => {
           placeholder="Select Model"
           selectOption={
             models
-              ? models.data.map(el => ({
+              ? models.data.map((el) => ({
                   label: el.name,
                   value: el._id,
                 }))
               : []
           }
+        /> */}
+
+        <InputField
+          type="text"
+          required={true}
+          name="productInfo.brandInformation.brandModel"
+          label="Model"
+          placeholder="Select Model"
+          errMsg={"Invalid input"}
         />
         {/* <InputField type="text" name="model" label="Model" required={false} /> */}
       </div>

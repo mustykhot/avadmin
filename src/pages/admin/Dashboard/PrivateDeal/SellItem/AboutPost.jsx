@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {useEffect} from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import NaijaStates from "naija-state-local-government";
 import UploadMultipleFile from "../../../../../component/UploadImgField/UploadMultipleFile";
 import {
@@ -9,15 +9,15 @@ import {
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
 import CreateVendor from "./createVendor";
-const AboutPost = ({display, imgUrl, setImgUrl}) => {
+const AboutPost = ({ display, imgUrl, setImgUrl }) => {
   // const { categories = [] } = useGetCt();
   const [create, setCreate] = useState(false);
 
   // get category
-  const {data: category = null} = useGetAllCategoryQuery(1);
+  const { data: category = null } = useGetAllCategoryQuery(1);
 
   // get vendor
-  const {data: vendor = null} = useGetAllPrivateVendorQuery({
+  const { data: vendor = null } = useGetAllPrivateVendorQuery({
     page: 1,
     limit: 100,
     search: "",
@@ -29,7 +29,7 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
     () =>
       category
         ? setCategoryOptions(
-            category.data.map(el => ({
+            category.data.map((el) => ({
               label: el.name,
               value: el._id,
             }))
@@ -40,7 +40,7 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
 
   const [activeState, setActiveState] = useState("Lagos");
   return (
-    <div style={{display: display ? "block" : "none"}}>
+    <div style={{ display: display ? "block" : "none" }}>
       <InputField
         type="text"
         name="productInfo.name"
@@ -68,6 +68,26 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
         isLoading={categoryOptions.length <= 0}
       />
       <SelectField
+        name="country"
+        label="Country"
+        errMsg="invalid field"
+        // required={false}
+        selectOption={[
+          {
+            label: "Select Country",
+            value: "",
+          },
+          {
+            label: "NIGERIA",
+            value: "NIGERIA",
+          },
+          {
+            label: "UNITED",
+            value: "UNITED KINGDOM",
+          },
+        ]}
+      />
+      {/* <SelectField
         name="productInfo.subCategory"
         label="Sub Category"
         required={false}
@@ -80,12 +100,12 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
           ...categoryOptions,
         ]}
         isLoading={categoryOptions.length <= 0}
-      />
+      /> */}
       <SelectField
         name="productInfo.state"
         label="State"
         errMsg="invalid field"
-        handleCustomChange={e => setActiveState(e.target.value)}
+        handleCustomChange={(e) => setActiveState(e.target.value)}
         // selectOption={[
         //   {
         //     label: "Select State",
@@ -93,7 +113,7 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
         //   },
         //   ...NaijaStates.states(),
         // ]}
-        selectOption={NaijaStates.states().map(item => ({
+        selectOption={NaijaStates.states().map((item) => ({
           label: item,
           value: item,
         }))}
@@ -109,7 +129,7 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
         //   },
         //   ...(NaijaStates.lgas(`${activeState}`)?.lgas || ""),
         // ]}
-        selectOption={NaijaStates.lgas(`${activeState}`)?.lgas.map(item => ({
+        selectOption={NaijaStates.lgas(`${activeState}`)?.lgas.map((item) => ({
           label: item,
           value: item,
         }))}
@@ -133,7 +153,7 @@ const AboutPost = ({display, imgUrl, setImgUrl}) => {
 
         selectOption={
           vendor
-            ? vendor.data.map(item => ({
+            ? vendor.data.map((item) => ({
                 label: item.fullName,
                 value: item.id,
               }))
