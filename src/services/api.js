@@ -82,7 +82,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["admins", "user", "users"],
+      invalidatesTags: ["admins", "user", "users", "audit"],
     }),
     updateBatch: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -90,7 +90,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["admins", "user", "users"],
+      invalidatesTags: ["admins", "user", "users", "audit"],
     }),
     updatePassword: builder.mutation({
       query: (credentials) => ({
@@ -106,7 +106,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["chat"],
+      invalidatesTags: ["chat", "audit"],
     }),
     sendChat: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -114,7 +114,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["chatmessage"],
+      invalidatesTags: ["chatmessage", "audit"],
     }),
 
     getConversationBtwUsers: builder.query({
@@ -219,7 +219,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["privatedeal"],
+      invalidatesTags: ["privatedeal", "audit"],
     }),
     activatePrivateDeal: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -227,7 +227,15 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["privatedeal"],
+      invalidatesTags: ["privatedeal", "audit"],
+    }),
+
+    delPrivateDeal: builder.mutation({
+      query: ({ id }) => ({
+        url: `deals/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["privatedeal", "audit"],
     }),
 
     // deal side
@@ -253,7 +261,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["deal"],
+      invalidatesTags: ["deal", "audit"],
     }),
     approveDealBatch: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -261,7 +269,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["deal"],
+      invalidatesTags: ["deal", "audit"],
     }),
     // rejectDeal: builder.mutation({
     //   query: ({ id }) => ({
@@ -316,7 +324,16 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["vendor"],
+      invalidatesTags: ["vendor", "audit"],
+    }),
+
+    addAdvert: builder.mutation({
+      query: (credentials) => ({
+        url: "announcements",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["ads", "audit"],
     }),
 
     addCategory: builder.mutation({
@@ -325,7 +342,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["category"],
+      invalidatesTags: ["category", "audit"],
     }),
 
     editCategory: builder.mutation({
@@ -334,7 +351,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["category"],
+      invalidatesTags: ["category", "audit"],
     }),
     activateCategory: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -342,7 +359,7 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["category"],
+      invalidatesTags: ["category", "audit"],
     }),
     disableCategory: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -350,14 +367,14 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["category"],
+      invalidatesTags: ["category", "audit"],
     }),
     deleteCategory: builder.mutation({
       query: ({ id }) => ({
         url: `categories/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["category"],
+      invalidatesTags: ["category", "audit"],
     }),
     getPlan: builder.query({
       query: (page) => `plans?page=${page}`,
@@ -370,7 +387,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["plan"],
+      invalidatesTags: ["plan", "audit"],
     }),
     editPlan: builder.mutation({
       query: ({ credentials, id }) => ({
@@ -378,14 +395,14 @@ export const authApi = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["plan"],
+      invalidatesTags: ["plan", "audit"],
     }),
     deletePlan: builder.mutation({
       query: ({ id }) => ({
         url: `plan/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["plan"],
+      invalidatesTags: ["plan", "audit"],
     }),
     // signd: builder.mutation({
     //   query: (credentials) => ({
@@ -400,7 +417,7 @@ export const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["admins"],
+      invalidatesTags: ["admins", "audit"],
     }),
     resetPwd: builder.mutation({
       query: (credentials) => ({
@@ -444,6 +461,7 @@ export const {
   useResetPwdMutation,
   useGetAllCategoryQuery,
   useAddCategoryMutation,
+  useAddAdvertMutation,
   useEditCategoryMutation,
   useActivateCategoryMutation,
   useDisableCategoryMutation,
@@ -476,4 +494,5 @@ export const {
   useUpdatePasswordMutation,
   useActivatePrivateDealMutation,
   useGetUserDataQuery,
+  useDelPrivateDealMutation,
 } = authApi;

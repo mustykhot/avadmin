@@ -180,7 +180,7 @@ const Account = () => {
               <div className="coverForm">
                 <FormProvider {...methods2}>
                   <form onSubmit={methods2.handleSubmit(onSubmit2)} action="">
-                    <FormHead title={"Profile Details"} />
+                    <FormHead title={"Password Details"} />
 
                     <InputField
                       type="password"

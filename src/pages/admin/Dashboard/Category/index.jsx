@@ -347,7 +347,7 @@ const Category = () => {
                     // disable={imgupload ? false : true}
                     btnText="Add Category"
                   />
-                  <button onClick={closeModal} className="cancel">
+                  <button type="button" onClick={closeModal} className="cancel">
                     Cancel
                   </button>
                 </form>
@@ -399,7 +399,11 @@ const Category = () => {
                   />
 
                   <SubmitBtn isLoading={editLoading} btnText="Edit Category" />
-                  <button onClick={closeEditModal} className="cancel">
+                  <button
+                    onClick={closeEditModal}
+                    type="button"
+                    className="cancel"
+                  >
                     Cancel
                   </button>
                 </form>

@@ -19,6 +19,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router";
 import {
   useActivatePrivateDealMutation,
+  useDelPrivateDealMutation,
   // useActivateDealMutation,
   useGetAllPrivateBuyDealQuery,
   useGetAllPrivateDealQuery,
@@ -45,8 +46,9 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { useGetUser } from "../../../../hook/getUserHook";
+import LoadingHead from "../../../../component/LoaderHead/loaderhead";
 // dropdown
-export const SubscribeDropDown = ({ id, activateDeal }) => (
+export const SubscribeDropDown = ({ id, activateDeal, delDeal }) => (
   <DropDownWrapper
     className="more-actions"
     action={
@@ -80,6 +82,15 @@ export const SubscribeDropDown = ({ id, activateDeal }) => (
       className="btn-noBg"
     >
       Activate
+    </button>
+    <button
+      onClick={() => {
+        delDeal({ id: id });
+      }}
+      className="btn-noBg"
+      style={{ color: "red" }}
+    >
+      Delete
     </button>
   </DropDownWrapper>
 );
@@ -167,6 +178,22 @@ const PrivateDeal = () => {
     }
   };
 
+  // update deal
+  const [delResponse, { isLoading: delLoading }] = useDelPrivateDealMutation();
+  const delDeal = async ({ type, id }) => {
+    try {
+      const response = await delResponse({
+        id: id,
+      }).unwrap();
+
+      toastr.success("Success", response.message);
+    } catch (err) {
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
+    }
+  };
+
   const handleSearch = (item) => {
     console.log(item);
   };
@@ -208,6 +235,7 @@ const PrivateDeal = () => {
   return (
     <AdminDashboardLayout active="deal">
       <div className="pd-private">
+        <LoadingHead status={delLoading || rejectoading ? true : false} />
         <div className="topicPart">
           <p className="pageTitle">Private Deals</p>
           <div className="btnBox">
@@ -394,6 +422,7 @@ const PrivateDeal = () => {
                                   <SubscribeDropDown
                                     id={item._id}
                                     activateDeal={activateDeal}
+                                    delDeal={delDeal}
                                   />
                                 </TableCell>
                               </TableRow>
@@ -564,6 +593,7 @@ const PrivateDeal = () => {
                                   <SubscribeDropDown
                                     id={item._id}
                                     activateDeal={activateDeal}
+                                    delDeal={delDeal}
                                   />
                                 </TableCell>
                               </TableRow>

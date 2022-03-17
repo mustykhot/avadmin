@@ -40,6 +40,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { useGetUser } from "../../../../hook/getUserHook";
+import LoadingHead from "../../../../component/LoaderHead/loaderhead";
 // dropdown
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
@@ -269,6 +270,9 @@ const Auction = () => {
   return (
     <AdminDashboardLayout active="auction">
       <div className="pd-auction">
+        <LoadingHead
+          status={approveBatchLoading || approveLoading ? true : false}
+        />
         <div className="topicPart">
           <p className="pageTitle">Auctions</p>
           <div className="btnBox">

@@ -12,6 +12,7 @@ import { Avatar, IconButton, Pagination } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {
   useActivateCategoryMutation,
+  useAddAdvertMutation,
   useApproveDealMutation,
   useGetAllCategoryQuery,
   useGetSponsoredDealQuery,
@@ -19,6 +20,8 @@ import {
 import { toastr } from "react-redux-toastr";
 import LoadingTable from "../../../../component/loadingTable";
 import NoProduct from "../../../../component/NoProduct";
+import InputField from "../../../../component/input/indexField";
+
 import {
   getComparator,
   stableSort,
@@ -35,7 +38,13 @@ import EnhancedTableHead from "../../../../component/EnhancedTableHead";
 import { moveIn } from "../../../../utils/variants";
 import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 import moment from "moment";
-
+import Modal from "../../../../component/Modal";
+import FormHead from "../../../../component/formHead";
+import { FormProvider, useForm } from "react-hook-form";
+import Textarea from "../../../../component/input/textarea";
+import uploadImg from "../../../../hook/UploadImg";
+import SubmitBtn from "../../../../component/submitBtn";
+import RajiFile from "../../../../component/input/RajiFile";
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
     className="more-actions"
@@ -138,12 +147,101 @@ const Ads = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+  const methods = useForm();
+  const [modal, setModal] = useState(false);
+  const closeModal = () => {
+    setModal(!modal);
+  };
+  const [addResponse, { isLoading }] = useAddAdvertMutation();
+  const onSubmit = async (vals) => {
+    let url = await uploadImg(vals.images[0], "n3mtymsx");
+    console.log(url);
+    const payload = {
+      ...vals,
+      images: [
+        {
+          url: url.secure_url,
+          name: vals.images[0].name,
+          mimeType: url.format,
+        },
+      ],
+    };
+    console.log(payload);
+    try {
+      const response = await addResponse(payload).unwrap();
+      closeModal();
+      toastr.success("Success", response.message);
+      methods.reset();
+    } catch (err) {
+      if (err.status === "FETCH_ERROR")
+        toastr.error("Error", "Something went wrong, please try again...");
+      else toastr.error("Error", err.data._meta.error.message);
+    }
+  };
 
   return (
     <AdminDashboardLayout active="ads">
       <div className="pd-ads">
+        <AnimatePresence>
+          {modal && (
+            <Modal>
+              <FormProvider {...methods}>
+                <form
+                  onSubmit={methods.handleSubmit(onSubmit)}
+                  className="createAdmin"
+                  action=""
+                >
+                  <FormHead title={"Create Category"} subTitle={""} />
+
+                  <InputField
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    label="Title"
+                    id="title"
+                  />
+                  <RajiFile
+                    name="images"
+                    placeholder="Image"
+                    label="Image"
+                    id="image"
+                    // setFiler={setImgUpload}
+                  />
+                  <InputField
+                    type="date"
+                    name="publishDate"
+                    placeholder="Date"
+                    label="Publish Date"
+                    id="date"
+                  />
+                  <Textarea
+                    type="text"
+                    name="description"
+                    placeholder="Description"
+                    label="Description"
+                    id="description"
+                  />
+                  <SubmitBtn
+                    isLoading={isLoading}
+                    // disable={imgupload ? false : true}
+                    // disable={imgupload ? false : true}
+                    btnText="Add Announcement"
+                  />
+                  <button type="button" onClick={closeModal} className="cancel">
+                    Cancel
+                  </button>
+                </form>
+              </FormProvider>
+            </Modal>
+          )}
+        </AnimatePresence>
         <div className="topicPart">
           <p className="pageTitle">Ads Manager</p>
+          <div className="btnBox">
+            <button onClick={closeModal} className="create">
+              Create Advert
+            </button>
+          </div>
         </div>
 
         <div style={{ marginTop: "20px" }} className="whiteContainer">
