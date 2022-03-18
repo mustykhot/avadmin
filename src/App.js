@@ -7,6 +7,10 @@ const theme = createTheme({
     primary: {
       main: "#0052bd",
     },
+    accentBlue: {
+      main: "#f0f3fb",
+      dark: "#DCDFF1",
+    },
   },
   typography: {
     fontWeightLight: 400,

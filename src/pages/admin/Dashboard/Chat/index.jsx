@@ -1,15 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import ChatBox from "../../../../component/ChatBox";
 import MessageBox from "../../../../component/MessageBox";
 import Modal from "../../../../component/Modal";
-import { ReactComponent as Close } from "../../../../assets/icons/close.svg";
-import { ReactComponent as Users } from "../../../../assets/icons/sidebar/users.svg";
-import { ReactComponent as Chat1 } from "../../../../assets/icons/sidebar/chat1.svg";
+import {ReactComponent as Close} from "../../../../assets/icons/close.svg";
+import {ReactComponent as Users} from "../../../../assets/icons/sidebar/users.svg";
+import {ReactComponent as Fileicon} from "../../../../assets/icons/fileIcon.svg";
+import {ReactComponent as Chat1} from "../../../../assets/icons/sidebar/chat1.svg";
 import "./style.scss";
 import NoProduct from "../../../../component/NoProduct";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCommentSlash } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCommentSlash} from "@fortawesome/free-solid-svg-icons";
 import LoadingHead from "../../../../component/LoaderHead/loaderhead";
 import {
   useCreateChatMutation,
@@ -18,24 +19,24 @@ import {
   useGetUsersInChatQuery,
   useGetChatAdminsQuery,
 } from "../../../../services/api";
-import { Avatar, CardHeader } from "@mui/material";
-import { useSelector } from "react-redux";
-import { toastr } from "react-redux-toastr";
+import {Avatar, CardHeader} from "@mui/material";
+import {useSelector} from "react-redux";
+import {toastr} from "react-redux-toastr";
 import Skeleton from "@mui/material/Skeleton";
 import io from "socket.io-client";
-import { AnimatePresence } from "framer-motion/dist/framer-motion";
-import { useLocation } from "react-router-dom";
-import { useCallback } from "react";
+import {AnimatePresence} from "framer-motion/dist/framer-motion";
+import {useLocation} from "react-router-dom";
+import {useCallback} from "react";
 
 const Chat = () => {
   const [activeMsg, setActiveMsg] = useState("");
-  const { user } = useSelector((state) => state.auth);
+  const {user} = useSelector(state => state.auth);
   const [search, setSearch] = useState("");
   const [search2] = useState("");
   const [adminSearch, setAdminSearch] = useState("");
 
   const [toggleChat, setToggleChat] = useState("admin");
-  const handleToggleChat = (type) => {
+  const handleToggleChat = type => {
     setToggleChat(type);
   };
   const [modal, setModal] = useState(false);
@@ -47,16 +48,15 @@ const Chat = () => {
     data: admins = null,
     isLoading: loading,
     isError,
-  } = useGetChatAdminsQuery({ search: adminSearch, page: 1 });
+  } = useGetChatAdminsQuery({search: adminSearch, page: 1});
   const {
     data: users = null,
     isLoading: loadingUsers,
     isError: isErrorUsers,
-  } = useGetUsersInChatQuery({ search, page: 1 });
+  } = useGetUsersInChatQuery({search, page: 1});
   // create chat
-  const [createResponse, { isLoading: createLoading }] =
-    useCreateChatMutation();
-  const startChat = async (id) => {
+  const [createResponse, {isLoading: createLoading}] = useCreateChatMutation();
+  const startChat = async id => {
     const payload = {
       senderId: user.id,
       receiverId: id,
@@ -74,11 +74,10 @@ const Chat = () => {
   };
 
   // get converstion
-  const { data: conversation, isLoading: convLoading } =
-    useGetConversationQuery({
-      id: user.id,
-      search: search2,
-    });
+  const {data: conversation, isLoading: convLoading} = useGetConversationQuery({
+    id: user.id,
+    search: search2,
+  });
 
   const [realConv, setRealConv] = useState(null);
   useEffect(() => {
@@ -88,10 +87,10 @@ const Chat = () => {
   }, [conversation]);
 
   const searchConv = useCallback(
-    (value) => {
+    value => {
       if (value && !!value.trim() && conversation?.data) {
-        const newConv = [...conversation.data].filter((item) => {
-          let mem = item.members.find((member) => member._id !== user.id);
+        const newConv = [...conversation.data].filter(item => {
+          let mem = item.members.find(member => member._id !== user.id);
 
           return (
             mem._id === value ||
@@ -128,7 +127,7 @@ const Chat = () => {
     setSecondId(id2);
   };
 
-  const { data: twoconversation, isLoading: twoconvLoading } =
+  const {data: twoconversation, isLoading: twoconvLoading} =
     useGetConversationBtwUsersQuery(
       {
         idFirst: firstId,
@@ -148,7 +147,7 @@ const Chat = () => {
   useEffect(() => {
     if (currentId) {
       socketRef.current = io("wss://auction-backend-api.herokuapp.com", {
-        query: { conversationId: currentId },
+        query: {conversationId: currentId},
         transports: ["websocket"],
       });
 
@@ -160,9 +159,9 @@ const Chat = () => {
       //   conversationId: currentMsg.id,
       // });
 
-      socketRef.current.on("new-message", (newMsg) => {
+      socketRef.current.on("new-message", newMsg => {
         console.log(newMsg, "newMsg");
-        setMessage((prev) => {
+        setMessage(prev => {
           return [...prev, newMsg.message];
         });
       });
@@ -187,7 +186,7 @@ const Chat = () => {
           <p className="pageTitle">Chats</p>
         </div>
         <div className="whiteContainer">
-          <div className="messageList">
+          <div className={`messageList ${activeMsg ? "active" : ""}`}>
             <div className="messageTop">
               <div className="new">
                 <p>Conversations</p>
@@ -199,7 +198,7 @@ const Chat = () => {
               <input
                 type="text"
                 placeholder="Search"
-                onChange={(e) => {
+                onChange={e => {
                   searchConv(e.target.value);
                   console.log(realConv);
                 }}
@@ -216,14 +215,21 @@ const Chat = () => {
                         <FontAwesomeIcon icon={faCommentSlash} />
                       </NoProduct>
                     ) : (
-                      realConv.map((item) => {
+                      realConv.map(item => {
                         return (
                           <MessageBox
                             image={item.img}
                             name={item.name}
                             key={item._id}
                             id={item._id}
-                            // latestMessage={item.latestMessage}
+                            latestMessage={
+                              item.messages[item.messages.length - 1]?.text || (
+                                <span className="file-msg">
+                                  <Fileicon className="fileIcon" />
+                                  File
+                                </span>
+                              )
+                            }
                             numberOfNew={item.numberOfNew}
                             time={item.createdAt}
                             setActive={setActiveMsg}
@@ -261,7 +267,7 @@ const Chat = () => {
                               animation="wave"
                               height={10}
                               width="80%"
-                              style={{ marginBottom: 6 }}
+                              style={{marginBottom: 6}}
                             />
                           }
                           subheader={
@@ -282,8 +288,13 @@ const Chat = () => {
               )}
             </div>
           </div>
-          <div className="chatBoxDiv">
+          <div
+            className={`chatBoxDiv ${
+              activeMsg && !twoconvLoading ? "active" : ""
+            }`}
+          >
             <ChatBox
+              setActive={setActiveMsg}
               currentMsg={twoconversation && twoconversation.data[0]}
               messages={message}
               loading={twoconvLoading}
@@ -328,7 +339,7 @@ const Chat = () => {
               <input
                 type="text"
                 placeholder="Search"
-                onChange={(e) => {
+                onChange={e => {
                   if (toggleChat === "customers") {
                     setSearch(e.target.value);
                   } else {
@@ -357,10 +368,10 @@ const Chat = () => {
                       </NoProduct>
                     ) : (
                       admins.data
-                        .filter((item) => {
+                        .filter(item => {
                           return user.id !== item._id;
                         })
-                        .map((item) => {
+                        .map(item => {
                           return (
                             <div
                               className="eachMember"
@@ -409,10 +420,10 @@ const Chat = () => {
                       </NoProduct>
                     ) : (
                       users.data
-                        .filter((item) => {
+                        .filter(item => {
                           return user.id !== item._id;
                         })
-                        .map((item) => {
+                        .map(item => {
                           return (
                             <div
                               className="eachMember"

@@ -5,13 +5,13 @@
   border-bottom: 0.5px solid #dcdff1;
   padding: 15px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   cursor: pointer;
   &.active {
     background: #f6f9ff;
     box-shadow: inset 5px 0px 0px #0052bd;
-    border-left: 4px solid $primary;
+    border-left: 4px solid var(--primary);
   }
   img {
     width: 31px;
@@ -19,7 +19,8 @@
     border-radius: 50%;
   }
   .textBox {
-    width: 80%;
+    flex-grow: 2;
+    margin-left: 1rem;
     .nameSide {
       display: flex;
       justify-content: space-between;

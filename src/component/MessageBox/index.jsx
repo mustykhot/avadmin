@@ -1,11 +1,12 @@
 import moment from "moment";
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import "./style.scss";
-import { Avatar } from "@mui/material";
-import { useSelector } from "react-redux";
+import {Avatar} from "@mui/material";
+import {useSelector} from "react-redux";
 
-import { motion } from "framer-motion/dist/framer-motion";
-import { moveIn } from "../../utils/variants";
+import {motion} from "framer-motion/dist/framer-motion";
+import {moveIn} from "../../utils/variants";
+import {truncateString} from "../../utils/utils";
 const MessageBox = ({
   id,
   active,
@@ -14,12 +15,13 @@ const MessageBox = ({
   setId,
   members,
   skipper,
+  latestMessage,
 }) => {
   const [sender, setSender] = useState(null);
-  const { user } = useSelector((state) => state.auth);
+  const {user} = useSelector(state => state.auth);
   useEffect(() => {
     const sendernew = members
-      ? members.filter((item) => {
+      ? members.filter(item => {
           return item._id !== user.id;
         })
       : "";
@@ -41,7 +43,7 @@ const MessageBox = ({
       <Avatar
         alt={"user"}
         src={sender && sender.image}
-        sx={{ width: 35, height: 35 }}
+        sx={{width: 35, height: 35}}
       />
       <div className="textBox">
         <div className="nameSide">
@@ -51,7 +53,7 @@ const MessageBox = ({
           <p className="time">{moment(time).fromNow()}</p>
         </div>
         <div className="messageSide">
-          {/* <p className="message">{truncateString(latestMessage, 66)}</p> */}
+          <p className="message">{truncateString(latestMessage || "", 60)}</p>
           {/* <p className="numberCircle">{numberOfNew}</p> */}
         </div>
       </div>
