@@ -60,11 +60,11 @@ const TnC = ({ display }) => {
             },
             {
               label: "1 year",
-              value: "",
+              value: "1 year",
             },
             {
               label: "2 years",
-              value: "",
+              value: "2 years",
             },
           ]}
         />
