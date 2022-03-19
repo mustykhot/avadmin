@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import {useState} from "react";
+import {useForm, FormProvider} from "react-hook-form";
 
 import "./style.scss";
 
@@ -9,10 +9,10 @@ import Pricing from "./Pricing";
 import ShippingDetails from "./ShippingDetails";
 import TnC from "./TnC";
 
-import { useAddPrivateDealMutation } from "../../../../../services/api";
-import { removeEmpty } from "../../../../../utils/utils";
+import {useAddPrivateDealMutation} from "../../../../../services/api";
+import {removeEmpty} from "../../../../../utils/utils";
 import SubmitBtn from "../../../../../component/submitBtn";
-import { toastr } from "react-redux-toastr";
+import {toastr} from "react-redux-toastr";
 import AdminDashboardLayout from "../../../../../component/adminDashboardLayout";
 
 const TOTAL_STEPS = 5;
@@ -31,12 +31,12 @@ const CreatePrivateDeal = () => {
       type: "BUY_NOW",
     },
   });
-  const [createDeal, { isLoading }] = useAddPrivateDealMutation();
+  const [createDeal, {isLoading}] = useAddPrivateDealMutation();
 
   const [presentStep, setPresentStep] = useState(1);
   const [image, setImage] = useState([]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     let cred = {
       ...removeEmpty(data),
       isPrivate: true,
@@ -84,7 +84,7 @@ const CreatePrivateDeal = () => {
     "Terms & Conditions",
   ];
 
-  const goNext = (num) => {
+  const goNext = num => {
     setPresentStep(presentStep + num);
     console.log(methods.getValues(), image);
     if (methods.formState.isValid && image.length > 0) {
@@ -169,7 +169,7 @@ const CreatePrivateDeal = () => {
                       disabled={!methods.formState.isValid}
                       isLoading={isLoading}
                       style={{
-                        display: presentStep === TOTAL_STEPS ? "unset" : "none",
+                        display: presentStep === TOTAL_STEPS ? "flex" : "none",
                       }}
                     />
                     <button

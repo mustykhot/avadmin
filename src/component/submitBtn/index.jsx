@@ -1,15 +1,21 @@
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
-const SubmitBtn = ({ isLoading, btnText, style, disable }) => {
+const SubmitBtn = ({
+  isLoading,
+  btnText,
+  className,
+  style,
+  disabled,
+  ...props
+}) => {
   return (
     <button
-      style={style}
       type="submit"
-      className="submit"
-      disabled={disable ? disable : false}
+      {...props}
+      style={style}
+      className={`btn-primary submit-btn ${className ? className : ""}`}
+      disabled={isLoading || disabled}
     >
-      {isLoading ? <FontAwesomeIcon icon={faSpinner} pulse spin /> : btnText}
+      {isLoading ? <div className="spin" /> : btnText}
     </button>
   );
 };
