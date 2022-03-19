@@ -13,7 +13,7 @@ const SubmitBtn = ({
       {...props}
       style={style}
       className={`btn-primary submit-btn ${className ? className : ""}`}
-      disabled={disabled || isLoading}
+      disabled={isLoading || disabled}
     >
       {isLoading ? <div className="spin" /> : btnText}
     </button>
