@@ -34,20 +34,23 @@ import moment from "moment";
 import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
 const Dashboard = () => {
-  const [newDate, setNewDate] = useState([{}]);
+  const [newDate, setNewDate] = useState({});
   const { currency } = useGetUser();
   const handleSetDate = (dateRange) => {
-    setNewDate([
-      {
-        startDate: dateRange[0].startDate,
-        endDate: dateRange[0].endDate,
-      },
-    ]);
+    setNewDate({
+      startDate: dateRange[0].startDate,
+      endDate: dateRange[0].endDate,
+    });
   };
-  const labels = ["January", "February", "March", "April", "May"];
+  console.log(newDate, "pop");
 
   // get category
-  const { data: dash = null, isLoading, isError, error } = useGetDashQuery();
+  const {
+    data: dash = null,
+    isLoading,
+    isError,
+    error,
+  } = useGetDashQuery(newDate);
   console.log(dash, "dash");
 
   ChartJS.register(
@@ -62,20 +65,14 @@ const Dashboard = () => {
   );
 
   const LineData = {
-    labels,
+    labels: dash ? dash.data.lineChart.month : [],
 
     datasets: [
       {
-        label: "set 1",
-        data: [1, 2, 3, 4, 5],
+        label: "Chart",
+        data: dash ? dash.data.lineChart.data : [],
         borderColor: "#f98b2d",
         backgroundColor: "#F98B2D",
-      },
-      {
-        label: "Dataset 2",
-        data: [1, 4, 6, 2, 5],
-        borderColor: "#285ED3",
-        backgroundColor: "#285ED3",
       },
     ],
   };
@@ -201,7 +198,7 @@ const Dashboard = () => {
             <div className="transaction-card-wrap">
               <div className="section-head">
                 <p className="title">Transaction Activities</p>
-                <DateRange handle={handleSetDate} position={"-350px"} />
+                {/* <DateRange handle={handleSetDate} position={"-350px"} /> */}
               </div>
               <div className="double-graph">
                 <div className="top-wrap">
@@ -223,9 +220,9 @@ const Dashboard = () => {
                       </p>
                     </div>
                   </div>
-                  <select name="" id="" className="filter">
+                  {/* <select name="" id="" className="filter">
                     <option value="">Filter by category</option>
-                  </select>
+                  </select> */}
                 </div>
                 <div className="line-graph">
                   <Line
