@@ -48,9 +48,9 @@ const NavBar = () => {
               <button onClick={logOutAction} className="logout">
                 Log Out
               </button>
-              <Link to="/" className="profile">
+              {/* <Link to="/" className="profile">
                 Profile
-              </Link>
+              </Link> */}
             </div>
           </div>
           {/* <div className="bellSide">
