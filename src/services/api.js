@@ -295,6 +295,12 @@ export const authApi = createApi({
       providesTags: ["deal"],
       transformResponse: (response) => response,
     }),
+    getOneDealHistory: builder.query({
+      query: ({ id }) =>
+        `deals/histories?population=["user", "deal"]&deal=${id}&byDeal=true`,
+      providesTags: ["deal"],
+      transformResponse: (response) => response,
+    }),
     getAudit: builder.query({
       query: ({ page, search }) =>
         `/audits?page=${page}&limit=10&search=${search}`,
@@ -481,6 +487,7 @@ export const {
   useGetOneDealQuery,
   useGetAllBuyDealQuery,
   useGetAdminsQuery,
+  useGetOneDealHistoryQuery,
   useGetUserQuery,
   useGetUsersQuery,
   useCreateChatMutation,

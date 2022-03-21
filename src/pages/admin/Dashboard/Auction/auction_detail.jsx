@@ -13,6 +13,7 @@ import Textarea from "../../../../component/input/textarea";
 import { useForm } from "react-hook-form";
 import {
   useApproveDealMutation,
+  useGetOneDealHistoryQuery,
   useGetOneDealQuery,
 } from "../../../../services/api";
 import { useParams } from "react-router-dom";
@@ -39,8 +40,14 @@ const AuctionDetail = () => {
     isError,
     error,
   } = useGetOneDealQuery(id);
+  const {
+    data: dealHistory = null,
+    isLoading: isLoadingHistory,
+    isError: isErrorHistory,
+    error: errorHistory,
+  } = useGetOneDealHistoryQuery({ id });
 
-  console.log(deal);
+  console.log(dealHistory);
 
   // disable category
   const [approveResponse, { isLoading: approveLoading }] =
@@ -255,40 +262,42 @@ const AuctionDetail = () => {
                 </p>
               </div>
             </div>
-            <div className="line"></div>
-            <div className="eachOrder">
-              <p className="orderTopic">Recent Bidding</p>
-              <div className="flexOrder">
-                <div className="cover">
-                  <div className="eachBidding">
-                    <img src={product} alt="bid" />
-                    <div className="leftBid">
-                      <div className="nameBid">
-                        <p className="name">Raji Mustapha</p>
-                        <p className="price"> ₦ 754,000,000</p>
-                      </div>
-                      <div className="nameBid">
-                        <p className="date">09 Nov -02:32:12</p>
-                        <p className="bid">Current Bid</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="eachBidding">
-                    <img src={product} alt="bid" />
-                    <div className="leftBid">
-                      <div className="nameBid">
-                        <p className="name">Raji Mustapha</p>
-                        <p className="price"> ₦ 754,000,000</p>
-                      </div>
-                      <div className="nameBid">
-                        <p className="name">09 Nov -02:32:12</p>
-                        <p className="price">Current Bid</p>
-                      </div>
+            {dealHistory && dealHistory.data.users.length && (
+              <>
+                {" "}
+                <div className="line"></div>
+                <div className="eachOrder">
+                  <p className="orderTopic">Recent Bidding</p>
+                  <div className="flexOrder">
+                    <div className="cover">
+                      {dealHistory.data.users.map((item) => {
+                        return (
+                          <div className="eachBidding">
+                            <Avatar
+                              alt={"user"}
+                              src={item.avatar}
+                              sx={{ width: 35, height: 35 }}
+                            />
+                            <div className="leftBid">
+                              <div className="nameBid">
+                                <p className="name">{`${item.firstName} ${item.lastName}`}</p>
+                                <p className="price"> {item.amount}</p>
+                              </div>
+                              <div className="nameBid">
+                                <p className="date">
+                                  {moment(item.historyDate).format("lll")}
+                                </p>
+                                {/* <p className="bid">Current Bid</p> */}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </motion.div>
       )}

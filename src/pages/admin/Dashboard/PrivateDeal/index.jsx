@@ -66,7 +66,7 @@ export const SubscribeDropDown = ({ id, activateDeal, delDeal }) => (
       Activate
     </button> */}
 
-    <button
+    {/* <button
       onClick={() => {
         activateDeal({ type: false, id: id });
       }}
@@ -82,7 +82,7 @@ export const SubscribeDropDown = ({ id, activateDeal, delDeal }) => (
       className="btn-noBg"
     >
       Activate
-    </button>
+    </button> */}
     <button
       onClick={() => {
         delDeal({ id: id });
@@ -549,11 +549,11 @@ const PrivateDeal = () => {
                                   <div className="nameDiv">
                                     <div className="nameBox">
                                       <p className="name">
-                                        {item.vendor && `${item.vendor.name}`}
+                                        {item.user && `${item.user.name}`}
                                       </p>
 
                                       <p className="email">
-                                        {item.vendor && `${item.vendor.email}`}
+                                        {item.user && `${item.user.email}`}
                                       </p>
                                     </div>
                                   </div>
