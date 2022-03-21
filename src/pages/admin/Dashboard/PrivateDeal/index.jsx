@@ -66,23 +66,23 @@ export const SubscribeDropDown = ({ id, activateDeal, delDeal }) => (
       Activate
     </button> */}
 
-    {/* <button
+    <button
       onClick={() => {
-        activateDeal({ type: false, id: id });
+        activateDeal({ type: "DECLINED", id: id });
       }}
       className="btn-noBg"
     >
-      Deactivate
+      Decline
     </button>
 
     <button
       onClick={() => {
-        activateDeal({ type: true, id: id });
+        activateDeal({ type: "APPROVED", id: id });
       }}
       className="btn-noBg"
     >
-      Activate
-    </button> */}
+      Approve
+    </button>
     <button
       onClick={() => {
         delDeal({ id: id });
@@ -161,7 +161,7 @@ const PrivateDeal = () => {
     useActivatePrivateDealMutation();
   const activateDeal = async ({ type, id }) => {
     let payload = {
-      actve: type,
+      status: type,
     };
     console.log(payload);
     try {
@@ -317,7 +317,11 @@ const PrivateDeal = () => {
                     deal.data.map((item) => {
                       return (
                         <tr>
-                          <td> {item.vendor && `${item.vendor.name}`}</td>
+                          <td>
+                            {" "}
+                            {item.user &&
+                              `${item.user.firstName} ${item.user.lastName}`}
+                          </td>
                           <td>{item.product && item.product.productName}</td>
                           <td>{toCurrency(currency, item.basePrice)}</td>
                           <td align="left">
@@ -410,12 +414,23 @@ const PrivateDeal = () => {
                                 </TableCell>
 
                                 <TableCell align="left">
-                                  <p
+                                  {/* <p
                                     className={`status ${
                                       item.active ? "active" : "red"
                                     }`}
                                   >
                                     {item.active ? "Active" : "Inactive"}
+                                  </p> */}
+                                  <p
+                                    className={`status ${
+                                      item.status === "DECLINED"
+                                        ? "red"
+                                        : item.status === "PENDING"
+                                        ? "yellow"
+                                        : "active"
+                                    }`}
+                                  >
+                                    {item.status.toLowerCase()}
                                   </p>
                                 </TableCell>
                                 <TableCell className="action" align="left">
@@ -488,7 +503,11 @@ const PrivateDeal = () => {
                     buydeal.data.map((item) => {
                       return (
                         <tr>
-                          <td> {item.vendor && `${item.vendor.name}`}</td>
+                          <td>
+                            {" "}
+                            {item.user &&
+                              `${item.user.firstName} ${item.user.lastName}`}
+                          </td>
                           <td>{item.product && item.product.name}</td>
                           <td>{toCurrency(currency, item.basePrice)}</td>
                           <td align="left">
@@ -549,7 +568,8 @@ const PrivateDeal = () => {
                                   <div className="nameDiv">
                                     <div className="nameBox">
                                       <p className="name">
-                                        {item.user && `${item.user.name}`}
+                                        {item.user &&
+                                          `${item.user.firstName} ${item.user.lastName}`}
                                       </p>
 
                                       <p className="email">
@@ -579,7 +599,7 @@ const PrivateDeal = () => {
                                 </TableCell>
 
                                 <TableCell align="left">
-                                  <p
+                                  {/* <p
                                     className={`status ${
                                       item.status === "Active"
                                         ? "active"
@@ -587,6 +607,17 @@ const PrivateDeal = () => {
                                     }`}
                                   >
                                     {item.status}
+                                  </p> */}
+                                  <p
+                                    className={`status ${
+                                      item.status === "DECLINED"
+                                        ? "red"
+                                        : item.status === "PENDING"
+                                        ? "yellow"
+                                        : "active"
+                                    }`}
+                                  >
+                                    {item.status.toLowerCase()}
                                   </p>
                                 </TableCell>
                                 <TableCell className="action" align="left">
