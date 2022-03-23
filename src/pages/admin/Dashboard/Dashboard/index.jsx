@@ -34,7 +34,7 @@ import moment from "moment";
 import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
 const Dashboard = () => {
-  const [newDate, setNewDate] = useState({});
+  const [newDate, setNewDate] = useState("");
   const { currency } = useGetUser();
   const handleSetDate = (dateRange) => {
     setNewDate({
@@ -308,20 +308,31 @@ const Dashboard = () => {
               </select> */}
               </div>
               <div className="top-wrap">
-                {dash &&
-                  dash.data.topSellers.map((item, i) => {
-                    if (i < 4) {
-                      return (
-                        <TopSeller
-                          key={i}
-                          name={item.user.firstName + "" + item.user.lastName}
-                          email={item.user.email}
-                          sales={item.totalCount}
-                          image={item.user.avatar}
-                        />
-                      );
-                    }
-                  })}
+                {dash ? (
+                  !dash.data.topSellers.length ? (
+                    <NoProduct msg="No Data Yet...">
+                      <FontAwesomeIcon icon={faCommentSlash} />
+                    </NoProduct>
+                  ) : (
+                    dash.data.topSellers.map((item, i) => {
+                      if (i < 4) {
+                        return (
+                          <TopSeller
+                            key={i}
+                            name={item.user.firstName + "" + item.user.lastName}
+                            email={item.user.email}
+                            sales={item.totalCount}
+                            image={item.user.avatar}
+                          />
+                        );
+                      }
+                    })
+                  )
+                ) : (
+                  <NoProduct msg="No Data Yet...">
+                    <FontAwesomeIcon icon={faCommentSlash} />
+                  </NoProduct>
+                )}
               </div>
             </div>
           </div>

@@ -14,8 +14,8 @@ const DateRange = ({ handle, position }) => {
   const [dateRange, setDateRange] = useState([
     {
       // ate_from=&date_to=
-      startDate: new Date(2021, 1, 1),
-      endDate: new Date(2021, 9, 27),
+      startDate: "",
+      endDate: "",
       key: "selection",
     },
   ]);
@@ -31,9 +31,15 @@ const DateRange = ({ handle, position }) => {
       <div onClick={handleRangeShow} className="dateBox">
         <img src={calender} alt="date icon" />
         <p className="date-range">
-          {` ${moment(dateRange[0].startDate).format("MM/DD/YYYY")} - ${moment(
+          {` ${
+            dateRange[0].startDate
+              ? moment(dateRange[0].startDate).format("MM/DD/YYYY")
+              : "Select Date"
+          } - ${
             dateRange[0].endDate
-          ).format("MM/DD/YYYY")}`}
+              ? moment(dateRange[0].endDate).format("MM/DD/YYYY")
+              : "Select Date"
+          }`}
 
           {/* moment(dateRange[0].startDate).format('MM/DD/YYYY') */}
         </p>

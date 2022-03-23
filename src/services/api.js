@@ -182,7 +182,9 @@ export const authApi = createApi({
     }),
     getDash: builder.query({
       query: (date) =>
-        `data/stats?startDate=${date.startDate}&endDate=${date.endDate}`,
+        `data/stats?startDate=${date ? date.startDate : ""}&endDate=${
+          date ? date.endDate : ""
+        }`,
       providesTags: ["dash"],
       transformResponse: (response) => response,
     }),
