@@ -396,7 +396,7 @@ const PlanSide = () => {
                           value: "NIGERIA",
                         },
                         {
-                          label: "UNITED",
+                          label: "UNITED KINGDOM",
                           value: "UNITED KINGDOM",
                         },
                       ]}

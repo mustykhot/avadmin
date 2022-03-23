@@ -82,7 +82,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
             value: "NIGERIA",
           },
           {
-            label: "UNITED",
+            label: "UNITED KINGDOM",
             value: "UNITED KINGDOM",
           },
         ]}
