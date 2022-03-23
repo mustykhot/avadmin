@@ -45,6 +45,7 @@ import Textarea from "../../../../component/input/textarea";
 import uploadImg from "../../../../hook/UploadImg";
 import SubmitBtn from "../../../../component/submitBtn";
 import RajiFile from "../../../../component/input/RajiFile";
+import Currency from "../../../../component/Currency";
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
     className="more-actions"
@@ -305,7 +306,11 @@ const Ads = () => {
                                 </div>
                               </TableCell>
                               <TableCell align="left">
-                                {item.basePrice}
+                                {/* {item.basePrice} */}
+                                <Currency
+                                  country={item.country || item.product.country}
+                                  price={item.basePrice || 0}
+                                />
                               </TableCell>
                               <TableCell align="left">{item.clicks}</TableCell>
                               <TableCell align="left">
