@@ -271,6 +271,26 @@ const PlanSide = () => {
                       id="amount"
                       errMsg="invalid input"
                     />
+                    <SelectField
+                      name="country"
+                      label="Country"
+                      errMsg="invalid field"
+                      // required={false}
+                      selectOption={[
+                        {
+                          label: "Select Country",
+                          value: "",
+                        },
+                        {
+                          label: "NIGERIA",
+                          value: "NIGERIA",
+                        },
+                        {
+                          label: "UNITED",
+                          value: "UNITED KINGDOM",
+                        },
+                      ]}
+                    />
                     <InputField
                       type="number"
                       name="priority"
@@ -497,7 +517,7 @@ const PlanSide = () => {
                             <TableRow tabIndex={-1} key={item._id}>
                               <TableCell align="left">{item.name}</TableCell>
                               <TableCell align="left">
-                                {toCurrency(currency, item.amount)}
+                                {/* {toCurrency(currency, item.amount)} */}
                                 <Currency
                                   country={item.country}
                                   price={item.amount || 0}
