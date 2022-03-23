@@ -19,6 +19,7 @@ import Loader from "../../../../component/Loader";
 import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
 import { useGetUser } from "../../../../hook/getUserHook";
+import Currency from "../../../../component/Currency";
 const TransactionDownload = () => {
   const list = [1, 2, 3];
   let { id } = useParams();
@@ -98,8 +99,12 @@ const TransactionDownload = () => {
                 <p className="left">Product price:</p>
                 <p className="right">
                   {/* ₦{transaction && formatCurrency(transaction.data.amount)} */}
-                  {transaction &&
-                    toCurrency(currency, transaction.data?.amount)}
+                  {/* {transaction &&
+                    toCurrency(currency, transaction.data?.amount)} */}
+                  <Currency
+                    country={transaction.data.user.country}
+                    price={transaction.data.amount || 0}
+                  />
                 </p>
               </div>
               {/* <div className="flexOrder">

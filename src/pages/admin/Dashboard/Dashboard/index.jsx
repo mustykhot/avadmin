@@ -33,6 +33,7 @@ import NoProduct from "../../../../component/NoProduct";
 import moment from "moment";
 import { motion } from "framer-motion/dist/framer-motion";
 import { moveIn } from "../../../../utils/variants";
+import Currency from "../../../../component/Currency";
 const Dashboard = () => {
   const [newDate, setNewDate] = useState("");
   const { currency } = useGetUser();
@@ -359,7 +360,13 @@ const Dashboard = () => {
                             return (
                               <tr key={item.id}>
                                 <td> {item.id} </td>
-                                <td>{toCurrency(currency, item?.amount)}</td>
+                                <td>
+                                  {/* {toCurrency(currency, item?.amount)} */}
+                                  <Currency
+                                    country={item.user.country}
+                                    price={item.amount || 0}
+                                  />
+                                </td>
                                 <td>
                                   <p className={`status ${item.status}`}>
                                     {item.status.toLowerCase()}

@@ -41,6 +41,7 @@ import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { useGetUser } from "../../../../hook/getUserHook";
 import LoadingHead from "../../../../component/LoaderHead/loaderhead";
+import Currency from "../../../../component/Currency";
 // dropdown
 const SubscribeDropDown = ({ id, approve }) => (
   <DropDownWrapper
@@ -441,14 +442,22 @@ const Auction = () => {
                             {item.product ? item.product.name : "N/A"}
                           </td>
                           <td align="left">
-                            {item.product
+                            {/* {item.product
                               ? toCurrency(currency, item.basePrice)
-                              : "N/A"}
+                              : "N/A"} */}
+                            <Currency
+                              country={item.country || item.product.country}
+                              price={item.basePrice || 0}
+                            />
                           </td>
                           <td align="left">
-                            {item.product
+                            {/* {item.product
                               ? toCurrency(currency, item.lastPriceOffered)
-                              : "N/A"}
+                              : "N/A"} */}
+                            <Currency
+                              country={item.country || item.product.country}
+                              price={item.lastPriceOffered || 0}
+                            />
                           </td>
                           <td align="left">
                             {moment(item.created_at).format("L")}
@@ -543,10 +552,18 @@ const Auction = () => {
                                   {row.product ? row.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {toCurrency(currency, row.basePrice)}
+                                  {/* {toCurrency(currency, row.basePrice)} */}
+                                  <Currency
+                                    country={row.country || row.product.country}
+                                    price={row.basePrice || 0}
+                                  />
                                 </TableCell>
                                 <TableCell align="left">
-                                  {toCurrency(currency, row.lastPriceOffered)}
+                                  {/* {toCurrency(currency, row.lastPriceOffered)} */}
+                                  <Currency
+                                    country={row.country || row.product.country}
+                                    price={row.lastPriceOffered || 0}
+                                  />
                                 </TableCell>
                                 <TableCell align="left">
                                   {moment(row.created_at).format("L")}
@@ -648,9 +665,13 @@ const Auction = () => {
                             {item.product ? item.product.name : "N/A"}
                           </td>
                           <td align="left">
-                            {item.product
+                            {/* {item.product
                               ? toCurrency(currency, item.basePrice)
-                              : "N/A"}
+                              : "N/A"} */}
+                            <Currency
+                              country={item.product.country}
+                              price={item.lastPriceOffered || 0}
+                            />
                           </td>
 
                           <td align="left">
@@ -744,7 +765,11 @@ const Auction = () => {
                                 {row.product ? row.product.name : "N/A"}
                               </TableCell>
                               <TableCell align="left">
-                                {toCurrency(currency, row.basePrice)}
+                                {/* {toCurrency(currency, row.basePrice)} */}
+                                <Currency
+                                  country={row.country || row.product.country}
+                                  price={row.basePrice || 0}
+                                />
                               </TableCell>
 
                               <TableCell align="left">

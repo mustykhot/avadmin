@@ -65,10 +65,12 @@
   &.amount {
     background: #0052bd;
     border: none;
-
+    span {
+      color: white;
+    }
     p.midText,
     p.btmText {
-      color: $white;
+      color: white !important;
     }
   }
 }

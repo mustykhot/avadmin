@@ -26,6 +26,7 @@ import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { Avatar } from "@mui/material";
 import { useGetUser } from "../../../../hook/getUserHook";
+import Currency from "../../../../component/Currency";
 const AuctionDetail = () => {
   const [isLoadng, setIsLoading] = useState(false);
   const [toggleBtn, setToggleBtn] = useState("auction");
@@ -47,7 +48,7 @@ const AuctionDetail = () => {
     error: errorHistory,
   } = useGetOneDealHistoryQuery({ id });
 
-  console.log(dealHistory);
+  console.log(deal);
 
   // disable category
   const [approveResponse, { isLoading: approveLoading }] =
@@ -236,7 +237,12 @@ const AuctionDetail = () => {
               <div className="flexOrder">
                 <p className="left">Based Price:</p>
                 <p className="right">
-                  {deal ? toCurrency(currency, deal.data.basePrice) : "0,00"}
+                  {/* {deal ? toCurrency(currency, deal.data.basePrice) : "0,00"} */}
+                  <Currency
+                    country={deal.data.product.country}
+                    price={deal.data.basePrice}
+                  />
+                  {console.log(deal.data.basePrice)}
                 </p>
               </div>
               {/* <div className="flexOrder">
@@ -254,11 +260,15 @@ const AuctionDetail = () => {
                 <p className="left">Highest Bid:</p>
                 <p className="right green">
                   {" "}
-                  {deal
+                  {/* {deal
                     ? deal.data
                       ? toCurrency(currency, deal.data.lastPriceOffered | 0)
                       : "N/A"
-                    : "N/A"}
+                    : "N/A"} */}
+                  <Currency
+                    country={deal.data.product.country}
+                    price={deal.data.lastPriceOffered || 0}
+                  />
                 </p>
               </div>
             </div>

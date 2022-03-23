@@ -35,6 +35,7 @@ import Loader from "../../../../component/Loader";
 import { Pagination } from "@mui/material";
 import { useGetUser } from "../../../../hook/getUserHook";
 import { toCurrency } from "../../../../utils/utils";
+import Currency from "../../../../component/Currency";
 const UsersProfile = () => {
   const list = [1, 2, 3];
   const [show, setShow] = useState(false);
@@ -235,36 +236,60 @@ const UsersProfile = () => {
                       icon={trendingUp}
                       currency={"₦"}
                       increase={true}
-                      midText={
-                        transaction
-                          ? toCurrency(currency, transaction.data.totalRevenue)
-                          : 0
-                      }
+                      // midText={
+                      //   transaction
+                      //     ? toCurrency(currency, transaction.data.totalRevenue)
+                      //     : 0
+                      // }
                       btmText={"Total Revenue"}
                       percent={"12%"}
-                    />
+                    >
+                      {" "}
+                      <Currency
+                        country={user.data.country}
+                        price={
+                          transaction ? transaction.data.totalRevenue || 0 : 0
+                        }
+                      />
+                    </SummaryCard>
                     <SummaryCard
                       icon={trendingUp}
                       currency={"₦"}
                       increase={false}
-                      midText={
-                        transaction
-                          ? toCurrency(currency, transaction.data.totalExpense)
-                          : 0
-                      }
+                      // midText={
+                      //   transaction
+                      //     ? toCurrency(currency, transaction.data.totalExpense)
+                      //     : 0
+                      // }
                       btmText={"Total Expense"}
                       percent={"12%"}
-                    />
+                    >
+                      {" "}
+                      <Currency
+                        country={user.data.country}
+                        price={
+                          transaction ? transaction.data.totalExpense || 0 : 0
+                        }
+                      />
+                    </SummaryCard>
                     <SummaryCard
-                      midText={
-                        transaction
-                          ? toCurrency(currency, transaction.data.totalBalance)
-                          : 0
-                      }
+                      // midText={
+                      //   transaction
+                      //     ? toCurrency(currency, transaction.data.totalBalance)
+                      //     : 0
+                      // }
                       currency={"₦"}
                       btmText={"Wallet Balance"}
                       isAmount={true}
-                    />
+                    >
+                      {" "}
+                      <Currency
+                        country={user.data.country}
+                        price={
+                          transaction ? transaction.data.totalBalance || 0 : 0
+                        }
+                      />
+                    </SummaryCard>
                   </div>
 
                   <div className="overflowTable">
@@ -304,7 +329,11 @@ const UsersProfile = () => {
                                 </td>
 
                                 <td className="role">
-                                  {toCurrency(currency, item.amount)}
+                                  {/* {toCurrency(currency, item.amount)} */}
+                                  <Currency
+                                    country={user.data.country}
+                                    price={item.amount || 0}
+                                  />
                                 </td>
                                 <td className="statusTd">
                                   <p
@@ -366,14 +395,21 @@ const UsersProfile = () => {
                     <SummaryCard
                       icon={check}
                       increase={false}
-                      midText={
-                        deal
-                          ? toCurrency(currency, deal.data.totalAmountSpent)
-                          : 0
-                      }
+                      // midText={
+                      //   deal
+                      //     ? toCurrency(currency, deal.data.totalAmountSpent)
+                      //     : 0
+                      // }
                       btmText={"Total Amount Spent"}
                       percent={"12%"}
-                    />
+                      currency={"N"}
+                    >
+                      {" "}
+                      <Currency
+                        country={user.data.country}
+                        price={deal ? deal.data.totalAmountSpent || 0 : 0}
+                      />
+                    </SummaryCard>
                     <SummaryCard
                       midText={
                         deal
@@ -419,7 +455,11 @@ const UsersProfile = () => {
                               >
                                 <td className="phone">{item.id}</td>
                                 <td className="role">
-                                  {toCurrency(currency, item.basePrice)}
+                                  {/* {toCurrency(currency, item.basePrice)} */}
+                                  <Currency
+                                    country={user.data.country}
+                                    price={item.basePrice || 0}
+                                  />
                                 </td>
                                 <td>{item.bidStatus}</td>
                                 <td className="statusTd">
@@ -487,12 +527,19 @@ const UsersProfile = () => {
                       percent={"12%"}
                     />
                     <SummaryCard
-                      midText={
-                        auction ? toCurrency(currency, auction.data.revenue) : 0
-                      }
+                      // midText={
+                      //   auction ? toCurrency(currency, auction.data.revenue) : 0
+                      // }
+                      currency={"N"}
                       btmText={"Total Revenue"}
                       isAmount={true}
-                    />
+                    >
+                      {" "}
+                      <Currency
+                        country={user.data.country}
+                        price={auction ? auction.data.revenue || 0 : 0}
+                      />
+                    </SummaryCard>
                   </div>
 
                   <div className="overflowTable">
@@ -524,7 +571,11 @@ const UsersProfile = () => {
                                 <td className="phone">{item._id}</td>
                                 <td className="role">
                                   {" "}
-                                  {toCurrency(currency, item.basePrice)}
+                                  {/* {toCurrency(currency, item.basePrice)} */}
+                                  <Currency
+                                    country={user.data.country}
+                                    price={item.basePrice || 0}
+                                  />
                                 </td>
                                 <td>{item.type}</td>
                                 <td className="statusTd">

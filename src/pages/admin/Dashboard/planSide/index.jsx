@@ -43,6 +43,8 @@ import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
 
 import moment from "moment";
 import { useGetUser } from "../../../../hook/getUserHook";
+import Currency from "../../../../component/Currency";
+import SelectField from "../../../../component/input/select";
 // dropdown
 export const SubscribeDropDown = ({
   id,
@@ -359,6 +361,26 @@ const PlanSide = () => {
                       id="amount"
                       errMsg="invalid input"
                     />
+                    <SelectField
+                      name="country"
+                      label="Country"
+                      errMsg="invalid field"
+                      // required={false}
+                      selectOption={[
+                        {
+                          label: "Select Country",
+                          value: "",
+                        },
+                        {
+                          label: "NIGERIA",
+                          value: "NIGERIA",
+                        },
+                        {
+                          label: "UNITED",
+                          value: "UNITED KINGDOM",
+                        },
+                      ]}
+                    />
                     <InputField
                       type="number"
                       name="priority"
@@ -476,6 +498,10 @@ const PlanSide = () => {
                               <TableCell align="left">{item.name}</TableCell>
                               <TableCell align="left">
                                 {toCurrency(currency, item.amount)}
+                                <Currency
+                                  country={item.country}
+                                  price={item.amount || 0}
+                                />
                               </TableCell>
                               <TableCell align="left">
                                 {item.priority}

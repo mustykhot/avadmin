@@ -5,11 +5,12 @@ const SummaryCard = ({
   icon,
   isAmount = false,
   increase,
-
+  currency,
   btmText,
   midText,
   isFour,
   percent,
+  children,
 }) => {
   return (
     <div
@@ -26,7 +27,8 @@ const SummaryCard = ({
           </div>
         )}
       </div>
-      <p className="midText">{midText}</p>
+      {currency ? children : <p className="midText">{midText}</p>}
+
       <p className="btmText">{btmText}</p>
     </div>
   );

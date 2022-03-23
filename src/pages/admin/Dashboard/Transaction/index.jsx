@@ -30,6 +30,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { useGetUser } from "../../../../hook/getUserHook";
+import Currency from "../../../../component/Currency";
 const Transaction = () => {
   const [toggleBtn, setToggleBtn] = useState("auction");
   const { currency } = useGetUser();
@@ -152,7 +153,13 @@ const Transaction = () => {
                           {item.user.lastName}
                         </td>
 
-                        <td>{toCurrency(currency, item?.amount)}</td>
+                        <td>
+                          {/* {toCurrency(currency, item?.amount)} */}
+                          <Currency
+                            country={item.user.country}
+                            price={item.amount || 0}
+                          />
+                        </td>
                         <td>{moment(item.createdAt).format("MM/DD/YYYY")}</td>
 
                         <td>{item.status}</td>
@@ -225,7 +232,11 @@ const Transaction = () => {
                               <TableCell align="left">
                                 {/* ₦ {moneyFormatter(item.amount)} */}
 
-                                {toCurrency(currency, item?.amount)}
+                                {/* {toCurrency(currency, item?.amount)} */}
+                                <Currency
+                                  country={item.user.country}
+                                  price={item.amount || 0}
+                                />
                               </TableCell>
                               <TableCell align="left">
                                 {moment(item.createdAt).format("MM/DD/YYYY")}

@@ -63,12 +63,15 @@ export const checkPermission = (permissions, permission) => {
   }
 };
 
-export const formatCurrency = (amount) => {
-  return Number(amount)
-    .toFixed(2)
-    .replace(/\d(?=(\d{3})+\.)/g, "$&,");
-};
+// export const formatCurrency = (amount) => {
+//   return Number(amount)
+//     .toFixed(2)
+//     .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+// };
 
+export const formatCurrency = (currency, amount) => {
+  return toCurrency(currency, amount).split(".00")[0];
+};
 //toast PopUp
 export const toastPopUp = (
   cb,
@@ -184,7 +187,6 @@ export const removeEmpty = (obj) => {
   );
 };
 
-//Format value with comma and add Naira sign
 export const toCurrency = (country = "en-NG", number) => {
   const formatter = new Intl.NumberFormat(country, {
     style: "currency",

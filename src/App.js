@@ -1,7 +1,10 @@
 import ReduxToastr from "react-redux-toastr";
 import Root from "./Root";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./index.scss";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setExchangeRate } from "./store/slice/CurrencySlice";
 const theme = createTheme({
   palette: {
     primary: {
@@ -21,6 +24,21 @@ const theme = createTheme({
 });
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetch(
+      `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        let rates = {
+          ngn: data.eur.ngn,
+          eur: parseFloat((1 / Math.round(data.eur.ngn)).toFixed(6)),
+        };
+        dispatch(setExchangeRate({ data: rates }));
+      });
+  }, [dispatch]);
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -33,7 +51,7 @@ function App() {
           transitionOut="fadeOut"
           position="top-center"
           removeOnHover={false}
-          getState={state => state.toastr} // This is the default
+          getState={(state) => state.toastr} // This is the default
           className="toastr"
           closeOnToastrClick={true}
         />

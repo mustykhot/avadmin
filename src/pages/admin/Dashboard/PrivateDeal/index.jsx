@@ -47,6 +47,7 @@ import { moveIn } from "../../../../utils/variants";
 import { motion } from "framer-motion/dist/framer-motion";
 import { useGetUser } from "../../../../hook/getUserHook";
 import LoadingHead from "../../../../component/LoaderHead/loaderhead";
+import Currency from "../../../../component/Currency";
 // dropdown
 export const SubscribeDropDown = ({ id, activateDeal, delDeal }) => (
   <DropDownWrapper
@@ -323,7 +324,13 @@ const PrivateDeal = () => {
                               `${item.user.firstName} ${item.user.lastName}`}
                           </td>
                           <td>{item.product && item.product.productName}</td>
-                          <td>{toCurrency(currency, item.basePrice)}</td>
+                          <td>
+                            {/* {toCurrency(currency, item.basePrice)} */}
+                            <Currency
+                              country={item.country || item.product.country}
+                              price={item.basePrice || 0}
+                            />
+                          </td>
                           <td align="left">
                             {item.product &&
                               moment(item.product.createdAt).format(
@@ -397,7 +404,13 @@ const PrivateDeal = () => {
                                   {item.product ? item.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {toCurrency(currency, item.basePrice)}
+                                  {/* {toCurrency(currency, item.basePrice)} */}
+                                  <Currency
+                                    country={
+                                      item.country || item.product.country
+                                    }
+                                    price={item.basePrice || 0}
+                                  />
                                 </TableCell>
                                 <TableCell align="left">
                                   {item.product &&
@@ -509,7 +522,13 @@ const PrivateDeal = () => {
                               `${item.user.firstName} ${item.user.lastName}`}
                           </td>
                           <td>{item.product && item.product.name}</td>
-                          <td>{toCurrency(currency, item.basePrice)}</td>
+                          <td>
+                            {/* {toCurrency(currency, item.basePrice)} */}
+                            <Currency
+                              country={item.country || item.product.country}
+                              price={item.basePrice || 0}
+                            />
+                          </td>
                           <td align="left">
                             {item.product &&
                               moment(item.product.createdAt).format(
@@ -582,7 +601,13 @@ const PrivateDeal = () => {
                                   {item.product ? item.product.name : "N/A"}
                                 </TableCell>
                                 <TableCell align="left">
-                                  {toCurrency(currency, item.basePrice)}
+                                  {/* {toCurrency(currency, item.basePrice)} */}
+                                  <Currency
+                                    country={
+                                      item.country || item.product.country
+                                    }
+                                    price={item.basePrice || 0}
+                                  />
                                 </TableCell>
                                 <TableCell align="left">
                                   {item.product &&
