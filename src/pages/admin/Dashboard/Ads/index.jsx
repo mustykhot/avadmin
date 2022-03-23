@@ -89,6 +89,10 @@ const headCells = [
     label: "Clicks",
   },
   {
+    id: "plan",
+    label: "Plan",
+  },
+  {
     id: "start_date",
     label: " Start Date",
   },
@@ -313,6 +317,7 @@ const Ads = () => {
                                 />
                               </TableCell>
                               <TableCell align="left">{item.clicks}</TableCell>
+                              <TableCell align="left">{item.plan}</TableCell>
                               <TableCell align="left">
                                 {moment(item.startDate).format("L")}
                               </TableCell>
