@@ -133,6 +133,7 @@ const PlanSide = () => {
       ...vals,
       features: selector,
     };
+    console.log(payload);
     if (selector.length) {
       try {
         const response = await addResponse(payload).unwrap();
@@ -286,7 +287,7 @@ const PlanSide = () => {
                           value: "NIGERIA",
                         },
                         {
-                          label: "UNITED",
+                          label: "UNITED KINGDOM",
                           value: "UNITED KINGDOM",
                         },
                       ]}
