@@ -9,6 +9,12 @@
   padding: 15px 20px;
   &.four {
     width: 23%;
+    &.amount {
+      span {
+        margin-bottom: 12px;
+        display: block;
+      }
+    }
   }
   .iconFlex {
     width: 100%;

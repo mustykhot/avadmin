@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import SummaryCard from "../../../../component/SummaryCard";
 import "./style.scss";
@@ -36,7 +37,8 @@ import { moveIn } from "../../../../utils/variants";
 import Currency from "../../../../component/Currency";
 const Dashboard = () => {
   const [newDate, setNewDate] = useState("");
-  const { currency } = useGetUser();
+  const { user } = useGetUser();
+  console.log(user);
   const handleSetDate = (dateRange) => {
     setNewDate({
       startDate: dateRange[0].startDate,
@@ -97,6 +99,8 @@ const Dashboard = () => {
         ? dash.data.topSellingCategory.map((item, el) => {
             if (el < 3) {
               return item.categoryName;
+            } else {
+              return "";
             }
           })
         : [0]
@@ -187,13 +191,22 @@ const Dashboard = () => {
               btmText={"Total Transactions"}
               isFour={true}
             />
+
             <SummaryCard
-              midText={dash ? (dash.data ? dash.data.totalRevenue : 0) : 0}
-              currency={"₦"}
+              // midText={
+              //   auction ? toCurrency(currency, auction.data.revenue) : 0
+              // }
+              currency={"N"}
               btmText={"Total Revenue"}
               isAmount={true}
               isFour={true}
-            />
+            >
+              {" "}
+              <Currency
+                country={user.country}
+                price={dash ? (dash.data ? dash.data.totalRevenue : 0) : 0}
+              />
+            </SummaryCard>
           </div>
           <div className="mid-wrap">
             <div className="transaction-card-wrap">
@@ -204,7 +217,7 @@ const Dashboard = () => {
               <div className="double-graph">
                 <div className="top-wrap">
                   <div className="money-wrap">
-                    <div className="transact">
+                    {/* <div className="transact">
                       <p className="money">₦ 940,000,000</p>
                       <p className="text">Total Transaction</p>
                     </div>
@@ -219,7 +232,7 @@ const Dashboard = () => {
                       <p className="circle">
                         <span></span> Auctions{" "}
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                   {/* <select name="" id="" className="filter">
                     <option value="">Filter by category</option>
