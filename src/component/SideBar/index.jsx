@@ -161,13 +161,13 @@ const SideBar = ({ active }) => {
           <p>Audit trails</p>
         </Link>
 
-        <Link
+        {/* <Link
           className={`item ${active === "shipping" ? "active" : ""}`}
           to="/shipping"
         >
           <Truck className="iconSide" />
           <p>Shipping</p>
-        </Link>
+        </Link> */}
       </div>
 
       <div className="setting">

@@ -35,7 +35,7 @@ const Login = () => {
 
       toastr.success("Success", "Login Successful");
       setTimeout(() => {
-        navigate("/category", { replace: true });
+        navigate("/dashboard", { replace: true });
       }, 1000);
     } catch (err) {
       // console.log(err.response.data, "err");
