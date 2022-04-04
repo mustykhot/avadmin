@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import NaijaStates from "naija-state-local-government";
+import {useState} from "react";
+import {useEffect} from "react";
 import UploadMultipleFile from "../../../../../component/UploadImgField/UploadMultipleFile";
 import {
   useGetAllCategoryQuery,
@@ -9,15 +8,16 @@ import {
 import InputField from "../../../../../component/input/indexField";
 import SelectField from "../../../../../component/input/select";
 import CreateVendor from "./createVendor";
-const AboutPost = ({ display, imgUrl, setImgUrl }) => {
+import StateCitySelect from "../../../../../component/StateCitySelect";
+const AboutPost = ({display, imgUrl, setImgUrl}) => {
   // const { categories = [] } = useGetCt();
   const [create, setCreate] = useState(false);
 
   // get category
-  const { data: category = null } = useGetAllCategoryQuery(1);
+  const {data: category = null} = useGetAllCategoryQuery(1);
 
   // get vendor
-  const { data: vendor = null } = useGetAllPrivateVendorQuery({
+  const {data: vendor = null} = useGetAllPrivateVendorQuery({
     page: 1,
     limit: 100,
     search: "",
@@ -29,7 +29,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
     () =>
       category
         ? setCategoryOptions(
-            category.data.map((el) => ({
+            category.data.map(el => ({
               label: el.name,
               value: el._id,
             }))
@@ -38,9 +38,9 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
     [category]
   );
 
-  const [activeState, setActiveState] = useState("Lagos");
+  const [activeCountry, setActiveCountry] = useState("Lagos");
   return (
-    <div style={{ display: display ? "block" : "none" }}>
+    <div style={{display: display ? "block" : "none"}}>
       <InputField
         type="text"
         name="productInfo.name"
@@ -72,6 +72,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
         label="Country"
         errMsg="invalid field"
         // required={false}
+        handleCustomChange={e => setActiveCountry(e.target.value)}
         selectOption={[
           {
             label: "Select Country",
@@ -87,54 +88,8 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
           },
         ]}
       />
-      {/* <SelectField
-        name="productInfo.subCategory"
-        label="Sub Category"
-        required={false}
-        errMsg="invalid field"
-        selectOption={[
-          {
-            label: "Select Sub Category",
-            value: "",
-          },
-          ...categoryOptions,
-        ]}
-        isLoading={categoryOptions.length <= 0}
-      /> */}
-      <SelectField
-        name="productInfo.state"
-        label="State"
-        errMsg="invalid field"
-        handleCustomChange={(e) => setActiveState(e.target.value)}
-        // selectOption={[
-        //   {
-        //     label: "Select State",
-        //     value: "",
-        //   },
-        //   ...NaijaStates.states(),
-        // ]}
-        selectOption={NaijaStates.states().map((item) => ({
-          label: item,
-          value: item,
-        }))}
-      />
-      <SelectField
-        name="productInfo.lga"
-        label="Town"
-        errMsg="invalid field"
-        // selectOption={[
-        //   {
-        //     label: "Select Town",
-        //     value: "",
-        //   },
-        //   ...(NaijaStates.lgas(`${activeState}`)?.lgas || ""),
-        // ]}
-        selectOption={NaijaStates.lgas(`${activeState}`)?.lgas.map((item) => ({
-          label: item,
-          value: item,
-        }))}
-        isDisabled={NaijaStates.lgas(`${activeState}`)?.lgas ? false : true}
-      />
+
+      <StateCitySelect country={activeCountry} />
 
       <UploadMultipleFile
         text="Upload Multiple Pictures"
@@ -153,7 +108,7 @@ const AboutPost = ({ display, imgUrl, setImgUrl }) => {
 
         selectOption={
           vendor
-            ? vendor.data.map((item) => ({
+            ? vendor.data.map(item => ({
                 label: item.fullName,
                 value: item.id,
               }))

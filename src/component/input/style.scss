@@ -1,6 +1,5 @@
 .input-icon-wrap {
-  background: #ffffff;
-  border: 1px solid #dcdff1;
+  background: var(--inputBg);
   width: 100%;
   border-radius: 3px;
   height: 40px;
@@ -9,197 +8,212 @@
   align-items: center;
   cursor: pointer;
   position: relative;
-  .currencyDiv {
-    width: 60px;
-    height: 100%;
-    background: #e1e4e7;
-    text-align: center;
-    font-size: 14px;
-    line-height: 16px;
-    color: #393939;
-    p {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      width: 100%;
-    }
-  }
 
   &.icon-placeholder {
     input {
-      padding-left: 40px;
-      &.pad {
-        padding-left: 10px;
+      padding-left: 45px;
+    }
+  }
+  .icon {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    padding: 0 0.8rem;
+    bottom: 0;
+    border: none;
+    font-size: 12px;
+    background-color: inherit;
+    z-index: 2;
+    height: 90%;
+    margin: 0.1rem;
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+    color: var(--textClr);
+    &.icon-left {
+      pointer-events: none;
+      cursor: text;
+      left: 0;
+      border-right: 1px solid var(--inputBorder);
+    }
+    &.icon-right {
+      right: 0;
+      cursor: pointer;
+    }
+  }
+  .Mui-error {
+    border-color: var(--inputBorder) !important;
+  }
+  &.select-wrap {
+    .icon {
+      cursor: auto;
+      color: var(--primary);
+      pointer-events: none;
+      padding: 0 0.1rem;
+
+      svg {
+        fill: var(--primary);
+        width: 18px;
+        height: 18px;
       }
     }
-    .icon-left {
-      cursor: text;
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      // color: color(placeholder);
+    select {
+      padding-right: 1.3rem !important;
+      cursor: pointer;
     }
   }
-
-  .icon,
-  .extraSelect {
-    height: 100%;
-    // width: 20px;
-    background: transparent;
-    cursor: pointer;
-    padding: 0 0.6rem;
-    border: none !important;
-    // color: $primary;
-  }
-  .extraSelect {
-    border: none;
-    width: 100px;
-  }
-
-  input {
-    background: transparent;
-    border: none !important;
+  input,
+  select {
     height: 100% !important;
-    flex-grow: 2;
-    font-size: 12px;
-    line-height: 14px;
-    /* identical to box height */
+  }
+  .invalid-number {
+    background-color: #fff !important;
+    border-color: var(--inputBorder) !important;
+  }
+}
+// .pincode {
+//   input {
+//     text-security: disc;
+//     -webkit-text-security: disc;
+//     -moz-text-security: disc;
+//   }
+// }
+// create a div with classname of form-group-wra to arrange input in 2's
+.form-group-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
 
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 14px;
-    /* identical to box height */
-
-    color: #393939;
-    &::placeholder {
-      font-size: 12px;
-      line-height: 14px;
-      /* identical to box height */
-
-      color: #babec2;
-    }
+  .form-group {
+    width: 48%;
   }
 }
 .form-group {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 22px 0;
+  padding: 10px 0;
   width: 100%;
-  &.extraWidth {
-    width: 48%;
-  }
-
-  &.except {
-    margin-bottom: 10px;
-  }
 
   label {
     font-weight: 600;
     font-size: 12px;
     line-height: 14px;
-    /* identical to box height */
-    color: #4a4a4a;
+    color: var(--textClr) !important;
     margin-bottom: 5px;
+  }
+
+  &.half-width {
+    width: 48%;
   }
 }
 
+/*custom select arrow*/
+select::-ms-expand {
+  display: none;
+}
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.MuiFormControl-root {
+  width: 100%;
+  .Mui-error fieldset {
+    border-color: var(--inputBorder) !important;
+  }
+}
 input:not([type="checkbox"]),
-.css-wb4q7n-MuiInputBase-root-MuiOutlinedInput-root,
 select,
-textarea {
+textarea,
+.select-mui {
   background: transparent;
-  border: 1px solid inherit;
   width: 100%;
   height: 40px;
-  padding: 0 0.8rem;
-  outline: none;
-  border-radius: 4px;
-  color: #222 !important;
+  overflow-y: hidden;
+  padding: 0 1rem;
+  border-radius: 3px;
+  font-size: 12px;
+  flex-grow: 2;
+  line-height: 14px;
+  color: var(--textClr);
+  border: 1px solid var(--inputBorder);
 
   &:focus {
+    border: 1px solid var(--primary);
     outline: none;
   }
 }
-.selectClass {
-  border: none;
+
+// material ui select
+.select-mui {
+  padding: 0;
+  .MuiOutlinedInput-root.MuiAutocomplete-inputRoot {
+    height: 40px;
+  }
+  input.MuiAutocomplete-input {
+    height: auto;
+    padding: 0;
+  }
+
+  font-size: 12px !important;
+  svg {
+    fill: var(--primary);
+  }
+  &,
+  input {
+    border: none !important;
+  }
+  fieldset {
+    border-width: 1px !important;
+    border-color: var(--inputBorder);
+    &:focus {
+      border-color: var(--primary) !important;
+    }
+  }
+}
+
+.menu-item,
+.MuiAutocomplete-popper li {
+  font-size: 12px !important;
+  background-color: white !important;
+  color: #000000;
+  &:hover,
+  &.Mui-selected {
+    background-color: var(--primary) !important;
+    color: var(--whiteClr) !important;
+  }
 }
 
 .form-group textarea {
   height: 130px !important;
-  border: 1px solid #dcdff1;
+  border: 1px solid var(--inputBorder);
   padding: 0.5rem;
   resize: vertical;
 }
-.react-select {
-  width: 100% !important;
-  &:focus {
-    outline: none !important;
-    border: 1px solid color(inputBorder) !important;
-  }
-  &__control {
-    background: color(inputBg) !important;
-    border: 1px solid color(inputBorder) !important;
-    width: 100%;
-    height: 40px;
-    padding: 0 0.5rem;
-    border-radius: 4px;
-    color: color(placeholder);
-  }
-  &__menu {
-    width: 50%;
-    max-width: 300px;
-  }
 
-  &__indicators,
-  &__value-container {
-    height: 100%;
-  }
-  &__multi-value {
-    border-radius: 15px !important;
-    background-color: #93e3964d !important;
-    color: #007b30;
-    border: 0.5px solid #007b30;
-    padding: 0.1rem 0.4rem;
-    &__label {
-      padding: 0rem 0.3rem !important;
-      padding-right: 0.5rem;
-      font-size: 0.9rem !important;
-      border-right: 1px solid #007b30;
-      height: max-content;
-      border-radius: 0 !important;
-    }
-    &__remove {
-      cursor: pointer;
-      &:hover {
-        color: #007b30 !important;
-        background-color: transparent !important;
-      }
-    }
-  }
-}
-.is-invalid {
-  border-color: #ff0606 !important;
-  .icon {
-    path {
-      fill: #ff0606;
-    }
-  }
-}
+// .is-invalid {
+//   border-color: #ff0606 !important;
+//   .icon {
+//     path {
+//       fill: #ff0606;
+//     }
+//   }
+// }
+
 .input-err-msg {
   color: #ff0606;
   width: 100%;
   font-weight: 500;
   font-size: 8.51965px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   margin-top: 10px;
   text-align: right;
 }
+
 .commentInput {
   margin-bottom: 0;
   input,
@@ -222,11 +236,14 @@ textarea {
 }
 
 // phone style
-.react-tel-input {
-  height: 100%;
-}
-.react-tel-input .selected-flag {
-  height: 40px;
-}
-.react-tel-input .selected-flag {
+.form-group {
+  .react-tel-input {
+    height: 100%;
+  }
+  .react-tel-input .selected-flag {
+    height: 40px;
+  }
+  .react-tel-input .form-control {
+    width: 100%;
+  }
 }

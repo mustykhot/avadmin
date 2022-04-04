@@ -21,6 +21,7 @@ const CreatePrivateDeal = () => {
   const methods = useForm({
     mode: "all",
     defaultValues: {
+      country: "NIGERIA",
       productInfo: {
         state: "Lagos",
         lga: "Ikeja",
@@ -177,7 +178,7 @@ const CreatePrivateDeal = () => {
                         display: presentStep < TOTAL_STEPS ? "unset" : "none",
                       }}
                       type="button"
-                      disabled={!methods.formState.isValid || image.length <= 0}
+                      // disabled={!methods.formState.isValid || image.length <= 0}
                       onClick={() => goNext(1)}
                       className="btn-primary blue"
                     >

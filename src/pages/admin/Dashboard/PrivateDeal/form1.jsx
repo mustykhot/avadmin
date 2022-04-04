@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import AdminDashboardLayout from "../../../../component/adminDashboardLayout";
 import "./style.scss";
-import { useEffect, useState } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import {useEffect, useState} from "react";
+import {FormProvider, useForm, useFormContext} from "react-hook-form";
 // import Select from "../../../../component/input/selectt";
 import FormHeadFlex from "../../../../component/formHeadFlex";
 import Input from "../../../../component/input";
 import InputAmount from "../../../../component/input/inputAmount";
 import MenuItem from "@mui/material/MenuItem";
-import { useRef } from "react";
+import {useRef} from "react";
 import Textarea from "../../../../component/input/textarea";
 import saveImg from "../../../../assets/icons/img.svg";
 import Phone from "../../../../component/input/phone";
 import PhoneInput from "react-phone-input-2";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   useAddPrivateDealMutation,
   useAddVendorMutation,
@@ -23,14 +23,14 @@ import {
   useGetBrandModalQuery,
   useGetBrandQuery,
 } from "../../../../services/api";
-import { toastr } from "react-redux-toastr";
-import NaijaStates from "naija-state-local-government";
+import {toastr} from "react-redux-toastr";
 import SelectField from "../../../../component/input/select";
+import StateCitySelect from "../../../../component/StateCitySelect";
 import InputField from "../../../../component/input/indexField";
-import { motion, AnimatePresence } from "framer-motion/dist/framer-motion";
+import {motion} from "framer-motion/dist/framer-motion";
 import uploadImg from "../../../../hook/UploadImg";
-import { moveIn, moveLeft } from "../../../../utils/variants";
-import { Select } from "@mui/material";
+import {moveIn, moveLeft} from "../../../../utils/variants";
+import {Select} from "@mui/material";
 
 const PrivateDealForm1 = () => {
   const methods = useForm({
@@ -38,7 +38,6 @@ const PrivateDealForm1 = () => {
   });
 
   const brandId = methods.watch("productInfo.brandInformation.brand");
-  const [isLoadng, setIsLoading] = useState(false);
 
   const [formStep, setFormStep] = useState(0);
 
@@ -48,24 +47,19 @@ const PrivateDealForm1 = () => {
   const [recState, setRecState] = useState("Oyo");
 
   // get category
-  const {
-    data: category = null,
-    isLoading: loading,
-    isError,
-    error,
-  } = useGetAllCategoryQuery(1);
+  const {data: category = null, x} = useGetAllCategoryQuery(1);
 
   // next step
   const completeFormStep = () => {
-    setFormStep((cur) => cur + 1);
+    setFormStep(cur => cur + 1);
   };
   const prevFormStep = () => {
-    setFormStep((cur) => cur - 1);
+    setFormStep(cur => cur - 1);
   };
 
   // file adding
   const ref = useRef();
-  const FileChangeHandler = (e) => {
+  const FileChangeHandler = e => {
     if (e.target.files && e.target.files[0]) {
       setImageList([...imageList, URL.createObjectURL(e.target.files[0])]);
     } else {
@@ -74,7 +68,7 @@ const PrivateDealForm1 = () => {
   };
   // file list
   const [imgupload, setImgUpload] = useState([]);
-  const uploader = async (file) => {
+  const uploader = async file => {
     let url = await uploadImg(file, "n3mtymsx");
     setImgUpload([...imgupload, url.secure_url]);
   };
@@ -86,7 +80,7 @@ const PrivateDealForm1 = () => {
     isLoading: isVendLoading,
     isError: isVendError,
     error: vendErr,
-  } = useGetAllPrivateVendorQuery({ page: 1, limit: 100, search: "" });
+  } = useGetAllPrivateVendorQuery({page: 1, limit: 100, search: ""});
 
   const {
     data: brand = null,
@@ -109,7 +103,7 @@ const PrivateDealForm1 = () => {
   const ref2 = useRef();
   const [companyImg, setCompanyImg] = useState("");
 
-  const FileChangeHandler2 = (e) => {
+  const FileChangeHandler2 = e => {
     if (e.target.files && e.target.files[0]) {
       setCompanyImg(URL.createObjectURL(e.target.files[0]));
 
@@ -119,7 +113,7 @@ const PrivateDealForm1 = () => {
     }
   };
   const [img, setImg] = useState("");
-  const uploader2 = async (file) => {
+  const uploader2 = async file => {
     let url = await uploadImg(file, "n3mtymsx");
     setImg(url.secure_url);
   };
@@ -129,9 +123,9 @@ const PrivateDealForm1 = () => {
   };
 
   // create deal
-  const [addDeal, { isLoading }] = useAddPrivateDealMutation();
+  const [addDeal, {isLoading}] = useAddPrivateDealMutation();
 
-  const onSubmit = async (vals) => {
+  const onSubmit = async vals => {
     const payload = {
       ...vals,
       isPrivate: true,
@@ -183,7 +177,7 @@ const PrivateDealForm1 = () => {
 
   const [loader, setLoader] = useState(false);
 
-  const onSubmitVendor = async (payload) => {
+  const onSubmitVendor = async payload => {
     setLoader(true);
     try {
       const response = await addVendor(payload).unwrap();
@@ -201,25 +195,25 @@ const PrivateDealForm1 = () => {
 
   // options
   const dealType = [
-    { value: "BUY_NOW", label: "Buy Now" },
-    { value: "AUCTION", label: "Auction" },
+    {value: "BUY_NOW", label: "Buy Now"},
+    {value: "AUCTION", label: "Auction"},
   ];
 
   const offerType = [
-    { value: "NEGOTIABLE", label: "Negotiable" },
-    { value: "NON NEGOTIABLE", label: "Non Negotiable" },
+    {value: "NEGOTIABLE", label: "Negotiable"},
+    {value: "NON NEGOTIABLE", label: "Non Negotiable"},
   ];
 
   const biddingType = [
-    { value: "ONLINE", label: "Online" },
-    { value: "OFFLINE", label: "Offline" },
+    {value: "ONLINE", label: "Online"},
+    {value: "OFFLINE", label: "Offline"},
   ];
 
   const conditionType = [
-    { value: "Brand New", label: "Brand New" },
-    { value: "Used", label: "Used" },
-    { value: "Manufacturer Refurbished", label: "Manufacturer Refurbished" },
-    { value: "Seller Refurbished", label: "Seller Refurbished" },
+    {value: "Brand New", label: "Brand New"},
+    {value: "Used", label: "Used"},
+    {value: "Manufacturer Refurbished", label: "Manufacturer Refurbished"},
+    {value: "Seller Refurbished", label: "Seller Refurbished"},
   ];
 
   return (
@@ -238,7 +232,7 @@ const PrivateDealForm1 = () => {
                 animate="visible"
                 initial="hidden"
                 exit="exit"
-                style={{ display: `${formStep === 0 ? "block" : "none"}` }}
+                style={{display: `${formStep === 0 ? "block" : "none"}`}}
               >
                 <FormHeadFlex
                   title={"Create Private Deal"}
@@ -252,7 +246,7 @@ const PrivateDealForm1 = () => {
                   name="productInfo.category"
                   selectOption={
                     category
-                      ? category.data.map((item) => ({
+                      ? category.data.map(item => ({
                           label: item.name,
                           value: item.id,
                         }))
@@ -290,7 +284,7 @@ const PrivateDealForm1 = () => {
                         id="productImg"
                         ref={ref}
                         // value={images}
-                        onChange={(e) => {
+                        onChange={e => {
                           FileChangeHandler(e);
                           // FileChangeHandlerGan(e);
                           setImages([...images, e.target.files]);
@@ -314,7 +308,7 @@ const PrivateDealForm1 = () => {
                 animate="visible"
                 initial="hidden"
                 exit="exit"
-                style={{ display: `${formStep === 1 ? "block" : "none"}` }}
+                style={{display: `${formStep === 1 ? "block" : "none"}`}}
               >
                 <FormHeadFlex title={"Item Details"} active={"2"} total={"6"} />
 
@@ -340,7 +334,7 @@ const PrivateDealForm1 = () => {
                   label="Deal Type"
                   id="role"
                   name="type"
-                  selectOption={dealType.map((item) => ({
+                  selectOption={dealType.map(item => ({
                     label: item.label,
                     value: item.value,
                   }))}
@@ -350,7 +344,7 @@ const PrivateDealForm1 = () => {
                   label="Offer Type"
                   id="role"
                   name="offerType"
-                  selectOption={offerType.map((item) => ({
+                  selectOption={offerType.map(item => ({
                     label: item.label,
                     value: item.value,
                   }))}
@@ -360,7 +354,7 @@ const PrivateDealForm1 = () => {
                   label="Bidding Type"
                   id="role"
                   name="biddingType"
-                  selectOption={biddingType.map((item) => ({
+                  selectOption={biddingType.map(item => ({
                     label: item.label,
                     value: item.value,
                   }))}
@@ -378,7 +372,7 @@ const PrivateDealForm1 = () => {
                   >
                     Item Location
                   </label>
-                  <div style={{ marginTop: "5px" }} className="group">
+                  <div style={{marginTop: "5px"}} className="group">
                     <div className="halfInput">
                       <SelectField
                         label=""
@@ -391,28 +385,19 @@ const PrivateDealForm1 = () => {
                         // selectOption={roleOption}
                         handleCustomChange={setRecState}
                         selectOption={[
-                          { label: "Nigeria", value: "nigeria" },
-                          { label: "USA", value: "usa" },
+                          {label: "Nigeria", value: "nigeria"},
+                          {label: "USA", value: "usa"},
                         ]}
                       />
                     </div>
                     <div className="halfInput">
-                      <SelectField
-                        label=""
-                        id="role"
-                        name="state"
-                        selectOption={NaijaStates.states().map((item) => ({
-                          label: item,
-                          value: item,
-                        }))}
-                        // selectOption={roleOption}
-                      />
+                      <StateCitySelect />
                     </div>
                   </div>
                 </div>
 
                 <div className="coverGroup">
-                  <div style={{ marginTop: "5px" }} className="group">
+                  <div style={{marginTop: "5px"}} className="group">
                     <div className="halfInput">
                       <InputField
                         type="datetime-local"
@@ -443,7 +428,7 @@ const PrivateDealForm1 = () => {
                 animate="visible"
                 initial="hidden"
                 exit="exit"
-                style={{ display: `${formStep === 2 ? "block" : "none"}` }}
+                style={{display: `${formStep === 2 ? "block" : "none"}`}}
               >
                 <FormHeadFlex
                   title={"Product Information"}
@@ -457,7 +442,7 @@ const PrivateDealForm1 = () => {
                   name="vendor"
                   selectOption={
                     vendor
-                      ? vendor.data.map((item) => ({
+                      ? vendor.data.map(item => ({
                           label: item.fullName,
                           value: item.id,
                         }))
@@ -485,7 +470,7 @@ const PrivateDealForm1 = () => {
                           id="vname"
                           name="vname"
                           placeholder="Vendor name"
-                          onChange={(e) => {
+                          onChange={e => {
                             setVendorName(e.target.value);
                           }}
                         />
@@ -501,7 +486,7 @@ const PrivateDealForm1 = () => {
                           id="vemail"
                           name="vemail"
                           placeholder="Vendor email"
-                          onChange={(e) => {
+                          onChange={e => {
                             setVendorEmail(e.target.value);
                           }}
                         />
@@ -514,15 +499,15 @@ const PrivateDealForm1 = () => {
                         className="select-mui"
                         ref={ref}
                         value={vendorType}
-                        onChange={(value) => {
+                        onChange={value => {
                           console.log(value.target.value);
                           setVendorType(value.target.value);
                         }}
                         displayEmpty
                       >
                         {[
-                          { label: "Individual", value: "INDIVDUAL" },
-                          { label: "Corporate", value: "CORPORATE" },
+                          {label: "Individual", value: "INDIVDUAL"},
+                          {label: "Corporate", value: "CORPORATE"},
                         ].map((item, i) => {
                           return (
                             <MenuItem
@@ -542,7 +527,7 @@ const PrivateDealForm1 = () => {
                         <PhoneInput
                           country={"us"}
                           value={phone}
-                          onChange={(phone) => {
+                          onChange={phone => {
                             setPhone(phone);
                           }}
                         />
@@ -566,7 +551,7 @@ const PrivateDealForm1 = () => {
                         <input
                           type="file"
                           ref={ref2}
-                          onChange={(e) => {
+                          onChange={e => {
                             FileChangeHandler2(e);
 
                             setImage(e.target.files[0]);
@@ -624,7 +609,7 @@ const PrivateDealForm1 = () => {
                 animate="visible"
                 initial="hidden"
                 exit="exit"
-                style={{ display: `${formStep === 3 ? "block" : "none"}` }}
+                style={{display: `${formStep === 3 ? "block" : "none"}`}}
               >
                 {" "}
                 <FormHeadFlex title={"Shipping"} active={"4"} total={"6"} />
@@ -633,8 +618,8 @@ const PrivateDealForm1 = () => {
                   id="pickup"
                   name="shippingInformation.pickUpAvailable"
                   selectOption={[
-                    { label: "Yes", value: "Yes" },
-                    { label: "No", value: "No" },
+                    {label: "Yes", value: "Yes"},
+                    {label: "No", value: "No"},
                   ]}
                 />
                 <InputField
@@ -677,7 +662,7 @@ const PrivateDealForm1 = () => {
                 animate="visible"
                 initial="hidden"
                 exit="exit"
-                style={{ display: `${formStep === 4 ? "block" : "none"}` }}
+                style={{display: `${formStep === 4 ? "block" : "none"}`}}
               >
                 {" "}
                 <FormHeadFlex title={"Product Info"} active={"5"} total={"6"} />
@@ -687,7 +672,7 @@ const PrivateDealForm1 = () => {
                   name="productInfo.brandInformation.brand"
                   selectOption={
                     brand
-                      ? brand.data.map((item) => ({
+                      ? brand.data.map(item => ({
                           label: item.name,
                           value: item.id,
                         }))
@@ -700,7 +685,7 @@ const PrivateDealForm1 = () => {
                   name="productInfo.brandInformation.brandModel"
                   selectOption={
                     brandModal
-                      ? brandModal.data.map((item) => ({
+                      ? brandModal.data.map(item => ({
                           label: item.name,
                           value: item.id,
                         }))
@@ -735,7 +720,7 @@ const PrivateDealForm1 = () => {
                   name="productInfo.brandInformation.condition"
                   label="Condition"
                   errMsg="invalid field"
-                  selectOption={conditionType.map((item) => ({
+                  selectOption={conditionType.map(item => ({
                     label: item.label,
                     value: item.value,
                   }))}
@@ -756,7 +741,7 @@ const PrivateDealForm1 = () => {
                 animate="visible"
                 initial="hidden"
                 exit="exit"
-                style={{ display: `${formStep === 5 ? "block" : "none"}` }}
+                style={{display: `${formStep === 5 ? "block" : "none"}`}}
               >
                 {" "}
                 <FormHeadFlex title={"Product Info"} active={"6"} total={"6"} />
@@ -773,8 +758,8 @@ const PrivateDealForm1 = () => {
                   id="repair"
                   name="productInfo.termsInformation.repairHistory"
                   selectOption={[
-                    { label: "Yes", value: "Yes" },
-                    { label: "No", value: "No" },
+                    {label: "Yes", value: "Yes"},
+                    {label: "No", value: "No"},
                   ]}
                 />
                 <InputField
@@ -798,8 +783,8 @@ const PrivateDealForm1 = () => {
                   id="refund_policy"
                   name="productInfo.termsInformation.refundPolicy"
                   selectOption={[
-                    { label: "Yes", value: "Yes" },
-                    { label: "No", value: "No" },
+                    {label: "Yes", value: "Yes"},
+                    {label: "No", value: "No"},
                   ]}
                 />
                 <Textarea
@@ -815,7 +800,7 @@ const PrivateDealForm1 = () => {
               type="submit"
               className="submit"
               // disabled={!methods.formState.isValid}
-              style={{ display: `${formStep === 5 ? "" : "none"}` }}
+              style={{display: `${formStep === 5 ? "" : "none"}`}}
               onClick={() => {
                 console.log("ggg");
               }}
@@ -830,7 +815,7 @@ const PrivateDealForm1 = () => {
               onClick={completeFormStep}
               type="button"
               className="submit"
-              style={{ display: `${formStep !== 5 ? "block" : "none"}` }}
+              style={{display: `${formStep !== 5 ? "block" : "none"}`}}
               disabled={!methods.formState.isValid}
             >
               Continue
